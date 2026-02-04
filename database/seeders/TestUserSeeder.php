@@ -27,8 +27,14 @@ class TestUserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'alamat' => 'Jl. Test No. 123',
                 'is_active' => true,
+                'email_verified_at' => now(),
             ]
         );
+
+        // Update email verification if user already exists
+        if (!$user->wasRecentlyCreated && !$user->email_verified_at) {
+            $user->update(['email_verified_at' => now()]);
+        }
 
         // Assign role
         $user->assignRole($superAdminRole);

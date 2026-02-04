@@ -29,7 +29,23 @@ class UsersTable
                     ->searchable()
                     ->sortable()
                     ->weight('medium')
-                    ->description(fn ($record) => $record->email),
+                    ->description(fn ($record) => $record->email)
+                    ->formatStateUsing(function (string $state, $record): string {
+                        $isVerified = filled($record->email_verified_at);
+
+                        $badgeLabel = $isVerified ? 'Verif' : 'Belum Verif';
+                        $badgeClasses = $isVerified
+                            ? 'bg-success-50 text-success-700 ring-success-600/20'
+                            : 'bg-gray-50 text-gray-700 ring-gray-600/20';
+
+                        return sprintf(
+                            '<span class="inline-flex items-center gap-2">%s <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset %s">%s</span></span>',
+                            e($state),
+                            $badgeClasses,
+                            e($badgeLabel),
+                        );
+                    })
+                    ->html(),
                 
                 TextColumn::make('username')
                     ->label('Username')
@@ -56,16 +72,6 @@ class UsersTable
                     ->searchable()
                     ->toggleable()
                     ->icon('heroicon-o-map-pin'),
-                
-                IconColumn::make('email_verified_at')
-                    ->label('Email Terverifikasi')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger')
-                    ->sortable()
-                    ->toggleable(),
                 
                 IconColumn::make('is_active')
                     ->label('Status')

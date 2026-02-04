@@ -8,9 +8,12 @@ namespace App\Models {
 	 * @property \Illuminate\Support\Carbon|null $updated_at
 	 * @property \Illuminate\Support\Carbon|null $created_at
 	 * @property string|null $remember_token
+	 * @property boolean $is_active
 	 * @property string $password
 	 * @property \Illuminate\Support\Carbon|null $email_verified_at
+	 * @property string|null $alamat
 	 * @property string $email
+	 * @property string $username
 	 * @property string $name
 	 * @property int $id
 	 * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
@@ -21,9 +24,12 @@ namespace App\Models {
 	 * @property-read int|null $notifications_count
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereId($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereName($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereUsername($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmail($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereAlamat($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmailVerifiedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User wherePassword($value)
+	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereIsActive($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereRememberToken($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereCreatedAt($value)
 	 * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereUpdatedAt($value)

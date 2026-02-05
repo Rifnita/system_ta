@@ -19,12 +19,27 @@ class RolePermissionSeeder extends Seeder
 
         // Create permissions
         $permissions = [
+            // User permissions
             'view_user',
             'view_any_user',
             'create_user',
             'update_user',
             'delete_user',
             'delete_any_user',
+            
+            // Laporan Aktivitas permissions
+            'view_laporan::aktivitas',
+            'view_any_laporan::aktivitas',
+            'create_laporan::aktivitas',
+            'update_laporan::aktivitas',
+            'delete_laporan::aktivitas',
+            'delete_any_laporan::aktivitas',
+            'force_delete_laporan::aktivitas',
+            'force_delete_any_laporan::aktivitas',
+            'restore_laporan::aktivitas',
+            'restore_any_laporan::aktivitas',
+            'replicate_laporan::aktivitas',
+            'reorder_laporan::aktivitas',
         ];
 
         foreach ($permissions as $permission) {
@@ -41,11 +56,20 @@ class RolePermissionSeeder extends Seeder
             'view_any_user',
             'create_user',
             'update_user',
+            'view_laporan::aktivitas',
+            'view_any_laporan::aktivitas',
+            'create_laporan::aktivitas',
+            'update_laporan::aktivitas',
+            'delete_laporan::aktivitas',
         ]);
 
         $user = Role::create(['name' => 'user']);
         $user->givePermissionTo([
             'view_user',
+            'view_laporan::aktivitas',
+            'create_laporan::aktivitas',
+            'update_laporan::aktivitas',
+            'delete_laporan::aktivitas',
         ]);
     }
 }

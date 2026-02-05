@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\LaporanAktivitas;
+use App\Policies\LaporanAktivitasPolicy;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Configure Filament with Gold luxury color palette
         $this->configureFilamentTheme();
+        
+        // Register policies
+        Gate::policy(LaporanAktivitas::class, LaporanAktivitasPolicy::class);
     }
 
     /**

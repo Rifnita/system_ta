@@ -73,7 +73,15 @@ class User extends Authenticatable implements MustVerifyEmail, HasAvatar
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->profile_photo_path 
-            ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->profile_photo_path)
+            ? \Illuminate\Support\Facades\Storage::url('public/' . $this->profile_photo_path)
             : null;
+    }
+
+    /**
+     * Get the laporan aktivitas for the user.
+     */
+    public function laporanAktivitas()
+    {
+        return $this->hasMany(LaporanAktivitas::class);
     }
 }

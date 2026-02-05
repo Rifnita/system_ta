@@ -49,29 +49,14 @@ class UsersTable
                     ->copyable()
                     ->copyMessage('Username disalin!')
                     ->icon('heroicon-o-at-symbol'),
-                
-                TextColumn::make('email')
-                    ->label('Email')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable()
-                    ->copyMessage('Email disalin!')
-                    ->icon('heroicon-o-envelope')
-                    ->badge()
-                    ->color(fn ($record): string => filled($record->email_verified_at) 
-                        ? 'success' 
-                        : 'warning')
-                    ->suffix(fn ($record): string => filled($record->email_verified_at) 
-                        ? ' ✓' 
-                        : ' (Belum Verifikasi)'),
-                
+
                 TextColumn::make('roles.name')
                     ->label('Role')
                     ->badge()
                     ->color(fn (string $state): string => match (strtolower($state)) {
                         'super_admin' => 'danger',
                         'admin' => 'warning',
-                        'user' => 'success',
+                        'user' => 'info',
                         default => 'gray',
                     })
                     ->searchable(),
@@ -87,7 +72,7 @@ class UsersTable
                     ->label('Status')
                     ->badge()
                     ->formatStateUsing(fn (bool $state): string => $state ? 'Aktif' : 'Tidak Aktif')
-                    ->color(fn (bool $state): string => $state ? 'success' : 'danger')
+                    ->color(fn (bool $state): string => $state ? 'info' : 'danger')
                     ->sortable(),
                 
                 TextColumn::make('created_at')
@@ -108,7 +93,8 @@ class UsersTable
                     ->placeholder('Semua')
                     ->trueLabel('Terverifikasi')
                     ->falseLabel('Belum Terverifikasi')
-                    ->nullable(),
+                    ->nullable()
+                    ->native(false),
                 
                 SelectFilter::make('is_active')
                     ->label('Status')
@@ -132,7 +118,7 @@ class UsersTable
                     Action::make('resendVerification')
                         ->label('Kirim Verifikasi Email')
                         ->icon('heroicon-o-envelope')
-                        ->color('info')
+                        ->color('warning')
                         ->visible(fn ($record): bool => is_null($record->email_verified_at))
                         ->requiresConfirmation()
                         ->modalHeading('Kirim Ulang Verifikasi Email')
@@ -187,7 +173,7 @@ class UsersTable
                     BulkAction::make('sendVerificationEmails')
                         ->label('Kirim Email Verifikasi')
                         ->icon('heroicon-o-envelope')
-                        ->color('info')
+                        ->color('warning')
                         ->requiresConfirmation()
                         ->modalHeading('Kirim Email Verifikasi')
                         ->modalDescription('Email verifikasi akan dikirim ke semua user yang dipilih dan belum terverifikasi.')

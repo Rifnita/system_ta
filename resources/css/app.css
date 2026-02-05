@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './gold-luxury.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -8,4 +9,46 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Gold Luxury Palette */
+    --color-gold-50: #FFFBF0;
+    --color-gold-100: #FEF3E2;
+    --color-gold-200: #FDE8C9;
+    --color-gold-300: #FCDCA8;
+    --color-gold-400: #F9C66D;
+    --color-gold-500: #D4AF37;
+    --color-gold-600: #C9A227;
+    --color-gold-700: #B8941F;
+    --color-gold-800: #8B6914;
+    --color-gold-900: #5A450C;
+    --color-gold-950: #3D2E08;
+
+    /* Custom color palette for primary brand */
+    --color-primary-50: #FFFBF0;
+    --color-primary-100: #FEF3E2;
+    --color-primary-200: #FDE8C9;
+    --color-primary-300: #FCDCA8;
+    --color-primary-400: #F9C66D;
+    --color-primary-500: #D4AF37;
+    --color-primary-600: #C9A227;
+    --color-primary-700: #B8941F;
+    --color-primary-800: #8B6914;
+    --color-primary-900: #5A450C;
+    --color-primary-950: #3D2E08;
+
+    /* Accent colors */
+    --color-accent-50: #F5F3F0;
+    --color-accent-100: #E8DFD5;
+    --color-accent-500: #8B7355;
+    --color-accent-900: #4A3728;
+}
+
+@layer base {
+    body {
+        @apply bg-gold-50 text-gold-900;
+    }
+
+    ::selection {
+        @apply bg-gold-500 text-white;
+    }
 }

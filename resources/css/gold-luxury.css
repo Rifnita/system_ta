@@ -1,0 +1,167 @@
+/* Gold Luxury Theme Stylesheet */
+
+:root {
+    /* Primary Gold Colors */
+    --gold-50: #FFFBF0;
+    --gold-100: #FEF3E2;
+    --gold-200: #FDE8C9;
+    --gold-300: #FCDCA8;
+    --gold-400: #F9C66D;
+    --gold-500: #D4AF37;
+    --gold-600: #C9A227;
+    --gold-700: #B8941F;
+    --gold-800: #8B6914;
+    --gold-900: #5A450C;
+    --gold-950: #3D2E08;
+
+    /* Accent Colors */
+    --warm-white: #FBF8F3;
+    --deep-charcoal: #2C3E50;
+    --light-gold: #E8D5B7;
+    --dark-gold: #AA8C2C;
+}
+
+/* General Styling */
+body {
+    background-color: var(--gold-50);
+    color: var(--gold-900);
+}
+
+/* Buttons and Interactive Elements */
+button, a {
+    transition: all 0.3s ease;
+}
+
+/* Cards and Containers */
+.filament-card,
+.rounded-lg,
+.border {
+    border-color: var(--gold-200);
+}
+
+/* Links */
+a {
+    color: var(--gold-700);
+}
+
+a:hover {
+    color: var(--gold-600);
+    text-decoration: underline;
+}
+
+/* Selection Color */
+::selection {
+    background-color: var(--gold-500);
+    color: white;
+}
+
+::-moz-selection {
+    background-color: var(--gold-500);
+    color: white;
+}
+
+/* Input Focus States */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--gold-500) !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Badge Styling */
+.badge {
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.badge-gold {
+    background-color: var(--gold-100);
+    color: var(--gold-900);
+}
+
+/* Table Row Hover */
+tbody tr:hover {
+    background-color: var(--gold-50);
+}
+
+/* Luxury Accents */
+.border-gold {
+    border-color: var(--gold-300);
+}
+
+.bg-gold-light {
+    background-color: var(--gold-50);
+}
+
+.bg-gold-luxury {
+    background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-700) 100%);
+    color: white;
+}
+
+.text-gold {
+    color: var(--gold-700);
+}
+
+/* Shadow Effects */
+.shadow-gold {
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+}
+
+/* Hover Effects */
+.hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(212, 175, 55, 0.2);
+}
+
+/* Elegant Borders */
+.border-elegant {
+    border: 1px solid var(--gold-300);
+    border-radius: 8px;
+}
+
+/* Status Badges */
+.badge-active {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.badge-inactive {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+/* Success Notification */
+.notification-success {
+    background-color: #D4EDDA;
+    border-left: 4px solid var(--gold-700);
+    color: #155724;
+}
+
+/* Warning Notification */
+.notification-warning {
+    background-color: #FFF3CD;
+    border-left: 4px solid var(--gold-600);
+    color: #856404;
+}
+
+/* Elegant Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--gold-900);
+    font-weight: 600;
+}
+
+/* Table Header */
+thead {
+    background: linear-gradient(to right, var(--gold-600), var(--gold-700));
+    color: white;
+}
+
+thead th {
+    border-bottom: 2px solid var(--gold-800);
+}
+
+/* Smooth Transitions */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}

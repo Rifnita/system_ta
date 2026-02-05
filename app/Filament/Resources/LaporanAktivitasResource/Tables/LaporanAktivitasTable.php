@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\LaporanAktivitasResource\Tables;
 
+use App\Filament\Resources\LaporanAktivitasResource;
+use App\Models\KategoriLaporanAktivitas;
 use App\Models\LaporanAktivitas;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -24,12 +26,15 @@ class LaporanAktivitasTable
                     ->label('Tanggal')
                     ->date('d M Y')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->icon('heroicon-o-calendar')
+                    ->weight('medium'),
 
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Pegawai')
                     ->searchable()
                     ->sortable()
+                    ->icon('heroicon-o-user')
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('judul')
@@ -42,30 +47,14 @@ class LaporanAktivitasTable
                             return null;
                         }
                         return $state;
-                    }),
+                    })
+                    ->weight('bold')
+                    ->wrap(),
 
                 Tables\Columns\BadgeColumn::make('kategori')
                     ->label('Kategori')
-                    ->colors([
-                        'primary' => 'Cek Rumah',
-                        'success' => 'Survey Lokasi',
-                        'warning' => 'Meeting Client',
-                        'info' => 'Pemasangan',
-                        'danger' => 'Perbaikan',
-                        'secondary' => 'Administrasi',
-                        'gray' => 'Lainnya',
-                    ])
+                    ->color(fn (string $state): string => KategoriLaporanAktivitas::colorFor($state))
                     ->searchable(),
-
-                Tables\Columns\TextColumn::make('waktu_mulai')
-                    ->label('Waktu Mulai')
-                    ->time('H:i')
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('waktu_selesai')
-                    ->label('Waktu Selesai')
-                    ->time('H:i')
-                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('durasi')
                     ->label('Durasi')
@@ -73,54 +62,13 @@ class LaporanAktivitasTable
                         return $record->durasi;
                     })
                     ->badge()
-                    ->color('success'),
-
-                Tables\Columns\TextColumn::make('lokasi')
-                    ->label('Lokasi')
-                    ->searchable()
-                    ->limit(30)
-                    ->toggleable()
-                    ->url(function (LaporanAktivitas $record): ?string {
-                        $lokasi = (string) ($record->lokasi ?? '');
-
-                        if ($lokasi === '') {
-                            return null;
-                        }
-
-                        if (str_starts_with($lokasi, 'http://') || str_starts_with($lokasi, 'https://')) {
-                            return $lokasi;
-                        }
-
-                        if (preg_match('/^-?\d+(?:\.\d+)?\s*,\s*-?\d+(?:\.\d+)?$/', $lokasi)) {
-                            $coord = preg_replace('/\s+/', '', $lokasi);
-                            return 'https://www.google.com/maps?q=' . $coord;
-                        }
-
-                        return null;
-                    }, true)
-                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
-                        $state = $column->getState();
-                        if (strlen($state) <= 30) {
-                            return null;
-                        }
-                        return $state;
-                    }),
-
-                Tables\Columns\ImageColumn::make('foto_bukti')
-                    ->label('Foto')
-                    ->circular()
-                    ->stacked()
-                    ->limit(3)
-                    ->limitedRemainingText()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Dibuat')
-                    ->dateTime('d M Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->color('success')
+                    ->icon('heroicon-o-clock'),
             ])
             ->defaultSort('tanggal_aktivitas', 'desc')
+            ->recordUrl(
+                fn (LaporanAktivitas $record): string => LaporanAktivitasResource::getUrl('view', ['record' => $record])
+            )
             ->filters([
                 Tables\Filters\SelectFilter::make('user_id')
                     ->label('Pegawai')
@@ -131,15 +79,7 @@ class LaporanAktivitasTable
 
                 Tables\Filters\SelectFilter::make('kategori')
                     ->label('Kategori')
-                    ->options([
-                        'Cek Rumah' => 'Cek Rumah',
-                        'Survey Lokasi' => 'Survey Lokasi',
-                        'Meeting Client' => 'Meeting Client',
-                        'Pemasangan' => 'Pemasangan',
-                        'Perbaikan' => 'Perbaikan',
-                        'Administrasi' => 'Administrasi',
-                        'Lainnya' => 'Lainnya',
-                    ])
+                    ->options(fn (): array => KategoriLaporanAktivitas::options())
                     ->multiple(),
 
                 Tables\Filters\Filter::make('tanggal_aktivitas')
@@ -174,6 +114,12 @@ class LaporanAktivitasTable
                     }),
             ])
             ->actions([
+                Action::make('export_pdf')
+                    ->label('Export PDF')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->action(function (LaporanAktivitas $record) {
+                        return redirect()->route('admin.laporan-aktivitas.export.single.pdf', $record);
+                    }),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -182,12 +128,8 @@ class LaporanAktivitasTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateActions([
-                CreateAction::make()
-                    ->icon('heroicon-o-plus'),
-            ])
             ->emptyStateHeading('Belum ada laporan aktivitas')
-            ->emptyStateDescription('Mulai dengan menambahkan laporan aktivitas harian Anda.')
+            ->emptyStateDescription('Belum ada data laporan aktivitas untuk ditampilkan.')
             ->poll('30s');
     }
 }

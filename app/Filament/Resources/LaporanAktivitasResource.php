@@ -12,6 +12,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class LaporanAktivitasResource extends Resource
 {
@@ -24,6 +25,8 @@ class LaporanAktivitasResource extends Resource
     protected static ?string $modelLabel = 'Laporan Aktivitas';
 
     protected static ?string $pluralModelLabel = 'Laporan Aktivitas';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Laporan';
 
     protected static ?int $navigationSort = 1;
 
@@ -44,6 +47,11 @@ class LaporanAktivitasResource extends Resource
         return LaporanAktivitasForm::configure($schema);
     }
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function table(Table $table): Table
     {
         return LaporanAktivitasTable::configure($table);
@@ -60,7 +68,7 @@ class LaporanAktivitasResource extends Resource
     {
         return [
             'index' => Pages\ListLaporanAktivitas::route('/'),
-            'create' => Pages\CreateLaporanAktivitas::route('/create'),
+            'view' => Pages\ViewLaporanAktivitas::route('/{record}'),
             'edit' => Pages\EditLaporanAktivitas::route('/{record}/edit'),
         ];
     }

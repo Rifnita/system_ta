@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\LaporanAktivitasResource\Schemas;
 
+use App\Models\KategoriLaporanAktivitas;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Schemas\Components\Section;
@@ -22,19 +23,17 @@ class LaporanAktivitasForm
                             ->required()
                             ->default(today())
                             ->maxDate(today())
-                            ->native(false),
+                            ->native(false)
+                            ->suffixAction(
+                                Action::make('setTanggalToday')
+                                    ->label('Today')
+                                    ->icon('heroicon-o-calendar-days')
+                                    ->action(fn (Set $set) => $set('tanggal_aktivitas', today()->format('Y-m-d')))
+                            ),
 
                         Forms\Components\Select::make('kategori')
                             ->label('Kategori Aktivitas')
-                            ->options([
-                                'Cek Rumah' => 'Cek Rumah',
-                                'Survey Lokasi' => 'Survey Lokasi',
-                                'Meeting Client' => 'Meeting Client',
-                                'Pemasangan' => 'Pemasangan',
-                                'Perbaikan' => 'Perbaikan',
-                                'Administrasi' => 'Administrasi',
-                                'Lainnya' => 'Lainnya',
-                            ])
+                            ->options(fn (): array => KategoriLaporanAktivitas::options())
                             ->required()
                             ->native(false)
                             ->searchable(),

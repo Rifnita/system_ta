@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <title>{{ $meta['judul'] ?? 'Laporan Aktivitas' }}</title>
+    <style>
+        body { 
+            font-family: 'DejaVu Sans', sans-serif; 
+            font-size: 10pt; 
+            color: #333; 
+            line-height: 1.5;
+        }
+
+        /* Kop Surat */
+        .kop-surat {
+            text-align: center;
+            border-bottom: 3px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .kop-nama {
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .kop-subtitle {
+            font-size: 10pt;
+            margin-bottom: 2px;
+        }
+        .kop-alamat {
+            font-size: 9pt;
+            color: #666;
+        }
+
+        /* Title */
+        .title {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .title h2 {
+            font-size: 14pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 0;
+        }
+
+        /* Metadata */
+        .metadata {
+            margin-bottom: 15px;
+        }
+        .metadata table {
+            width: 100%;
+        }
+        .metadata td {
+            padding: 3px 0;
+            vertical-align: top;
+        }
+        .metadata .label {
+            width: 30%;
+            font-weight: bold;
+        }
+
+        /* Summary */
+        .summary {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+
+        /* Table */
+        table.data { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px;
+        }
+        table.data th { 
+            background: #333;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #333;
+            font-size: 9pt;
+        }
+        table.data td { 
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+            font-size: 9pt;
+        }
+
+        /* Photo */
+        .photo {
+            max-width: 100%;
+            max-height: 40mm;
+            border: 1px solid #ddd;
+            margin: 2px 0;
+        }
+
+        /* Misc */
+        .text-muted { color: #666; }
+        .text-small { font-size: 8pt; }
+        .text-center { text-align: center; }
+        .nowrap { white-space: nowrap; }
+        .bold { font-weight: bold; }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            font-size: 8pt;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    {{-- Kop Surat --}}
+    <div class="kop-surat">
+        <div class="kop-nama">{{ $meta['app_name'] ?? config('app.name', 'SISTEM TA') }}</div>
+        <div class="kop-subtitle">Sistem Informasi Laporan Aktivitas</div>
+        <div class="kop-alamat">Jl. Contoh No. 123, Kota, Provinsi | Email: info@example.com | Telp: (021) 12345678</div>
+    </div>
+
+    {{-- Title --}}
+    <div class="title">
+        <h2>{{ strtoupper($meta['judul'] ?? 'LAPORAN AKTIVITAS') }}</h2>
+    </div>
+
+    {{-- Metadata --}}
+    <div class="metadata">
+        <table>
+            <tr>
+                <td class="label">Nama Pegawai</td>
+                <td>: {{ $meta['pegawai'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label">Periode Laporan</td>
+                <td>: {{ $meta['periode'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label">Dicetak Oleh</td>
+                <td>: {{ $meta['dicetak_oleh'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label">Tanggal Cetak</td>
+                <td>: {{ \Illuminate\Support\Carbon::parse($meta['dicetak_pada'] ?? now())->format('d F Y, H:i') }} WIB</td>
+            </tr>
+        </table>
+    </div>
+
+    {{-- Summary --}}
+    <div class="summary">
+        <strong>Ringkasan:</strong>
+        Total <strong>{{ (int) ($meta['total_aktivitas'] ?? 0) }}</strong> aktivitas dengan 
+        durasi <strong>{{ intdiv((int) ($meta['total_durasi_menit'] ?? 0), 60) }} jam {{ ((int) ($meta['total_durasi_menit'] ?? 0)) % 60 }} menit</strong>
+    </div>
+
+    {{-- Data Table --}}
+    <table class="data">
+        <thead>
+            <tr>
+                <th style="width: 5%;">No</th>
+                <th style="width: 12%;">Tanggal</th>
+                <th style="width: 20%;">Aktivitas</th>
+                <th style="width: 13%;">Kategori</th>
+                <th style="width: 12%;">Waktu</th>
+                <th style="width: 8%;">Durasi</th>
+                <th style="width: 30%;">Foto & Lokasi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($records as $index => $record)
+                <tr>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td class="nowrap">{{ optional($record->tanggal_aktivitas)->format('d M Y') ?? '-' }}</td>
+                    <td>
+                        <div class="bold">{{ $record->judul }}</div>
+                        @if (!empty($record->deskripsi))
+                            <div class="text-small text-muted">{{ \Illuminate\Support\Str::limit($record->deskripsi, 80) }}</div>
+                        @endif
+                    </td>
+                    <td>{{ $record->kategori }}</td>
+                    <td class="text-small nowrap">
+                        {{ $record->waktu_mulai ? \Illuminate\Support\Carbon::parse($record->waktu_mulai)->format('H:i') : '-' }}
+                        -
+                        {{ $record->waktu_selesai ? \Illuminate\Support\Carbon::parse($record->waktu_selesai)->format('H:i') : '-' }}
+                    </td>
+                    <td class="nowrap">{{ $record->durasi }}</td>
+                    <td>
+                        @php
+                            $fotoBukti = collect((array) ($record->foto_bukti ?? []))
+                                ->filter(fn ($v) => filled($v))
+                                ->values();
+                        @endphp
+
+                        @if ($fotoBukti->isNotEmpty())
+                            @foreach ($fotoBukti->take(2) as $foto)
+                                @php
+                                    $imagePath = null;
+                                    
+                                    if (is_string($foto)) {
+                                        // Check if it's already an absolute path
+                                        if (file_exists($foto)) {
+                                            $imagePath = $foto;
+                                        }
+                                        // Try storage/app/public path
+                                        elseif (\Illuminate\Support\Facades\Storage::disk('public')->exists($foto)) {
+                                            $imagePath = storage_path('app/public/' . $foto);
+                                        }
+                                        // Try public/storage path (symlinked)
+                                        elseif (file_exists(public_path('storage/' . ltrim($foto, '/')))) {
+                                            $imagePath = public_path('storage/' . ltrim($foto, '/'));
+                                        }
+                                    }
+                                @endphp
+
+                                @if ($imagePath && file_exists($imagePath))
+                                    <img class="photo" src="{{ $imagePath }}" alt="Foto">
+                                @endif
+                            @endforeach
+                            
+                            @if ($fotoBukti->count() > 2)
+                                <div class="text-small text-muted">+{{ $fotoBukti->count() - 2 }} foto lainnya</div>
+                            @endif
+                        @else
+                            <span class="text-muted text-small">-</span>
+                        @endif
+
+                        @if (!empty($record->lokasi))
+                            <div class="text-small" style="margin-top: 4px; border-top: 1px solid #eee; padding-top: 4px;">
+                                <strong>Lokasi:</strong> {{ \Illuminate\Support\Str::limit($record->lokasi, 35) }}
+                            </div>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" class="text-muted text-center" style="padding: 20px;">
+                        Tidak ada data aktivitas
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    {{-- Footer --}}
+    <div class="footer">
+        <div>{{ $meta['app_name'] ?? config('app.name') }} - Laporan Aktivitas</div>
+        <div class="text-small">
+            Dicetak pada {{ now()->format('d F Y H:i') }} WIB
+        </div>
+    </div>
+</body>
+</html>

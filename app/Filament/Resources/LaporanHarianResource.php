@@ -12,6 +12,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class LaporanHarianResource extends Resource
 {
@@ -24,6 +25,8 @@ class LaporanHarianResource extends Resource
     protected static ?string $modelLabel = 'Laporan Harian';
 
     protected static ?string $pluralModelLabel = 'Laporan Harian';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Laporan';
 
     protected static ?int $navigationSort = 2;
 

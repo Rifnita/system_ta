@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\LaporanHarianResource\Tables;
 
+use App\Models\KategoriLaporanAktivitas;
 use App\Models\LaporanAktivitas;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -38,15 +39,7 @@ class LaporanHarianTable
 
                 Tables\Columns\BadgeColumn::make('kategori')
                     ->label('Kategori')
-                    ->colors([
-                        'primary' => 'Cek Rumah',
-                        'success' => 'Survey Lokasi',
-                        'warning' => 'Meeting Client',
-                        'info' => 'Pemasangan',
-                        'danger' => 'Perbaikan',
-                        'secondary' => 'Administrasi',
-                        'gray' => 'Lainnya',
-                    ])
+                    ->color(fn (string $state): string => KategoriLaporanAktivitas::colorFor($state))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('waktu_mulai')
@@ -114,15 +107,7 @@ class LaporanHarianTable
             ->filters([
                 Tables\Filters\SelectFilter::make('kategori')
                     ->label('Kategori')
-                    ->options([
-                        'Cek Rumah' => 'Cek Rumah',
-                        'Survey Lokasi' => 'Survey Lokasi',
-                        'Meeting Client' => 'Meeting Client',
-                        'Pemasangan' => 'Pemasangan',
-                        'Perbaikan' => 'Perbaikan',
-                        'Administrasi' => 'Administrasi',
-                        'Lainnya' => 'Lainnya',
-                    ])
+                    ->options(fn (): array => KategoriLaporanAktivitas::options())
                     ->multiple(),
 
                 Tables\Filters\Filter::make('tanggal_aktivitas')

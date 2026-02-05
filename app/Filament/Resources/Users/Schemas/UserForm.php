@@ -19,8 +19,8 @@ class UserForm
             ->columns(3)
             ->components([
                 // Avatar Section - Sidebar
-                Section::make('Foto Profil')
-                    ->description('Upload foto profil pengguna')
+                Section::make('Profile Photo')
+                    ->description('Upload a user profile photo')
                     ->icon('heroicon-o-camera')
                     ->components([
                         FileUpload::make('profile_photo_path')
@@ -33,7 +33,7 @@ class UserForm
                             ->imageEditor()
                             ->circleCropper()
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->helperText('Maks. 2MB (JPG, PNG, WEBP)')
+                            ->helperText('Max 2MB (JPG, PNG, WEBP)')
                             ->alignCenter(),
                     ])
                     ->columnSpan(1)
@@ -41,41 +41,41 @@ class UserForm
                     ->collapsed(false),
 
                 // Main Form - Takes 2/3 width
-                Section::make('Data Pengguna')
-                    ->description('Informasi lengkap pengguna sistem')
+                Section::make('User Details')
+                    ->description('Full user details')
                     ->icon('heroicon-o-identification')
                     ->columns(2)
                     ->components([
                         // Personal Information
-                        Section::make('Informasi Pribadi')
+                        Section::make('Personal Information')
                             ->icon('heroicon-o-user')
                             ->columns(2)
                             ->components([
                                 TextInput::make('name')
-                                    ->label('Nama Lengkap')
+                                    ->label('Full Name')
                                     ->required()
                                     ->maxLength(255)
-                                    ->placeholder('Masukkan nama lengkap')
+                                    ->placeholder('Enter full name')
                                     ->autocomplete('name')
                                     ->prefixIcon('heroicon-o-user')
                                     ->columnSpan(2),
 
                                 TextInput::make('email')
-                                    ->label('Alamat Email')
+                                    ->label('Email Address')
                                     ->email()
                                     ->required()
                                     ->unique(ignoreRecord: true)
                                     ->maxLength(255)
-                                    ->placeholder('nama@example.com')
+                                    ->placeholder('name@example.com')
                                     ->autocomplete('email')
                                     ->prefixIcon('heroicon-o-envelope')
-                                    ->helperText('Email untuk verifikasi & reset password')
+                                    ->helperText('Email for verification and password reset')
                                     ->columnSpan(2),
                             ])
                             ->columnSpanFull(),
 
                         // Work Information
-                        Section::make('Informasi Kepegawaian')
+                        Section::make('Work Information')
                             ->icon('heroicon-o-briefcase')
                             ->columns(2)
                             ->components([
@@ -84,35 +84,35 @@ class UserForm
                                     ->required()
                                     ->unique(ignoreRecord: true)
                                     ->maxLength(255)
-                                    ->placeholder('Masukkan username')
+                                    ->placeholder('Enter username')
                                     ->prefixIcon('heroicon-o-at-symbol')
-                                    ->helperText('Hanya huruf, angka, dash dan underscore')
+                                    ->helperText('Letters, numbers, dashes, and underscores only')
                                     ->alphaDash()
                                     ->columnSpan(1),
 
                                 TextInput::make('alamat')
-                                    ->label('Alamat')
+                                    ->label('Address')
                                     ->maxLength(65535)
-                                    ->placeholder('Masukkan alamat')
+                                    ->placeholder('Enter address')
                                     ->prefixIcon('heroicon-o-map-pin')
                                     ->columnSpan(1),
 
                                 Select::make('roles')
-                                    ->label('Role / Jabatan')
+                                    ->label('Role / Position')
                                     ->relationship('roles', 'name')
                                     ->preload()
                                     ->searchable()
                                     ->required()
                                     ->prefixIcon('heroicon-o-shield-check')
-                                    ->helperText('Pilih satu role untuk pengguna')
-                                    ->placeholder('Pilih role')
+                                    ->helperText('Select a role for the user')
+                                    ->placeholder('Select role')
                                     ->native(false)
                                     ->columnSpan(2),
                             ])
                             ->columnSpanFull(),
 
                         // Security
-                        Section::make('Keamanan Akun')
+                        Section::make('Account Security')
                             ->icon('heroicon-o-lock-closed')
                             ->columns(2)
                             ->components([
@@ -125,28 +125,28 @@ class UserForm
                                     ->required(fn ($context) => $context === 'create')
                                     ->minLength(8)
                                     ->maxLength(255)
-                                    ->placeholder('Minimal 8 karakter')
+                                    ->placeholder('At least 8 characters')
                                     ->prefixIcon('heroicon-o-key')
-                                    ->helperText('Min. 8 karakter')
+                                    ->helperText('Min. 8 characters')
                                     ->confirmed()
                                     ->validationAttribute('password')
                                     ->visible(fn ($context) => $context === 'create')
                                     ->columnSpan(1),
 
                                 TextInput::make('password_confirmation')
-                                    ->label('Konfirmasi Password')
+                                    ->label('Confirm Password')
                                     ->password()
                                     ->revealable()
                                     ->dehydrated(false)
                                     ->required(fn ($context) => $context === 'create')
-                                    ->placeholder('Ketik ulang password')
+                                    ->placeholder('Re-enter password')
                                     ->prefixIcon('heroicon-o-key')
                                     ->visible(fn ($context) => $context === 'create')
                                     ->columnSpan(1),
 
                                 Toggle::make('is_active')
-                                    ->label('Status Aktif')
-                                    ->helperText('Aktifkan untuk memberikan akses ke sistem')
+                                    ->label('Active Status')
+                                    ->helperText('Enable to grant system access')
                                     ->default(true)
                                     ->inline(false)
                                     ->onColor('success')
@@ -154,18 +154,18 @@ class UserForm
                                     ->columnSpan(fn ($context) => $context === 'create' ? 2 : 1),
 
                                 Placeholder::make('email_verification_status')
-                                    ->label('Verifikasi Email')
+                                    ->label('Email Verification')
                                     ->content(function ($record) {
                                         if (!$record) {
-                                            return '📧 Email verifikasi akan dikirim otomatis';
+                                            return '📧 Verification email will be sent automatically';
                                         }
                                         
                                         if ($record->hasVerifiedEmail()) {
-                                            return '✅ Terverifikasi (' . 
+                                            return '✅ Verified (' . 
                                                    $record->email_verified_at->format('d M Y H:i') . ')';
                                         }
                                         
-                                        return '⏳ Menunggu verifikasi';
+                                        return '⏳ Pending verification';
                                     })
                                     ->columnSpan(1)
                                     ->visible(fn ($context) => $context === 'edit'),
@@ -177,27 +177,27 @@ class UserForm
                     ->collapsed(false),
 
                 // Metadata Section (Only visible on edit) - Full Width
-                Section::make('Informasi Sistem')
-                    ->description('Riwayat dan metadata akun')
+                Section::make('System Information')
+                    ->description('Account history and metadata')
                     ->icon('heroicon-o-information-circle')
                     ->columns(3)
                     ->components([
                         Placeholder::make('created_at')
-                            ->label('Dibuat Pada')
+                            ->label('Created At')
                             ->content(fn ($record): string => $record?->created_at?->format('d M Y, H:i') ?? '-')
                             ->columnSpan(1),
 
                         Placeholder::make('updated_at')
-                            ->label('Terakhir Diupdate')
+                            ->label('Last Updated')
                             ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-')
                             ->columnSpan(1),
 
                         Placeholder::make('email_verified_at')
-                            ->label('Email Diverifikasi')
+                            ->label('Email Verified')
                             ->content(fn ($record): string => 
                                 $record?->email_verified_at 
                                     ? '✅ ' . $record->email_verified_at->format('d M Y, H:i')
-                                    : '⏳ Belum diverifikasi'
+                                    : '⏳ Not verified'
                             )
                             ->columnSpan(1),
                     ])

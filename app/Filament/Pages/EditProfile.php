@@ -61,6 +61,7 @@ class EditProfile extends Page implements HasForms
                         ->label('')
                         ->image()
                         ->avatar()
+                        ->disk('public')
                         ->directory('profile-photos')
                         ->visibility('public')
                         ->maxSize(2048)

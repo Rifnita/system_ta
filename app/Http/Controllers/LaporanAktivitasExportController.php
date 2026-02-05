@@ -14,46 +14,17 @@ class LaporanAktivitasExportController extends Controller
     public function exportPdf(Request $request, LaporanAktivitasPdfExporter $exporter)
     {
         $data = $request->validate([
-            'periode' => ['required', 'in:harian,mingguan,bulanan'],
-            'tanggal' => ['nullable', 'date'],
-            'bulan' => ['nullable', 'integer', 'min:1', 'max:12'],
-            'tahun' => ['nullable', 'integer', 'min:2000', 'max:2100'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
         ]);
 
-        $periode = (string) $data['periode'];
-
-        $startDate = null;
-        $endDate = null;
-        $periodeLabel = '-';
-
-        if (in_array($periode, ['harian', 'mingguan'], true)) {
-            $tanggal = Carbon::parse($data['tanggal'] ?? now());
-
-            if ($periode === 'harian') {
-                $startDate = $tanggal->toDateString();
-                $endDate = $tanggal->toDateString();
-                $periodeLabel = 'Harian (' . $tanggal->translatedFormat('d M Y') . ')';
-            } else {
-                $mulai = $tanggal->copy()->startOfWeek(Carbon::MONDAY);
-                $sampai = $tanggal->copy()->endOfWeek(Carbon::SUNDAY);
-                $startDate = $mulai->toDateString();
-                $endDate = $sampai->toDateString();
-                $periodeLabel = 'Mingguan (' . $mulai->translatedFormat('d M Y') . ' - ' . $sampai->translatedFormat('d M Y') . ')';
-            }
-        }
-
-        if ($periode === 'bulanan') {
-            $bulan = (int) ($data['bulan'] ?? now()->month);
-            $tahun = (int) ($data['tahun'] ?? now()->year);
-            $mulai = Carbon::create($tahun, $bulan, 1)->startOfMonth();
-            $sampai = Carbon::create($tahun, $bulan, 1)->endOfMonth();
-            $startDate = $mulai->toDateString();
-            $endDate = $sampai->toDateString();
-            $periodeLabel = 'Bulanan (' . $mulai->translatedFormat('F Y') . ')';
-        }
-
-        abort_if(! $startDate || ! $endDate, 422, 'Periode tidak valid.');
+        $startDate = Carbon::parse($data['start_date'])->toDateString();
+        $endDate = Carbon::parse($data['end_date'])->toDateString();
+        
+        $startCarbon = Carbon::parse($startDate);
+        $endCarbon = Carbon::parse($endDate);
+        $periodeLabel = 'Periode ' . $startCarbon->translatedFormat('d M Y') . ' - ' . $endCarbon->translatedFormat('d M Y');
 
         $query = LaporanAktivitas::query()
             ->with('user')

@@ -81,19 +81,19 @@
             text-align: left;
             padding: 8px;
             border: 1px solid #333;
-            font-size: 9pt;
+            font-size: 10pt;
         }
         table.data td { 
             border: 1px solid #ddd;
             padding: 8px;
             vertical-align: top;
-            font-size: 9pt;
+            font-size: 10pt;
         }
 
         /* Photo */
         .photo {
             max-width: 100%;
-            max-height: 40mm;
+            max-height: 35mm;
             border: 1px solid #ddd;
             margin: 2px 0;
         }
@@ -162,14 +162,15 @@
     <table class="data">
         <thead>
             <tr>
-                <th style="width: 4%;">No</th>
-                <th style="width: 11%;">Tanggal</th>
-                <th style="width: 20%;">Aktivitas</th>
-                <th style="width: 11%;">Kategori</th>
-                <th style="width: 11%;">Waktu</th>
-                <th style="width: 7%;">Durasi</th>
-                <th style="width: 25%;">Foto</th>
-                <th style="width: 11%;">Lokasi</th>
+                <th style="width: 3%;">No</th>
+                <th style="width: 9%;">Tanggal</th>
+                <th style="width: 15%;">Judul</th>
+                <th style="width: 20%;">Deskripsi</th>
+                <th style="width: 9%;">Kategori</th>
+                <th style="width: 10%;">Waktu</th>
+                <th style="width: 6%;">Durasi</th>
+                <th style="width: 18%;">Foto</th>
+                <th style="width: 10%;">Lokasi</th>
             </tr>
         </thead>
         <tbody>
@@ -177,10 +178,12 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td class="nowrap">{{ optional($record->tanggal_aktivitas)->format('d M Y') ?? '-' }}</td>
-                    <td>
-                        <div class="bold">{{ $record->judul }}</div>
+                    <td class="bold">{{ $record->judul }}</td>
+                    <td class="text-small">
                         @if (!empty($record->deskripsi))
-                            <div class="text-small text-muted">{{ \Illuminate\Support\Str::limit($record->deskripsi, 80) }}</div>
+                            {{ \Illuminate\Support\Str::limit($record->deskripsi, 100) }}
+                        @else
+                            <span class="text-muted">-</span>
                         @endif
                     </td>
                     <td>{{ $record->kategori }}</td>
@@ -252,7 +255,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="text-muted text-center" style="padding: 20px;">
+                    <td colspan="9" class="text-muted text-center" style="padding: 20px;">
                         Tidak ada data aktivitas
                     </td>
                 </tr>

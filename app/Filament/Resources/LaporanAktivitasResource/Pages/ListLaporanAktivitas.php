@@ -24,53 +24,19 @@ class ListLaporanAktivitas extends ListRecords
                 ->icon('heroicon-o-arrow-down-tray')
                 ->modalHeading('Export Laporan Aktivitas (PDF)')
                 ->form([
-                    Select::make('periode')
-                        ->label('Periode')
-                        ->options([
-                            'harian' => '1 Hari',
-                            'mingguan' => '1 Minggu',
-                            'bulanan' => '1 Bulan',
-                        ])
-                        ->default('harian')
-                        ->required()
-                        ->live(),
-
-                    DatePicker::make('tanggal')
-                        ->label('Tanggal')
+                    DatePicker::make('start_date')
+                        ->label('Tanggal Mulai')
                         ->native(false)
-                        ->required(fn ($get) => in_array($get('periode'), ['harian', 'mingguan'], true))
-                        ->visible(fn ($get) => in_array($get('periode'), ['harian', 'mingguan'], true)),
+                        ->default(now()->startOfMonth())
+                        ->maxDate(fn ($get) => $get('end_date'))
+                        ->required(),
 
-                    Select::make('bulan')
-                        ->label('Bulan')
-                        ->options([
-                            1 => 'Januari',
-                            2 => 'Februari',
-                            3 => 'Maret',
-                            4 => 'April',
-                            5 => 'Mei',
-                            6 => 'Juni',
-                            7 => 'Juli',
-                            8 => 'Agustus',
-                            9 => 'September',
-                            10 => 'Oktober',
-                            11 => 'November',
-                            12 => 'Desember',
-                        ])
-                        ->default((int) now()->month)
-                        ->required(fn ($get) => $get('periode') === 'bulanan')
-                        ->visible(fn ($get) => $get('periode') === 'bulanan'),
-
-                    Select::make('tahun')
-                        ->label('Tahun')
-                        ->options(function (): array {
-                            $year = (int) now()->year;
-                            $years = range($year - 5, $year + 1);
-                            return array_combine($years, $years);
-                        })
-                        ->default((int) now()->year)
-                        ->required(fn ($get) => $get('periode') === 'bulanan')
-                        ->visible(fn ($get) => $get('periode') === 'bulanan'),
+                    DatePicker::make('end_date')
+                        ->label('Tanggal Selesai')
+                        ->native(false)
+                        ->default(now())
+                        ->minDate(fn ($get) => $get('start_date'))
+                        ->required(),
 
                     Select::make('user_id')
                         ->label('Pegawai (opsional)')
@@ -88,10 +54,8 @@ class ListLaporanAktivitas extends ListRecords
                     // Livewire tidak bisa mengirim binary PDF langsung dalam response JSON.
                     // Jadi kita redirect ke route download.
                     return redirect()->route('admin.laporan-aktivitas.export.pdf', array_filter([
-                        'periode' => $data['periode'] ?? 'harian',
-                        'tanggal' => $data['tanggal'] ?? null,
-                        'bulan' => $data['bulan'] ?? null,
-                        'tahun' => $data['tahun'] ?? null,
+                        'start_date' => $data['start_date'] ?? null,
+                        'end_date' => $data['end_date'] ?? null,
                         'user_id' => $data['user_id'] ?? null,
                     ], fn ($value) => $value !== null && $value !== ''));
                 }),

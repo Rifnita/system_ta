@@ -63,4 +63,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    /**
+     * Get the user's profile photo URL for Filament.
+     *
+     * @return string|null
+     */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->profile_photo_path 
+            ? asset('storage/' . $this->profile_photo_path)
+            : null;
+    }
 }

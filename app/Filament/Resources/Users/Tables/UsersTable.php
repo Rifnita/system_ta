@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -12,6 +15,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Password;
 
 class UsersTable
 {
@@ -44,6 +49,21 @@ class UsersTable
                     ->copyable()
                     ->copyMessage('Username disalin!')
                     ->icon('heroicon-o-at-symbol'),
+                
+                TextColumn::make('email')
+                    ->label('Email')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('Email disalin!')
+                    ->icon('heroicon-o-envelope')
+                    ->badge()
+                    ->color(fn ($record): string => filled($record->email_verified_at) 
+                        ? 'success' 
+                        : 'warning')
+                    ->suffix(fn ($record): string => filled($record->email_verified_at) 
+                        ? ' ✓' 
+                        : ' (Belum Verifikasi)'),
                 
                 TextColumn::make('roles.name')
                     ->label('Role')
@@ -104,20 +124,116 @@ class UsersTable
                     ->preload(),
             ])
             ->recordActions([
-                EditAction::make()
-                    ->label('Edit')
-                    ->icon('heroicon-o-pencil-square'),
-                DeleteAction::make()
-                    ->label('Hapus')
-                    ->icon('heroicon-o-trash')
-                    ->requiresConfirmation()
-                    ->modalHeading('Hapus User')
-                    ->modalDescription('Apakah Anda yakin ingin menghapus user ini? Data yang sudah dihapus tidak dapat dikembalikan.')
-                    ->modalSubmitActionLabel('Ya, Hapus')
-                    ->modalCancelActionLabel('Batal'),
+                ActionGroup::make([
+                    EditAction::make()
+                        ->label('Edit')
+                        ->icon('heroicon-o-pencil-square'),
+                    
+                    Action::make('resendVerification')
+                        ->label('Kirim Verifikasi Email')
+                        ->icon('heroicon-o-envelope')
+                        ->color('info')
+                        ->visible(fn ($record): bool => is_null($record->email_verified_at))
+                        ->requiresConfirmation()
+                        ->modalHeading('Kirim Ulang Verifikasi Email')
+                        ->modalDescription('Email verifikasi akan dikirim ke alamat email user.')
+                        ->modalSubmitActionLabel('Kirim Email')
+                        ->modalCancelActionLabel('Batal')
+                        ->action(function ($record) {
+                            $record->sendEmailVerificationNotification();
+                            return true;
+                        })
+                        ->successNotification(
+                            fn () => \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('Email Verifikasi Terkirim')
+                                ->body('Email verifikasi telah dikirim ke user.')
+                        ),
+                    
+                    Action::make('sendResetPassword')
+                        ->label('Kirim Reset Password')
+                        ->icon('heroicon-o-key')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Kirim Link Reset Password')
+                        ->modalDescription('Link reset password akan dikirim ke alamat email user.')
+                        ->modalSubmitActionLabel('Kirim Email')
+                        ->modalCancelActionLabel('Batal')
+                        ->action(function ($record) {
+                            Password::sendResetLink(['email' => $record->email]);
+                            return true;
+                        })
+                        ->successNotification(
+                            fn () => \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('Email Reset Password Terkirim')
+                                ->body('Link reset password telah dikirim ke user.')
+                        ),
+                    
+                    DeleteAction::make()
+                        ->label('Hapus')
+                        ->icon('heroicon-o-trash')
+                        ->requiresConfirmation()
+                        ->modalHeading('Hapus User')
+                        ->modalDescription('Apakah Anda yakin ingin menghapus user ini? Data yang sudah dihapus tidak dapat dikembalikan.')
+                        ->modalSubmitActionLabel('Ya, Hapus')
+                        ->modalCancelActionLabel('Batal'),
+                ])
+                    ->label('Aksi')
+                    ->icon('heroicon-o-ellipsis-horizontal'),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
+                    BulkAction::make('sendVerificationEmails')
+                        ->label('Kirim Email Verifikasi')
+                        ->icon('heroicon-o-envelope')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->modalHeading('Kirim Email Verifikasi')
+                        ->modalDescription('Email verifikasi akan dikirim ke semua user yang dipilih dan belum terverifikasi.')
+                        ->modalSubmitActionLabel('Kirim Email')
+                        ->action(function ($records) {
+                            $count = 0;
+                            foreach ($records as $record) {
+                                if (is_null($record->email_verified_at)) {
+                                    $record->sendEmailVerificationNotification();
+                                    $count++;
+                                }
+                            }
+                            return $count;
+                        })
+                        ->successNotification(
+                            fn ($result) => \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('Email Verifikasi Terkirim')
+                                ->body("Email verifikasi telah dikirim ke {$result} user.")
+                        )
+                        ->deselectRecordsAfterCompletion(),
+                    
+                    BulkAction::make('sendResetPasswordEmails')
+                        ->label('Kirim Reset Password')
+                        ->icon('heroicon-o-key')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Kirim Link Reset Password')
+                        ->modalDescription('Link reset password akan dikirim ke semua user yang dipilih.')
+                        ->modalSubmitActionLabel('Kirim Email')
+                        ->action(function ($records) {
+                            $count = 0;
+                            foreach ($records as $record) {
+                                Password::sendResetLink(['email' => $record->email]);
+                                $count++;
+                            }
+                            return $count;
+                        })
+                        ->successNotification(
+                            fn ($result) => \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('Email Reset Password Terkirim')
+                                ->body("Link reset password telah dikirim ke {$result} user.")
+                        )
+                        ->deselectRecordsAfterCompletion(),
+                    
                     DeleteBulkAction::make(),
                 ]),
             ])

@@ -47,7 +47,13 @@ class LaporanAktivitasPdfExporter
             'margin_right' => 15,
             'margin_top' => 18,
             'margin_bottom' => 18,
+            'showImageErrors' => true,
+            'allow_output_buffering' => true,
+            'img_dpi' => 96,
         ]);
+        
+        // Increase backtrack limit for large HTML with images
+        @ini_set('pcre.backtrack_limit', '5000000');
 
         $mpdf->SetTitle($meta['judul'] ?? 'Laporan Aktivitas');
         $mpdf->WriteHTML($html);

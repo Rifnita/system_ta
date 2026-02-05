@@ -162,13 +162,14 @@
     <table class="data">
         <thead>
             <tr>
-                <th style="width: 5%;">No</th>
-                <th style="width: 12%;">Tanggal</th>
+                <th style="width: 4%;">No</th>
+                <th style="width: 11%;">Tanggal</th>
                 <th style="width: 20%;">Aktivitas</th>
-                <th style="width: 13%;">Kategori</th>
-                <th style="width: 12%;">Waktu</th>
-                <th style="width: 8%;">Durasi</th>
-                <th style="width: 30%;">Foto & Lokasi</th>
+                <th style="width: 11%;">Kategori</th>
+                <th style="width: 11%;">Waktu</th>
+                <th style="width: 7%;">Durasi</th>
+                <th style="width: 25%;">Foto</th>
+                <th style="width: 11%;">Lokasi</th>
             </tr>
         </thead>
         <tbody>
@@ -199,46 +200,59 @@
                         @if ($fotoBukti->isNotEmpty())
                             @foreach ($fotoBukti->take(2) as $foto)
                                 @php
-                                    $imagePath = null;
+                                    $imageData = null;
+                                    $mimeType = 'image/jpeg';
                                     
                                     if (is_string($foto)) {
-                                        // Check if it's already an absolute path
-                                        if (file_exists($foto)) {
-                                            $imagePath = $foto;
-                                        }
-                                        // Try storage/app/public path
-                                        elseif (\Illuminate\Support\Facades\Storage::disk('public')->exists($foto)) {
-                                            $imagePath = storage_path('app/public/' . $foto);
-                                        }
-                                        // Try public/storage path (symlinked)
-                                        elseif (file_exists(public_path('storage/' . ltrim($foto, '/')))) {
-                                            $imagePath = public_path('storage/' . ltrim($foto, '/'));
+                                        // Try multiple paths
+                                        $paths = [
+                                            storage_path('app/private/' . $foto),
+                                            storage_path('app/public/' . $foto),
+                                            storage_path('app/' . $foto),
+                                        ];
+                                        
+                                        foreach ($paths as $absolutePath) {
+                                            if (file_exists($absolutePath) && is_readable($absolutePath)) {
+                                                $imageContent = @file_get_contents($absolutePath);
+                                                if ($imageContent !== false && strlen($imageContent) > 0) {
+                                                    $imageData = base64_encode($imageContent);
+                                                    $extension = strtolower(pathinfo($absolutePath, PATHINFO_EXTENSION));
+                                                    $mimeType = match($extension) {
+                                                        'jpg', 'jpeg' => 'image/jpeg',
+                                                        'png' => 'image/png',
+                                                        'gif' => 'image/gif',
+                                                        default => 'image/jpeg',
+                                                    };
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                 @endphp
 
-                                @if ($imagePath && file_exists($imagePath))
-                                    <img class="photo" src="{{ $imagePath }}" alt="Foto">
+                                @if ($imageData)
+                                    <img class="photo" src="data:{{ $mimeType }};base64,{{ $imageData }}" alt="Foto">
                                 @endif
                             @endforeach
                             
                             @if ($fotoBukti->count() > 2)
-                                <div class="text-small text-muted">+{{ $fotoBukti->count() - 2 }} foto lainnya</div>
+                                <div class="text-small text-muted">+{{ $fotoBukti->count() - 2 }} foto</div>
                             @endif
                         @else
                             <span class="text-muted text-small">-</span>
                         @endif
-
+                    </td>
+                    <td class="text-small">
                         @if (!empty($record->lokasi))
-                            <div class="text-small" style="margin-top: 4px; border-top: 1px solid #eee; padding-top: 4px;">
-                                <strong>Lokasi:</strong> {{ \Illuminate\Support\Str::limit($record->lokasi, 35) }}
-                            </div>
+                            {{ \Illuminate\Support\Str::limit($record->lokasi, 40) }}
+                        @else
+                            <span class="text-muted">-</span>
                         @endif
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-muted text-center" style="padding: 20px;">
+                    <td colspan="8" class="text-muted text-center" style="padding: 20px;">
                         Tidak ada data aktivitas
                     </td>
                 </tr>

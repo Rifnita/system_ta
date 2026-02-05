@@ -29,20 +29,15 @@ class UsersTable
                     ->searchable()
                     ->sortable()
                     ->weight('medium')
-                    ->description(fn ($record) => $record->email)
                     ->formatStateUsing(function (string $state, $record): string {
                         $isVerified = filled($record->email_verified_at);
-
-                        $badgeLabel = $isVerified ? 'Verif' : 'Belum Verif';
-                        $badgeClasses = $isVerified
-                            ? 'bg-success-50 text-success-700 ring-success-600/20'
-                            : 'bg-gray-50 text-gray-700 ring-gray-600/20';
-
+                        $icon = $isVerified
+                            ? '<svg class="h-4 w-4 text-success-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>'
+                            : '<svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>';
                         return sprintf(
-                            '<span class="inline-flex items-center gap-2">%s <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset %s">%s</span></span>',
+                            '<span class="inline-flex items-center gap-1.5">%s %s</span>',
                             e($state),
-                            $badgeClasses,
-                            e($badgeLabel),
+                            $icon
                         );
                     })
                     ->html(),
@@ -73,13 +68,11 @@ class UsersTable
                     ->toggleable()
                     ->icon('heroicon-o-map-pin'),
                 
-                IconColumn::make('is_active')
+                TextColumn::make('is_active')
                     ->label('Status')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-badge')
-                    ->falseIcon('heroicon-o-no-symbol')
-                    ->trueColor('success')
-                    ->falseColor('danger')
+                    ->badge()
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Aktif' : 'Tidak Aktif')
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger')
                     ->sortable(),
                 
                 TextColumn::make('created_at')

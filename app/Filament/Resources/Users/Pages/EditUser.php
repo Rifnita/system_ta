@@ -10,6 +10,8 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
+    protected static string $maxWidth = '7xl';
+
     protected function getHeaderActions(): array
     {
         return [

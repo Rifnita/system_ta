@@ -18,7 +18,7 @@ class ListLaporanHarian extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Laporan')
+                ->label('Tambah Task')
                 ->icon('heroicon-o-plus'),
         ];
     }
@@ -28,31 +28,26 @@ class ListLaporanHarian extends ListRecords
         $userId = Auth::id();
 
         return [
-            'semua' => Tab::make('Semua')
+            'semua' => Tab::make('Semua Task')
                 ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->count()),
 
-            'hari_ini' => Tab::make('Hari Ini')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereDate('tanggal_aktivitas', today()))
-                ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->whereDate('tanggal_aktivitas', today())->count()),
+            'pending' => Tab::make('Pending')
+                ->icon('heroicon-o-clock')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))
+                ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->where('status', 'pending')->count())
+                ->badgeColor('warning'),
 
-            'minggu_ini' => Tab::make('Minggu Ini')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereBetween('tanggal_aktivitas', [
-                    now()->startOfWeek(),
-                    now()->endOfWeek(),
-                ]))
-                ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->whereBetween('tanggal_aktivitas', [
-                    now()->startOfWeek(),
-                    now()->endOfWeek(),
-                ])->count()),
+            'in_progress' => Tab::make('On Progress')
+                ->icon('heroicon-o-arrow-path')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'in_progress'))
+                ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->where('status', 'in_progress')->count())
+                ->badgeColor('info'),
 
-            'bulan_ini' => Tab::make('Bulan Ini')
-                ->modifyQueryUsing(fn (Builder $query) => $query
-                    ->whereMonth('tanggal_aktivitas', now()->month)
-                    ->whereYear('tanggal_aktivitas', now()->year))
-                ->badge(fn () => LaporanAktivitas::where('user_id', $userId)
-                    ->whereMonth('tanggal_aktivitas', now()->month)
-                    ->whereYear('tanggal_aktivitas', now()->year)
-                    ->count()),
+            'completed' => Tab::make('Completed')
+                ->icon('heroicon-o-check-circle')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed'))
+                ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->where('status', 'completed')->count())
+                ->badgeColor('success'),
         ];
     }
 }

@@ -19,7 +19,7 @@ class CreateLaporanHarian extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Laporan Harian Berhasil Dibuat')
-            ->body('Laporan harian Anda telah berhasil disimpan.');
+            ->title('Task Harian Berhasil Dibuat')
+            ->body('Task harian Anda telah berhasil disimpan.');
     }
 }

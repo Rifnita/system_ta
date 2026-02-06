@@ -18,13 +18,13 @@ class LaporanHarianResource extends Resource
 {
     protected static ?string $model = LaporanAktivitas::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'Laporan Harian';
+    protected static ?string $navigationLabel = 'Task Harian Saya';
 
-    protected static ?string $modelLabel = 'Laporan Harian';
+    protected static ?string $modelLabel = 'Task Harian';
 
-    protected static ?string $pluralModelLabel = 'Laporan Harian';
+    protected static ?string $pluralModelLabel = 'Task Harian';
 
     protected static string|UnitEnum|null $navigationGroup = 'Laporan';
 
@@ -70,6 +70,7 @@ class LaporanHarianResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        // Menampilkan hanya laporan milik user yang sedang login
         return parent::getEloquentQuery()
             ->where('user_id', Auth::id());
     }

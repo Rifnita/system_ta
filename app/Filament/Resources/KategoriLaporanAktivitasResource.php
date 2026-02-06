@@ -20,11 +20,11 @@ class KategoriLaporanAktivitasResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationLabel = 'Kategori Laporan Harian';
+    protected static ?string $navigationLabel = 'Kategori Task';
 
     protected static ?string $modelLabel = 'Kategori';
 
-    protected static ?string $pluralModelLabel = 'Kategori Laporan Harian';
+    protected static ?string $pluralModelLabel = 'Kategori Task';
 
     protected static string|UnitEnum|null $navigationGroup = 'Laporan';
 

@@ -18,13 +18,13 @@ class LaporanAktivitasResource extends Resource
 {
     protected static ?string $model = LaporanAktivitas::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'Laporan Aktivitas';
+    protected static ?string $navigationLabel = 'Daily Task';
 
-    protected static ?string $modelLabel = 'Laporan Aktivitas';
+    protected static ?string $modelLabel = 'Daily Task';
 
-    protected static ?string $pluralModelLabel = 'Laporan Aktivitas';
+    protected static ?string $pluralModelLabel = 'Daily Tasks';
 
     protected static string|UnitEnum|null $navigationGroup = 'Laporan';
 
@@ -38,8 +38,8 @@ class LaporanAktivitasResource extends Resource
             return false;
         }
 
-        // Menu ini khusus admin/supervisor untuk monitoring & pengelolaan data.
-        return $user->can('view_any_laporan::aktivitas') || $user->can('ViewAny:LaporanAktivitas');
+        // Semua user bisa akses menu untuk manage task mereka sendiri
+        return true;
     }
 
     public static function form(Schema $schema): Schema
@@ -49,7 +49,8 @@ class LaporanAktivitasResource extends Resource
 
     public static function canCreate(): bool
     {
-        return false;
+        // Semua user bisa create daily task untuk diri mereka sendiri
+        return true;
     }
 
     public static function table(Table $table): Table
@@ -68,6 +69,7 @@ class LaporanAktivitasResource extends Resource
     {
         return [
             'index' => Pages\ListLaporanAktivitas::route('/'),
+            'create' => Pages\CreateLaporanAktivitas::route('/create'),
             'view' => Pages\ViewLaporanAktivitas::route('/{record}'),
             'edit' => Pages\EditLaporanAktivitas::route('/{record}/edit'),
         ];
@@ -76,10 +78,11 @@ class LaporanAktivitasResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
+        $user = Auth::user();
 
-        // If user doesn't have view_any permission, only show their own records
-        if (!Auth::user()->can('view_any_laporan::aktivitas')) {
-            $query->where('user_id', Auth::id());
+        // Admin/Supervisor bisa lihat semua task, user biasa hanya lihat task mereka
+        if ($user && !$user->hasAnyRole(['super_admin', 'admin'])) {
+            $query->where('user_id', $user->id);
         }
 
         return $query;

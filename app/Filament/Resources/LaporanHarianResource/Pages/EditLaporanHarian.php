@@ -29,7 +29,7 @@ class EditLaporanHarian extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('Laporan Harian Berhasil Diupdate')
-            ->body('Perubahan laporan harian Anda telah berhasil disimpan.');
+            ->title('Task Harian Berhasil Diupdate')
+            ->body('Perubahan task harian Anda telah berhasil disimpan.');
     }
 }

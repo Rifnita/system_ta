@@ -12,6 +12,11 @@ class RoleResource extends ShieldRoleResource
     
     protected static ?int $navigationSort = 2;
     
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Manajemen User';
+    }
+    
     public static function getPages(): array
     {
         return [

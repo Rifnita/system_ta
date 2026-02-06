@@ -691,8 +691,8 @@ namespace App\Models {
 	 * @property float|null $latitude
 	 * @property string|null $alamat_lengkap
 	 * @property string|null $lokasi
-	 * @property string $waktu_selesai
-	 * @property string $waktu_mulai
+	 * @property string|null $waktu_selesai
+	 * @property string|null $waktu_mulai
 	 * @property string $deskripsi
 	 * @property string $judul
 	 * @property \Illuminate\Support\Carbon $tanggal_aktivitas

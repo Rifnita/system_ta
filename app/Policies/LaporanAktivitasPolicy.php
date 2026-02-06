@@ -14,44 +14,27 @@ class LaporanAktivitasPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        // Semua authenticated user bisa view (filtered di query)
-        return true;
+        return $authUser->can('ViewAny:LaporanAktivitas');
     }
 
     public function view(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        // Admin bisa view semua, user biasa hanya bisa view task mereka sendiri
-        if ($authUser->hasAnyRole(['super_admin', 'admin'])) {
-            return true;
-        }
-        
-        return $laporanAktivitas->user_id === $authUser->id;
+        return $authUser->can('View:LaporanAktivitas');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        // Semua authenticated user bisa create daily task
-        return true;
+        return $authUser->can('Create:LaporanAktivitas');
     }
 
     public function update(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        // Admin bisa update semua, user biasa hanya bisa update task mereka sendiri
-        if ($authUser->hasAnyRole(['super_admin', 'admin'])) {
-            return true;
-        }
-        
-        return $laporanAktivitas->user_id === $authUser->id;
+        return $authUser->can('Update:LaporanAktivitas');
     }
 
     public function delete(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        // Admin bisa delete semua, user biasa hanya bisa delete task mereka sendiri
-        if ($authUser->hasAnyRole(['super_admin', 'admin'])) {
-            return true;
-        }
-        
-        return $laporanAktivitas->user_id === $authUser->id;
+        return $authUser->can('Delete:LaporanAktivitas');
     }
 
     public function restore(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool

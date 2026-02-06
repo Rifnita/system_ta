@@ -20,13 +20,13 @@ class TugasResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationLabel = 'Manajemen Tugas';
+    protected static ?string $navigationLabel = 'Task Management';
 
-    protected static ?string $modelLabel = 'Tugas';
+    protected static ?string $modelLabel = 'Task';
 
-    protected static ?string $pluralModelLabel = 'Tugas';
+    protected static ?string $pluralModelLabel = 'Tasks';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
+    protected static string|UnitEnum|null $navigationGroup = 'Task Management';
 
     protected static ?int $navigationSort = 1;
 
@@ -38,7 +38,7 @@ class TugasResource extends Resource
             return false;
         }
 
-        // Semua user bisa akses menu untuk manage task mereka sendiri
+        // All users can access the menu to manage their own tasks
         return true;
     }
 
@@ -49,7 +49,7 @@ class TugasResource extends Resource
 
     public static function canCreate(): bool
     {
-        // Semua user bisa create daily task untuk diri mereka sendiri
+        // All users can create daily tasks for themselves
         return true;
     }
 
@@ -80,7 +80,7 @@ class TugasResource extends Resource
         $query = parent::getEloquentQuery();
         $user = Auth::user();
 
-        // Admin/Supervisor bisa lihat semua task, user biasa hanya lihat task mereka
+        // Admin/Supervisor can view all tasks, regular users can only view their own tasks
         if ($user && !$user->hasAnyRole(['super_admin', 'admin'])) {
             $query->where('user_id', $user->id);
         }

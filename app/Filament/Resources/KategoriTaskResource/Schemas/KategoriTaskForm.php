@@ -12,10 +12,10 @@ class KategoriTaskForm
     {
         return $schema
             ->components([
-                Section::make('Kategori')
+                Section::make('Category')
                     ->components([
                         Forms\Components\TextInput::make('nama')
-                            ->label('Nama Kategori')
+                            ->label('Category Name')
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),

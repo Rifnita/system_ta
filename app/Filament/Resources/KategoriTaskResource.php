@@ -20,13 +20,13 @@ class KategoriTaskResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationLabel = 'Kategori Task';
+    protected static ?string $navigationLabel = 'Task Categories';
 
-    protected static ?string $modelLabel = 'Kategori';
+    protected static ?string $modelLabel = 'Category';
 
-    protected static ?string $pluralModelLabel = 'Kategori Task';
+    protected static ?string $pluralModelLabel = 'Task Categories';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
+    protected static string|UnitEnum|null $navigationGroup = 'Task Management';
 
     protected static ?int $navigationSort = 3;
 
@@ -38,7 +38,7 @@ class KategoriTaskResource extends Resource
             return false;
         }
 
-        // Admin/supervisor yang boleh monitoring laporan aktivitas juga yang boleh mengelola kategori.
+        // Admin/supervisor who can monitor activity reports can also manage categories.
         return $user->can('view_any_laporan::aktivitas') || $user->can('ViewAny:LaporanAktivitas');
     }
 

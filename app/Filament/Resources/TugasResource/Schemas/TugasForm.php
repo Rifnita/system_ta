@@ -20,26 +20,26 @@ class TugasForm
         return $schema
             ->components([
                 // Main Information Section
-                Section::make('Informasi Task')
-                    ->description('Informasi dasar tentang task yang akan dikerjakan')
+                Section::make('Task Information')
+                    ->description('Basic information about the task to be completed')
                     ->icon('heroicon-o-clipboard-document-list')
                     ->schema([
                         Forms\Components\DatePicker::make('tanggal_aktivitas')
-                            ->label('Tanggal Task')
+                            ->label('Task Date')
                             ->required()
                             ->default(today())
                             ->native(false)
                             ->prefixIcon('heroicon-o-calendar')
                             ->suffixAction(
                                 Action::make('setTanggalToday')
-                                    ->label('Hari Ini')
+                                    ->label('Today')
                                     ->icon('heroicon-o-calendar-days')
                                     ->action(fn (Set $set) => $set('tanggal_aktivitas', today()->format('Y-m-d')))
                             )
                             ->columnSpan(1),
 
                         Forms\Components\Select::make('kategori')
-                            ->label('Kategori Task')
+                            ->label('Task Category')
                             ->options(fn (): array => KategoriLaporanAktivitas::options())
                             ->required()
                             ->native(false)
@@ -48,13 +48,13 @@ class TugasForm
                             ->columnSpan(1),
 
                         Forms\Components\Select::make('status')
-                            ->label('Status Task')
+                            ->label('Task Status')
                             ->options([
-                                'pending' => 'Belum Dimulai',
-                                'in_progress' => 'Sedang Dikerjakan',
-                                'completed' => 'Selesai',
-                                'failed' => 'Gagal',
-                                'cancelled' => 'Dibatalkan',
+                                'pending' => 'Not Started',
+                                'in_progress' => 'In Progress',
+                                'completed' => 'Completed',
+                                'failed' => 'Failed',
+                                'cancelled' => 'Cancelled',
                             ])
                             ->default('pending')
                             ->required()
@@ -74,31 +74,31 @@ class TugasForm
                             ->columnSpan(1),
 
                         Forms\Components\Toggle::make('is_priority')
-                            ->label('Task Prioritas')
-                            ->helperText('Tandai jika task ini prioritas/urgent')
+                            ->label('Priority Task')
+                            ->helperText('Mark if this task is priority/urgent')
                             ->default(false)
                             ->inline(false)
                             ->columnSpan(1),
 
                         Forms\Components\TextInput::make('judul')
-                            ->label('Judul Task')
+                            ->label('Task Title')
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('Contoh: Cek kondisi rumah di Perumahan Griya Asri')
+                            ->placeholder('Example: Check house condition in Griya Asri Housing')
                             ->prefixIcon('heroicon-o-pencil-square')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('deskripsi')
-                            ->label('Deskripsi Task')
+                            ->label('Task Description')
                             ->required()
                             ->rows(4)
-                            ->placeholder('Jelaskan detail task yang akan dikerjakan...')
+                            ->placeholder('Explain details of the task to be completed...')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('catatan_status')
-                            ->label('Catatan Status')
+                            ->label('Status Notes')
                             ->rows(3)
-                            ->placeholder('Tambahkan catatan terkait status task (wajib untuk status Gagal)')
+                            ->placeholder('Add notes about task status (required for Failed status)')
                             ->requiredIf('status', 'failed')
                             ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed', 'cancelled']))
                             ->columnSpanFull(),
@@ -108,12 +108,12 @@ class TugasForm
                     ->persistCollapsed(),
 
                 // Time Planning Section
-                Section::make('Planning Waktu')
-                    ->description('Target dan waktu aktual pengerjaan task (wajib diisi)')
+                Section::make('Time Planning')
+                    ->description('Target and actual task completion time (required)')
                     ->icon('heroicon-o-clock')
                     ->schema([
                         Forms\Components\DateTimePicker::make('target_start_time')
-                            ->label('Target Mulai')
+                            ->label('Target Start')
                             ->required()
                             ->native(false)
                             ->seconds(false)
@@ -122,7 +122,7 @@ class TugasForm
                             ->columnSpan(1),
 
                         Forms\Components\DateTimePicker::make('target_end_time')
-                            ->label('Target Selesai')
+                            ->label('Target Finish')
                             ->required()
                             ->native(false)
                             ->seconds(false)
@@ -131,7 +131,7 @@ class TugasForm
                             ->columnSpan(1),
 
                         Forms\Components\DateTimePicker::make('actual_start_time')
-                            ->label('Waktu Mulai Aktual')
+                            ->label('Actual Start Time')
                             ->native(false)
                             ->seconds(false)
                             ->prefixIcon('heroicon-o-play-circle')
@@ -139,7 +139,7 @@ class TugasForm
                             ->columnSpan(1),
 
                         Forms\Components\DateTimePicker::make('actual_end_time')
-                            ->label('Waktu Selesai Aktual')
+                            ->label('Actual Finish Time')
                             ->native(false)
                             ->seconds(false)
                             ->prefixIcon('heroicon-o-check-circle')
@@ -152,13 +152,13 @@ class TugasForm
                     ->persistCollapsed(),
 
                 // Location Section
-                Section::make('Lokasi Task')
-                    ->description('Masukkan alamat, sistem akan generate link Google Maps otomatis')
+                Section::make('Task Location')
+                    ->description('Enter address, system will automatically generate Google Maps link')
                     ->icon('heroicon-o-map-pin')
                     ->schema([
                         Forms\Components\Textarea::make('alamat_lengkap')
-                            ->label('Alamat Lengkap')
-                            ->placeholder('Contoh: Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta')
+                            ->label('Full Address')
+                            ->placeholder('Example: Jl. Sudirman No. 123, Central Jakarta, DKI Jakarta')
                             ->rows(3)
                             ->live(debounce: 2000)
                             ->afterStateUpdated(function (Set $set, Get $get, ?string $state) {
@@ -210,15 +210,15 @@ class TugasForm
                                     $set('lokasi', $googleMapsUrl);
                                 }
                             })
-                            ->helperText('Ketik alamat lengkap, link Google Maps akan dibuat otomatis dalam 2 detik')
+                            ->helperText('Type full address, Google Maps link will be created automatically in 2 seconds')
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('lokasi')
-                            ->label('Link Google Maps')
-                            ->placeholder('Link akan dibuat otomatis...')
+                            ->label('Google Maps Link')
+                            ->placeholder('Link will be created automatically...')
                             ->suffixAction(
                                 Action::make('open_maps')
-                                    ->label('Buka Maps')
+                                    ->label('Open Maps')
                                     ->icon('heroicon-o-map-pin')
                                     ->color('success')
                                     ->url(fn ($get) => $get('lokasi'), shouldOpenInNewTab: true)
@@ -226,7 +226,7 @@ class TugasForm
                             )
                             ->disabled()
                             ->dehydrated()
-                            ->helperText('Link otomatis dibuat dari alamat. Klik "Buka Maps" untuk verifikasi lokasi di Google Maps.')
+                            ->helperText('Link automatically created from address. Click "Open Maps" to verify location on Google Maps.')
                             ->columnSpanFull(),
 
                         Forms\Components\Hidden::make('latitude'),
@@ -237,12 +237,12 @@ class TugasForm
                     ->collapsed(),
 
                 // Documentation Section
-                Section::make('Dokumentasi')
-                    ->description('Upload foto dan dokumen bukti (opsional, wajib untuk task yang selesai/gagal)')
+                Section::make('Documentation')
+                    ->description('Upload photos and proof documents (optional, required for completed/failed tasks)')
                     ->icon('heroicon-o-camera')
                     ->schema([
                         Forms\Components\FileUpload::make('foto_bukti')
-                            ->label('Foto Bukti Aktivitas')
+                            ->label('Activity Proof Photos')
                             ->image()
                             ->multiple()
                             ->maxFiles(5)
@@ -256,19 +256,19 @@ class TugasForm
                             ->downloadable()
                             ->openable()
                             ->reorderable()
-                            ->helperText('Opsional: Upload foto aktivitas (Maks 5 foto, 2MB/foto)')
+                            ->helperText('Optional: Upload activity photos (Max 5 photos, 2MB/photo)')
                             ->maxSize(2048)
                             ->columnSpanFull(),
 
                         Forms\Components\FileUpload::make('dokumen_bukti')
-                            ->label('Dokumen Bukti Penyelesaian')
+                            ->label('Completion Proof Document')
                             ->multiple()
                             ->maxFiles(5)
                             ->directory('laporan-aktivitas/dokumen')
                             ->acceptedFileTypes(['application/pdf', 'image/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
                             ->downloadable()
                             ->openable()
-                            ->helperText('Wajib upload dokumen bukti untuk task yang selesai atau gagal (PDF, Word, atau Image)')
+                            ->helperText('Required for completed or failed tasks (PDF, Word, or Image)')
                             ->requiredIf('status', fn ($get) => in_array($get('status'), ['completed', 'failed']))
                             ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed']))
                             ->maxSize(5120)

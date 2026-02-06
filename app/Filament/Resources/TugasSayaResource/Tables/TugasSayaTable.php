@@ -22,7 +22,7 @@ class TugasSayaTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal_aktivitas')
-                    ->label('Tanggal')
+                    ->label('Date')
                     ->date('d M Y')
                     ->sortable()
                     ->searchable()
@@ -31,7 +31,7 @@ class TugasSayaTable
                     ->color('primary'),
 
                 Tables\Columns\TextColumn::make('judul')
-                    ->label('Judul Task')
+                    ->label('Task Title')
                     ->searchable()
                     ->limit(50)
                     ->wrap()
@@ -48,7 +48,7 @@ class TugasSayaTable
                     ->iconPosition('before'),
 
                 Tables\Columns\BadgeColumn::make('kategori')
-                    ->label('Kategori')
+                    ->label('Category')
                     ->color(fn (string $state): string => KategoriLaporanAktivitas::colorFor($state))
                     ->searchable()
                     ->icon('heroicon-o-tag'),
@@ -57,10 +57,10 @@ class TugasSayaTable
                     ->label('Status')
                     ->formatStateUsing(fn ($state) => match ($state) {
                         'pending' => 'Pending',
-                        'in_progress' => 'Dikerjakan',
-                        'completed' => 'Selesai',
-                        'failed' => 'Gagal',
-                        'cancelled' => 'Dibatalkan',
+                        'in_progress' => 'In Progress',
+                        'completed' => 'Completed',
+                        'failed' => 'Failed',
+                        'cancelled' => 'Cancelled',
                         default => $state,
                     })
                     ->color(fn ($record) => $record->status_color)
@@ -75,28 +75,28 @@ class TugasSayaTable
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('waktu_mulai')
-                    ->label('Mulai')
+                    ->label('Start')
                     ->time('H:i')
                     ->icon('heroicon-o-play-circle')
                     ->color('success')
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('waktu_selesai')
-                    ->label('Selesai')
+                    ->label('Finish')
                     ->time('H:i')
                     ->icon('heroicon-o-stop-circle')
                     ->color('danger')
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('durasi')
-                    ->label('Durasi')
+                    ->label('Duration')
                     ->getStateUsing(fn (LaporanAktivitas $record) => $record->durasi)
                     ->badge()
                     ->color('success')
                     ->icon('heroicon-o-clock'),
 
                 Tables\Columns\TextColumn::make('lokasi')
-                    ->label('Lokasi')
+                    ->label('Location')
                     ->searchable()
                     ->limit(30)
                     ->wrap()
@@ -130,7 +130,7 @@ class TugasSayaTable
                     }),
 
                 Tables\Columns\ImageColumn::make('foto_bukti')
-                    ->label('Foto Bukti')
+                    ->label('Photo Proof')
                     ->circular()
                     ->stacked()
                     ->limit(3)
@@ -138,7 +138,7 @@ class TugasSayaTable
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Dibuat')
+                    ->label('Created')
                     ->dateTime('d M Y H:i')
                     ->sortable()
                     ->icon('heroicon-o-clock')
@@ -148,17 +148,17 @@ class TugasSayaTable
             ->defaultSort('tanggal_aktivitas', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('kategori')
-                    ->label('Kategori')
+                    ->label('Category')
                     ->options(fn (): array => KategoriLaporanAktivitas::options())
                     ->multiple(),
 
                 Tables\Filters\Filter::make('tanggal_aktivitas')
                     ->form([
                         Forms\Components\DatePicker::make('dari')
-                            ->label('Dari Tanggal')
+                            ->label('From Date')
                             ->native(false),
                         Forms\Components\DatePicker::make('sampai')
-                            ->label('Sampai Tanggal')
+                            ->label('To Date')
                             ->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -175,10 +175,10 @@ class TugasSayaTable
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
                         if ($data['dari'] ?? null) {
-                            $indicators['dari'] = 'Dari: ' . \Carbon\Carbon::parse($data['dari'])->format('d M Y');
+                            $indicators['dari'] = 'From: ' . \Carbon\Carbon::parse($data['dari'])->format('d M Y');
                         }
                         if ($data['sampai'] ?? null) {
-                            $indicators['sampai'] = 'Sampai: ' . \Carbon\Carbon::parse($data['sampai'])->format('d M Y');
+                            $indicators['sampai'] = 'To: ' . \Carbon\Carbon::parse($data['sampai'])->format('d M Y');
                         }
                         return $indicators;
                     }),
@@ -191,13 +191,13 @@ class TugasSayaTable
                         ->color('info')
                         ->form([
                             Forms\Components\Select::make('status')
-                                ->label('Status Task')
+                                ->label('Task Status')
                                 ->options([
-                                    'pending' => 'Belum Dimulai',
-                                    'in_progress' => 'Sedang Dikerjakan',
-                                    'completed' => 'Selesai',
-                                    'failed' => 'Gagal',
-                                    'cancelled' => 'Dibatalkan',
+                                    'pending' => 'Not Started',
+                                    'in_progress' => 'In Progress',
+                                    'completed' => 'Completed',
+                                    'failed' => 'Failed',
+                                    'cancelled' => 'Cancelled',
                                 ])
                                 ->required()
                                 ->native(false)
@@ -212,22 +212,22 @@ class TugasSayaTable
                                 }),
 
                             Forms\Components\Textarea::make('catatan_status')
-                                ->label('Catatan')
+                                ->label('Notes')
                                 ->rows(3)
-                                ->placeholder('Tambahkan catatan terkait perubahan status...')
+                                ->placeholder('Add notes about the status change...')
                                 ->requiredIf('status', 'failed')
-                                ->helperText('Wajib diisi untuk status Gagal')
+                                ->helperText('Required for Failed status')
                                 ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed', 'cancelled']))
                                 ->columnSpanFull(),
 
                             Forms\Components\FileUpload::make('dokumen_bukti')
-                                ->label('Dokumen Bukti Penyelesaian')
+                                ->label('Proof Document')
                                 ->multiple()
                                 ->maxFiles(5)
                                 ->directory('laporan-aktivitas/dokumen')
                                 ->acceptedFileTypes(['application/pdf', 'image/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
                                 ->downloadable()
-                                ->helperText('Wajib upload dokumen bukti untuk task yang selesai atau gagal')
+                                ->helperText('Required for Completed or Failed tasks')
                                 ->requiredIf('status', fn ($get) => in_array($get('status'), ['completed', 'failed']))
                                 ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed']))
                                 ->maxSize(5120)
@@ -249,8 +249,8 @@ class TugasSayaTable
 
                             $record->update($data);
                         })
-                        ->successNotificationTitle('Status berhasil diupdate')
-                        ->modalHeading('Update Status Task')
+                        ->successNotificationTitle('Status updated successfully')
+                        ->modalHeading('Update Task Status')
                         ->modalWidth('lg'),
 
                     EditAction::make()
@@ -259,7 +259,7 @@ class TugasSayaTable
                         ->visible(fn (LaporanAktivitas $record): bool => Auth::user()?->can('delete', $record) ?? false)
                         ->color('danger'),
                 ])
-                ->label('Aksi')
+                ->label('Actions')
                 ->icon('heroicon-m-ellipsis-vertical')
                 ->size('sm')
                 ->color('primary')
@@ -267,10 +267,10 @@ class TugasSayaTable
             ])
             ->emptyStateActions([
                 CreateAction::make()
-                    ->label('Tambah Laporan')
+                    ->label('Add Report')
                     ->icon('heroicon-o-plus'),
             ])
-            ->emptyStateHeading('Belum ada tugas')
-            ->emptyStateDescription('Mulai dengan menambahkan tugas harian Anda.');
+            ->emptyStateHeading('No tasks yet')
+            ->emptyStateDescription('Start by adding your daily tasks.');
     }
 }

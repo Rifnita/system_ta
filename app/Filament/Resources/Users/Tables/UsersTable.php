@@ -109,7 +109,7 @@ class UsersTable
                     ->multiple()
                     ->preload(),
             ])
-            ->recordActions([
+            ->actions([
                 ActionGroup::make([
                     EditAction::make()
                         ->label('Edit')
@@ -166,7 +166,10 @@ class UsersTable
                         ->modalCancelActionLabel('Cancel'),
                 ])
                     ->label('Actions')
-                    ->icon('heroicon-o-ellipsis-horizontal'),
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->size('sm')
+                    ->color('primary')
+                    ->button(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

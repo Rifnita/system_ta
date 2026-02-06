@@ -29,7 +29,7 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Manajemen User';
+    protected static string|UnitEnum|null $navigationGroup = 'User Management';
 
     protected static ?int $navigationSort = 1;
 

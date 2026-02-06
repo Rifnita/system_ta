@@ -20,13 +20,13 @@ class TugasSayaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'Tugas Saya';
+    protected static ?string $navigationLabel = 'My Tasks';
 
-    protected static ?string $modelLabel = 'Tugas';
+    protected static ?string $modelLabel = 'Task';
 
-    protected static ?string $pluralModelLabel = 'Tugas';
+    protected static ?string $pluralModelLabel = 'Tasks';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
+    protected static string|UnitEnum|null $navigationGroup = 'Task Management';
 
     protected static ?int $navigationSort = 2;
 
@@ -38,7 +38,7 @@ class TugasSayaResource extends Resource
             return false;
         }
 
-        // Tampilkan menu jika user punya permission terkait (biarkan Shield yang mengatur).
+        // Show menu if user has related permissions (let Shield manage it).
         return $user->can('view_laporan::aktivitas')
             || $user->can('create_laporan::aktivitas')
             || $user->can('update_laporan::aktivitas')
@@ -70,7 +70,7 @@ class TugasSayaResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        // Menampilkan hanya laporan milik user yang sedang login
+        // Show only reports belonging to the currently logged-in user
         return parent::getEloquentQuery()
             ->where('user_id', Auth::id());
     }

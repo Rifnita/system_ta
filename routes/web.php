@@ -5,7 +5,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\LaporanAktivitasExportController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin/login');
 });
 
 // Password Reset Routes

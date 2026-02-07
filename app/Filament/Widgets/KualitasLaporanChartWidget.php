@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class KualitasLaporanChartWidget extends ChartWidget
 {
-    protected ?string $maxHeight = '300px';
+    protected static ?int $sort = 1;
+    protected int | string | array $columnSpan = 1;
+    protected ?string $maxHeight = '250px';
 
     public function getHeading(): ?string
     {

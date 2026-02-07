@@ -43,24 +43,19 @@ class RekapMingguanStatsWidget extends BaseWidget
 
         return [
             Stat::make('Total Laporan Mingguan', $totalLaporan)
-                ->description('Jumlah laporan yang masuk')
-                ->descriptionIcon('heroicon-m-document-text')
-                ->color('primary')
-                ->chart($this->getWeeklyChart()),
+                ->description('Jumlah laporan masuk')
+                ->color('primary'),
             
             Stat::make('Rata-rata Progress', number_format($avgProgress, 2) . '%')
-                ->description('Progress keseluruhan proyek')
-                ->descriptionIcon('heroicon-m-chart-bar')
+                ->description('Progress keseluruhan')
                 ->color('success'),
             
             Stat::make('Target Tercapai', $targetTercapai . ' dari ' . $totalLaporan)
-                ->description($targetPercentage . '% mencapai target')
-                ->descriptionIcon('heroicon-m-check-circle')
+                ->description($targetPercentage . '% tercapai')
                 ->color($targetPercentage >= 70 ? 'success' : ($targetPercentage >= 50 ? 'warning' : 'danger')),
             
             Stat::make('Proyek Dilaporkan', $totalProyek)
-                ->description('Proyek aktif dengan laporan')
-                ->descriptionIcon('heroicon-m-building-office-2')
+                ->description('Proyek aktif')
                 ->color('info'),
         ];
     }

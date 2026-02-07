@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class ProgressTrendChartWidget extends ChartWidget
 {
-    protected int | string | array $columnSpan = 'full';
+    protected static ?int $sort = 2;
+    protected int | string | array $columnSpan = 1;
+    protected ?string $maxHeight = '250px';
 
     public function getHeading(): ?string
     {

@@ -3,8 +3,6 @@
 namespace App\Filament\Pages;
 
 use App\Models\Proyek;
-use BackedEnum;
-use UnitEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -15,22 +13,22 @@ class RekapMingguan extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static ?string $navigationLabel = 'Weekly Summary';
-
-    protected string $view = 'filament.pages.rekap-mingguan';
 
     protected static ?string $title = 'Weekly Reports Summary';
 
     protected static ?int $navigationSort = 3;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Reports & Projects';
+    protected static string | \UnitEnum | null $navigationGroup = 'Reports & Projects';
 
     public $proyekId = null;
     public $tahun = null;
     public $tanggalMulai = null;
     public $tanggalAkhir = null;
+
+    protected string $view = 'filament.pages.rekap-mingguan';
 
     public function mount(): void
     {
@@ -80,5 +78,35 @@ class RekapMingguan extends Page implements HasForms
             ])
             ->columns(4)
             ->statePath('data');
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Widgets\RekapMingguanStatsWidget::class,
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            \App\Filament\Widgets\KualitasLaporanChartWidget::class,
+            \App\Filament\Widgets\ProgressTrendChartWidget::class,
+            \App\Filament\Widgets\TopProyekProgressWidget::class,
+        ];
+    }
+
+    public function getHeaderWidgetsColumns(): int | array
+    {
+        return 4;
+    }
+
+    public function getFooterWidgetsColumns(): int | array
+    {
+        return [
+            'sm' => 1,
+            'md' => 2,
+            'xl' => 2,
+        ];
     }
 }

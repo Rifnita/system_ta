@@ -12,11 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 class TopProyekProgressWidget extends BaseWidget
 {
+    protected static ?int $sort = 3;
     protected int | string | array $columnSpan = 'full';
 
     public function getHeading(): ?string
     {
-        return 'Top 5 Proyek (Progress Tertinggi)';
+        return 'Top Proyek Progress';
     }
 
     public ?int $proyekId = null;

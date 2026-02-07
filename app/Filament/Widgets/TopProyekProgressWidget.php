@@ -8,12 +8,20 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TopProyekProgressWidget extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 10;
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        // Analytics widget - visible for managers
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
+    }
 
     public function getHeading(): ?string
     {

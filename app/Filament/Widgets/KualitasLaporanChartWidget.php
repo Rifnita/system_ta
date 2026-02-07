@@ -4,13 +4,24 @@ namespace App\Filament\Widgets;
 
 use App\Models\LaporanMingguan;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class KualitasLaporanChartWidget extends ChartWidget
 {
-    protected static ?int $sort = 1;
-    protected int | string | array $columnSpan = 1;
-    protected ?string $maxHeight = '250px';
+    protected static ?int $sort = 6;
+    protected int | string | array $columnSpan = [
+        'md' => 2,
+        'xl' => 1,
+    ];
+    protected ?string $maxHeight = '300px';
+
+    public static function canView(): bool
+    {
+        // Analytics widget - visible for managers
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
+    }
 
     public function getHeading(): ?string
     {

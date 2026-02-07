@@ -5,10 +5,21 @@ namespace App\Filament\Widgets;
 use App\Models\LaporanMingguan;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RekapMingguanStatsWidget extends BaseWidget
 {
+    protected static ?int $sort = 4;
+    protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        // Analytics widget - visible for managers
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
+    }
+    
     public ?int $proyekId = null;
     public ?int $tahun = null;
     public ?string $tanggalMulai = null;

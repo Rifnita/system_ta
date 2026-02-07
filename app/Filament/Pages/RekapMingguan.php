@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\Proyek;
 use BackedEnum;
+use UnitEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -16,13 +17,15 @@ class RekapMingguan extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?string $navigationLabel = 'Rekap Mingguan';
+    protected static ?string $navigationLabel = 'Weekly Summary';
 
     protected string $view = 'filament.pages.rekap-mingguan';
 
-    protected static ?string $title = 'Rekap Laporan Mingguan';
+    protected static ?string $title = 'Weekly Reports Summary';
 
     protected static ?int $navigationSort = 3;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Reports & Projects';
 
     public $proyekId = null;
     public $tahun = null;
@@ -44,15 +47,15 @@ class RekapMingguan extends Page implements HasForms
         return $form
             ->schema([
                 Select::make('proyekId')
-                    ->label('Filter Proyek')
+                    ->label('Filter Project')
                     ->options(Proyek::pluck('nama_proyek', 'id'))
                     ->searchable()
                     ->preload()
                     ->native(false)
-                    ->placeholder('Semua Proyek'),
+                    ->placeholder('All Projects'),
                 
                 Select::make('tahun')
-                    ->label('Tahun')
+                    ->label('Year')
                     ->options(function () {
                         $years = [];
                         for ($i = date('Y'); $i >= 2020; $i--) {
@@ -64,13 +67,13 @@ class RekapMingguan extends Page implements HasForms
                     ->native(false),
                 
                 DatePicker::make('tanggalMulai')
-                    ->label('Dari Tanggal')
+                    ->label('From Date')
                     ->native(false)
                     ->displayFormat('d/m/Y')
                     ->maxDate(fn ($get) => $get('tanggalAkhir')),
                 
                 DatePicker::make('tanggalAkhir')
-                    ->label('Sampai Tanggal')
+                    ->label('To Date')
                     ->native(false)
                     ->displayFormat('d/m/Y')
                     ->minDate(fn ($get) => $get('tanggalMulai')),

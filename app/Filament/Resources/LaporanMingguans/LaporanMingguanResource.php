@@ -9,6 +9,7 @@ use App\Filament\Resources\LaporanMingguans\Schemas\LaporanMingguanForm;
 use App\Filament\Resources\LaporanMingguans\Tables\LaporanMingguansTable;
 use App\Models\LaporanMingguan;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -22,13 +23,15 @@ class LaporanMingguanResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationLabel = 'Laporan Mingguan';
+    protected static ?string $navigationLabel = 'Weekly Reports';
 
-    protected static ?string $modelLabel = 'Laporan Mingguan';
+    protected static ?string $modelLabel = 'Weekly Report';
 
-    protected static ?string $pluralModelLabel = 'Laporan Mingguan';
+    protected static ?string $pluralModelLabel = 'Weekly Reports';
 
     protected static ?int $navigationSort = 2;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Reports & Projects';
 
     public static function form(Schema $schema): Schema
     {

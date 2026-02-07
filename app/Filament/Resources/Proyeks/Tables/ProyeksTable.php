@@ -21,13 +21,13 @@ class ProyeksTable
         return $table
             ->columns([
                 TextColumn::make('kode_proyek')
-                    ->label('Kode')
+                    ->label('Code')
                     ->searchable()
                     ->sortable()
                     ->copyable()
                     ->weight('bold'),
                 TextColumn::make('nama_proyek')
-                    ->label('Nama Proyek')
+                    ->label('Project Name')
                     ->searchable()
                     ->sortable()
                     ->limit(40)
@@ -39,15 +39,15 @@ class ProyeksTable
                         return $state;
                     }),
                 TextColumn::make('tipe_bangunan')
-                    ->label('Tipe')
+                    ->label('Type')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'rumah_tinggal' => 'Rumah Tinggal',
-                        'ruko' => 'Ruko',
-                        'gedung' => 'Gedung',
+                        'rumah_tinggal' => 'Residential House',
+                        'ruko' => 'Shophouse',
+                        'gedung' => 'Building',
                         'villa' => 'Villa',
-                        'apartemen' => 'Apartemen',
-                        'lainnya' => 'Lainnya',
+                        'apartemen' => 'Apartment',
+                        'lainnya' => 'Others',
                         default => $state,
                     })
                     ->color(fn (string $state): string => match ($state) {
@@ -59,17 +59,17 @@ class ProyeksTable
                         default => 'gray',
                     }),
                 TextColumn::make('lokasi')
-                    ->label('Lokasi')
+                    ->label('Location')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'perencanaan' => 'Perencanaan',
-                        'dalam_pengerjaan' => 'Dalam Pengerjaan',
-                        'tertunda' => 'Tertunda',
-                        'selesai' => 'Selesai',
+                        'perencanaan' => 'Planning',
+                        'dalam_pengerjaan' => 'In Progress',
+                        'tertunda' => 'On Hold',
+                        'selesai' => 'Completed',
                         default => $state,
                     })
                     ->color(fn (string $state): string => match ($state) {
@@ -81,43 +81,43 @@ class ProyeksTable
                     })
                     ->sortable(),
                 TextColumn::make('tanggal_mulai')
-                    ->label('Tgl Mulai')
+                    ->label('Start Date')
                     ->date('d/m/Y')
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('estimasi_selesai')
-                    ->label('Estimasi Selesai')
+                    ->label('Est. Completion')
                     ->date('d/m/Y')
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('nilai_kontrak')
-                    ->label('Nilai Kontrak')
+                    ->label('Contract Value')
                     ->money('IDR')
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('kontraktor')
-                    ->label('Kontraktor')
+                    ->label('Contractor')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('luas_bangunan')
-                    ->label('Luas Bangunan')
+                    ->label('Building Area')
                     ->numeric()
                     ->suffix(' m²')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('luas_tanah')
-                    ->label('Luas Tanah')
+                    ->label('Land Area')
                     ->numeric()
                     ->suffix(' m²')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->label('Dibuat')
+                    ->label('Created')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label('Diupdate')
+                    ->label('Updated')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -126,21 +126,21 @@ class ProyeksTable
                 SelectFilter::make('status')
                     ->label('Status')
                     ->options([
-                        'perencanaan' => 'Perencanaan',
-                        'dalam_pengerjaan' => 'Dalam Pengerjaan',
-                        'tertunda' => 'Tertunda',
-                        'selesai' => 'Selesai',
+                        'perencanaan' => 'Planning',
+                        'dalam_pengerjaan' => 'In Progress',
+                        'tertunda' => 'On Hold',
+                        'selesai' => 'Completed',
                     ])
                     ->native(false),
                 SelectFilter::make('tipe_bangunan')
-                    ->label('Tipe Bangunan')
+                    ->label('Building Type')
                     ->options([
-                        'rumah_tinggal' => 'Rumah Tinggal',
-                        'ruko' => 'Ruko',
-                        'gedung' => 'Gedung',
+                        'rumah_tinggal' => 'Residential House',
+                        'ruko' => 'Shophouse',
+                        'gedung' => 'Building',
                         'villa' => 'Villa',
-                        'apartemen' => 'Apartemen',
-                        'lainnya' => 'Lainnya',
+                        'apartemen' => 'Apartment',
+                        'lainnya' => 'Others',
                     ])
                     ->native(false),
                 TrashedFilter::make(),

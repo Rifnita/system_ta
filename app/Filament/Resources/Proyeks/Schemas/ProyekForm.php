@@ -15,40 +15,40 @@ class ProyekForm
     {
         return $schema
             ->components([
-                Section::make('Informasi Dasar Proyek')
-                    ->description('Data identitas dan informasi umum proyek')
+                Section::make('Basic Project Information')
+                    ->description('Project identity and general information')
                     ->schema([
                         TextInput::make('kode_proyek')
-                            ->label('Kode Proyek')
-                            ->placeholder('Contoh: PRJ-2026-001')
+                            ->label('Project Code')
+                            ->placeholder('Example: PRJ-2026-001')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(50),
                         TextInput::make('nama_proyek')
-                            ->label('Nama Proyek')
-                            ->placeholder('Contoh: Pembangunan Rumah Tinggal Bapak Ahmad')
+                            ->label('Project Name')
+                            ->placeholder('Example: Mr. Ahmad Residential House Construction')
                             ->required()
                             ->maxLength(255),
                         Select::make('tipe_bangunan')
-                            ->label('Tipe Bangunan')
+                            ->label('Building Type')
                             ->options([
-                                'rumah_tinggal' => 'Rumah Tinggal',
-                                'ruko' => 'Ruko',
-                                'gedung' => 'Gedung',
+                                'rumah_tinggal' => 'Residential House',
+                                'ruko' => 'Shophouse',
+                                'gedung' => 'Building',
                                 'villa' => 'Villa',
-                                'apartemen' => 'Apartemen',
-                                'lainnya' => 'Lainnya',
+                                'apartemen' => 'Apartment',
+                                'lainnya' => 'Others',
                             ])
                             ->default('rumah_tinggal')
                             ->required()
                             ->native(false),
                         Select::make('status')
-                            ->label('Status Proyek')
+                            ->label('Project Status')
                             ->options([
-                                'perencanaan' => 'Perencanaan',
-                                'dalam_pengerjaan' => 'Dalam Pengerjaan',
-                                'tertunda' => 'Tertunda',
-                                'selesai' => 'Selesai',
+                                'perencanaan' => 'Planning',
+                                'dalam_pengerjaan' => 'In Progress',
+                                'tertunda' => 'On Hold',
+                                'selesai' => 'Completed',
                             ])
                             ->default('perencanaan')
                             ->required()
@@ -56,64 +56,64 @@ class ProyekForm
                     ])
                     ->columns(2),
                 
-                Section::make('Lokasi dan Pihak Terkait')
+                Section::make('Location and Related Parties')
                     ->schema([
                         TextInput::make('lokasi')
-                            ->label('Lokasi/Kota')
-                            ->placeholder('Contoh: Surabaya')
+                            ->label('Location/City')
+                            ->placeholder('Example: Surabaya')
                             ->required()
                             ->maxLength(255),
                         Textarea::make('alamat_lengkap')
-                            ->label('Alamat Lengkap')
-                            ->placeholder('Alamat detail proyek...')
+                            ->label('Full Address')
+                            ->placeholder('Detailed project address...')
                             ->rows(3)
                             ->columnSpanFull(),
                         TextInput::make('nama_pemilik')
-                            ->label('Nama Pemilik')
-                            ->placeholder('Nama pemilik/klien')
+                            ->label('Owner Name')
+                            ->placeholder('Owner/client name')
                             ->maxLength(255),
                         TextInput::make('kontraktor')
-                            ->label('Kontraktor/Mandor')
-                            ->placeholder('Nama kontraktor atau mandor')
+                            ->label('Contractor/Foreman')
+                            ->placeholder('Contractor or foreman name')
                             ->maxLength(255),
                     ])
                     ->columns(2),
                 
-                Section::make('Timeline dan Anggaran')
+                Section::make('Timeline and Budget')
                     ->schema([
                         DatePicker::make('tanggal_mulai')
-                            ->label('Tanggal Mulai')
+                            ->label('Start Date')
                             ->native(false)
                             ->displayFormat('d/m/Y'),
                         DatePicker::make('estimasi_selesai')
-                            ->label('Estimasi Selesai')
+                            ->label('Estimated Completion')
                             ->native(false)
                             ->displayFormat('d/m/Y')
                             ->after('tanggal_mulai'),
                         TextInput::make('nilai_kontrak')
-                            ->label('Nilai Kontrak')
+                            ->label('Contract Value')
                             ->numeric()
                             ->prefix('Rp')
                             ->placeholder('0')
-                            ->helperText('Nilai kontrak dalam Rupiah'),
+                            ->helperText('Contract value in Rupiah'),
                     ])
                     ->columns(3),
                 
-                Section::make('Spesifikasi Bangunan')
+                Section::make('Building Specifications')
                     ->schema([
                         TextInput::make('luas_tanah')
-                            ->label('Luas Tanah')
+                            ->label('Land Area')
                             ->numeric()
                             ->suffix('m²')
                             ->placeholder('0'),
                         TextInput::make('luas_bangunan')
-                            ->label('Luas Bangunan')
+                            ->label('Building Area')
                             ->numeric()
                             ->suffix('m²')
                             ->placeholder('0'),
                         Textarea::make('deskripsi')
-                            ->label('Deskripsi/Catatan')
-                            ->placeholder('Informasi tambahan tentang proyek...')
+                            ->label('Description/Notes')
+                            ->placeholder('Additional information about the project...')
                             ->rows(3)
                             ->columnSpanFull(),
                     ])

@@ -9,6 +9,7 @@ use App\Filament\Resources\Proyeks\Schemas\ProyekForm;
 use App\Filament\Resources\Proyeks\Tables\ProyeksTable;
 use App\Models\Proyek;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -22,13 +23,15 @@ class ProyekResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static ?string $navigationLabel = 'Master Proyek';
+    protected static ?string $navigationLabel = 'Master Project';
 
-    protected static ?string $modelLabel = 'Proyek';
+    protected static ?string $modelLabel = 'Project';
 
-    protected static ?string $pluralModelLabel = 'Proyek';
+    protected static ?string $pluralModelLabel = 'Projects';
 
     protected static ?int $navigationSort = 1;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Reports & Projects';
 
     protected static ?string $recordTitleAttribute = 'nama_proyek';
 

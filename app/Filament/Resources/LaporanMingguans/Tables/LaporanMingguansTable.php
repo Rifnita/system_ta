@@ -22,7 +22,7 @@ class LaporanMingguansTable
         return $table
             ->columns([
                 TextColumn::make('proyek.nama_proyek')
-                    ->label('Proyek')
+                    ->label('Project')
                     ->searchable()
                     ->sortable()
                     ->limit(30)
@@ -36,19 +36,19 @@ class LaporanMingguansTable
                     ->weight('bold'),
                 
                 TextColumn::make('minggu_ke')
-                    ->label('Minggu Ke')
+                    ->label('Week')
                     ->sortable()
                     ->badge()
                     ->color('info'),
                 
                 TextColumn::make('tanggal_mulai')
-                    ->label('Periode')
+                    ->label('Period')
                     ->date('d M Y')
                     ->description(fn ($record) => $record->tanggal_akhir?->format('d M Y'))
                     ->sortable(),
                 
                 TextColumn::make('persentase_penyelesaian')
-                    ->label('Progress Total')
+                    ->label('Total Progress')
                     ->suffix('%')
                     ->sortable()
                     ->color(fn ($state) => match(true) {
@@ -66,7 +66,7 @@ class LaporanMingguansTable
                     ->toggleable(),
                 
                 TextColumn::make('realisasi_mingguan')
-                    ->label('Realisasi')
+                    ->label('Realization')
                     ->suffix('%')
                     ->sortable()
                     ->color(fn ($record) => $record->isTargetTercapai() ? 'success' : 'warning')
@@ -74,13 +74,13 @@ class LaporanMingguansTable
                     ->toggleable(),
                 
                 TextColumn::make('status_kualitas')
-                    ->label('Kualitas')
+                    ->label('Quality')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'excellent' => 'Sangat Baik',
-                        'good' => 'Baik',
-                        'fair' => 'Cukup',
-                        'poor' => 'Buruk',
+                        'excellent' => 'Excellent',
+                        'good' => 'Good',
+                        'fair' => 'Fair',
+                        'poor' => 'Poor',
                         default => '-',
                     })
                     ->color(fn (string $state): string => match ($state) {
@@ -93,7 +93,7 @@ class LaporanMingguansTable
                     ->sortable(),
                 
                 ImageColumn::make('foto_progress')
-                    ->label('Foto')
+                    ->label('Photo')
                     ->circular()
                     ->stacked()
                     ->limit(3)
@@ -101,25 +101,25 @@ class LaporanMingguansTable
                     ->toggleable(),
                 
                 TextColumn::make('user.name')
-                    ->label('Pelapor')
+                    ->label('Reporter')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
                 
                 TextColumn::make('jumlah_pekerja')
-                    ->label('Pekerja')
+                    ->label('Workers')
                     ->suffix(' org')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 
                 TextColumn::make('kondisi_cuaca')
-                    ->label('Cuaca')
+                    ->label('Weather')
                     ->badge()
                     ->formatStateUsing(fn (?string $state): string => match ($state) {
-                        'cerah' => 'Cerah',
-                        'berawan' => 'Berawan',
-                        'hujan_ringan' => 'Hujan Ringan',
-                        'hujan_lebat' => 'Hujan Lebat',
+                        'cerah' => 'Sunny',
+                        'berawan' => 'Cloudy',
+                        'hujan_ringan' => 'Light Rain',
+                        'hujan_lebat' => 'Heavy Rain',
                         default => '-',
                     })
                     ->color(fn (?string $state): string => match ($state) {
@@ -139,27 +139,27 @@ class LaporanMingguansTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 
                 TextColumn::make('submitted_at')
-                    ->label('Dilaporkan')
+                    ->label('Reported')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 
                 TextColumn::make('created_at')
-                    ->label('Dibuat')
+                    ->label('Created')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('proyek_id')
-                    ->label('Proyek')
+                    ->label('Project')
                     ->options(Proyek::pluck('nama_proyek', 'id'))
                     ->searchable()
                     ->preload()
                     ->native(false),
                 
                 SelectFilter::make('tahun')
-                    ->label('Tahun')
+                    ->label('Year')
                     ->options(function () {
                         $years = [];
                         for ($i = date('Y'); $i >= 2020; $i--) {
@@ -170,12 +170,12 @@ class LaporanMingguansTable
                     ->native(false),
                 
                 SelectFilter::make('status_kualitas')
-                    ->label('Status Kualitas')
+                    ->label('Quality Status')
                     ->options([
-                        'excellent' => 'Sangat Baik',
-                        'good' => 'Baik',
-                        'fair' => 'Cukup',
-                        'poor' => 'Buruk',
+                        'excellent' => 'Excellent',
+                        'good' => 'Good',
+                        'fair' => 'Fair',
+                        'poor' => 'Poor',
                     ])
                     ->native(false),
                 

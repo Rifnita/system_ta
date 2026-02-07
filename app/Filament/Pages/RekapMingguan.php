@@ -68,12 +68,14 @@ class RekapMingguan extends Page implements HasForms
                     ->label('From Date')
                     ->native(false)
                     ->displayFormat('d/m/Y')
+                    ->prefixIcon('heroicon-o-calendar')
                     ->maxDate(fn ($get) => $get('tanggalAkhir')),
                 
                 DatePicker::make('tanggalAkhir')
                     ->label('To Date')
                     ->native(false)
                     ->displayFormat('d/m/Y')
+                    ->prefixIcon('heroicon-o-calendar')
                     ->minDate(fn ($get) => $get('tanggalMulai')),
             ])
             ->columns(4)

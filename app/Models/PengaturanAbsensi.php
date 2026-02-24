@@ -39,6 +39,6 @@ class PengaturanAbsensi extends Model
      */
     public static function getAktif(): ?self
     {
-        return self::where('aktif', true)->first();
+        return self::where('aktif', true)->first() ?? self::query()->latest('id')->first();
     }
 }

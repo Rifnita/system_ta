@@ -8,7 +8,6 @@ use App\Models\PengaturanAbsensi;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class CreateAbsensi extends CreateRecord
 {
@@ -16,6 +15,11 @@ class CreateAbsensi extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $data['user_id'] = Auth::id();
+        $data['tanggal'] = today()->format('Y-m-d');
+        $data['jam_masuk'] = now()->format('H:i:s');
+        $data['status'] = 'hadir';
+
         // Validasi: Cek apakah sudah absen hari ini
         if (Absensi::sudahAbsenHariIni(Auth::id())) {
             Notification::make()
@@ -28,7 +32,7 @@ class CreateAbsensi extends CreateRecord
         }
 
         // Cek pengaturan absensi
-        $pengaturan = PengaturanAbsensi::first();
+        $pengaturan = PengaturanAbsensi::getAktif();
         
         if (!$pengaturan) {
             // Jika belum ada pengaturan, set default tanpa validasi ketat
@@ -64,11 +68,26 @@ class CreateAbsensi extends CreateRecord
             $this->halt();
         }
 
-        // Deteksi mock location (warning saja, tidak block)
-        if (!empty($data['mock_location_detected_masuk']) && $data['mock_location_detected_masuk']) {
+        $risk = (new Absensi())->evaluasiRisikoGps(
+            isset($data['akurasi_gps_masuk']) ? (float) $data['akurasi_gps_masuk'] : null,
+            (bool) ($data['mock_location_detected_masuk'] ?? false),
+            isset($data['latitude_masuk']) ? (float) $data['latitude_masuk'] : null,
+            isset($data['longitude_masuk']) ? (float) $data['longitude_masuk'] : null,
+        );
+
+        if ($risk['blocked']) {
             Notification::make()
-                ->title('Peringatan')
-                ->body('Sistem mendeteksi kemungkinan penggunaan fake GPS.')
+                ->title('Risiko GPS Terlalu Tinggi')
+                ->body('Absensi ditolak. Indikasi spoofing lokasi terdeteksi.')
+                ->danger()
+                ->send();
+            $this->halt();
+        }
+
+        if ($risk['level'] === 'sedang') {
+            Notification::make()
+                ->title('Peringatan GPS')
+                ->body('Sistem mendeteksi anomali GPS. Absensi tetap dicatat dan ditandai untuk review.')
                 ->warning()
                 ->send();
         }
@@ -95,15 +114,17 @@ class CreateAbsensi extends CreateRecord
         // Hitung keterlambatan - simple, hanya bandingkan jam
         try {
             // Parse jam standar (misalnya 08:00:00)
-            list($jamStd, $menitStd) = explode(':', $pengaturan->jam_masuk_standar);
+            $jamStandar = \Carbon\Carbon::parse($pengaturan->jam_masuk_standar)->format('H:i');
+            [$jamStd, $menitStd] = explode(':', $jamStandar);
             
             // Parse jam masuk aktual (dari form, misalnya 08:15:00) 
-            list($jamAktual, $menitAktual) = explode(':', $data['jam_masuk']);
+            $jamMasuk = \Carbon\Carbon::parse((string) $data['jam_masuk'])->format('H:i');
+            [$jamAktual, $menitAktual] = explode(':', $jamMasuk);
             
             // Hitung selisih dalam menit
             $selisih = (($jamAktual * 60) + $menitAktual) - (($jamStd * 60) + $menitStd);
             
-            $data['keterlambatan_menit'] = $selisih > 0 ? $selisih : 0;
+            $data['keterlambatan_menit'] = $selisih > (int) $pengaturan->toleransi_keterlambatan ? $selisih : 0;
         } catch (\Exception $e) {
             // Jika gagal, set 0
             $data['keterlambatan_menit'] = 0;

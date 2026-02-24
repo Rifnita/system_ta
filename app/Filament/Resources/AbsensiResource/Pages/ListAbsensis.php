@@ -7,7 +7,6 @@ use App\Models\Absensi;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\Auth;
-use Filament\Notifications\Notification;
 
 class ListAbsensis extends ListRecords
 {
@@ -15,7 +14,9 @@ class ListAbsensis extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        $sudahAbsen = Absensi::sudahAbsenHariIni(Auth::id());
+        $absensiHariIni = Absensi::absensiHariIni(Auth::id());
+        $sudahAbsen = (bool) $absensiHariIni;
+        $bisaAbsenKeluar = $absensiHariIni?->canCheckoutBy(Auth::user()) ?? false;
         
         return [
             Actions\Action::make('absen_masuk')
@@ -24,7 +25,14 @@ class ListAbsensis extends ListRecords
                 ->color($sudahAbsen ? 'gray' : 'success')
                 ->disabled($sudahAbsen)
                 ->url(fn () => AbsensiResource::getUrl('create'))
-                ->visible(fn () => Auth::user()->can('create_absensi')),
+                ->visible(fn () => AbsensiResource::canDo('create')),
+            Actions\Action::make('absen_keluar')
+                ->label($bisaAbsenKeluar ? 'Absen Keluar' : 'Belum Bisa Absen Keluar')
+                ->icon('heroicon-o-arrow-right-on-rectangle')
+                ->color($bisaAbsenKeluar ? 'warning' : 'gray')
+                ->disabled(! $bisaAbsenKeluar)
+                ->url(fn () => $absensiHariIni ? AbsensiResource::getUrl('edit', ['record' => $absensiHariIni]) : '#')
+                ->visible(fn () => AbsensiResource::canDo('create') || AbsensiResource::canDo('update')),
         ];
     }
 }

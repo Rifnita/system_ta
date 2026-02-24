@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AbsensiResource\Tables;
 
+use App\Filament\Resources\AbsensiResource;
 use App\Models\Absensi;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -63,7 +64,7 @@ class AbsensiTable
                 ->label('Status')
                 ->colors([
                     'success' => 'hadir',
-                    'warning' => 'izin',
+                    'warning' => ['izin', 'lembur'],
                     'info' => 'sakit',
                     'primary' => 'cuti',
                     'secondary' => 'dinas_luar',
@@ -96,6 +97,7 @@ class AbsensiTable
                     'cuti' => 'Cuti',
                     'alpha' => 'Alpha',
                     'dinas_luar' => 'Dinas Luar',
+                    'lembur' => 'Lembur',
                 ]),
             
             Tables\Filters\Filter::make('tanggal')
@@ -128,20 +130,17 @@ class AbsensiTable
         return [
             ViewAction::make(),
             EditAction::make()
-                ->visible(fn () => Auth::user()->can('update_absensi')),
+                ->visible(fn () => AbsensiResource::canDo('update')),
             Action::make('absen_keluar')
                 ->label('Absen Keluar')
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->color('success')
-                ->requiresConfirmation()
                 ->visible(fn (Absensi $record) => 
-                    $record->user_id === Auth::id() && 
-                    !$record->jam_keluar &&
-                    $record->tanggal->isToday()
+                    Auth::check()
+                    && (AbsensiResource::canDo('create') || AbsensiResource::canDo('update'))
+                    && $record->canCheckoutBy(Auth::user())
                 )
-                ->action(function (Absensi $record, array $data) {
-                    // This will be handled by custom page action
-                }),
+                ->url(fn (Absensi $record) => \App\Filament\Resources\AbsensiResource::getUrl('edit', ['record' => $record])),
         ];
     }
 

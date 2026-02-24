@@ -421,6 +421,7 @@ namespace App\Models {
 	 * @method static \Illuminate\Database\Eloquent\Builder<Absensi>|Absensi newModelQuery()
 	 * @method static \Illuminate\Database\Eloquent\Builder<Absensi>|Absensi newQuery()
 	 * @method static \Illuminate\Database\Eloquent\Builder<Absensi>|Absensi query()
+	 * @method static \Illuminate\Database\Eloquent\Builder<Absensi>|Absensi hariIni(?int $userId = null) {@see App\Models\Absensi::scopeHariIni()}
 	 * @method static mixed select($columns)
 	 * @method static mixed selectSub($query, $as)
 	 * @method static mixed selectExpression($expression, $as)

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class Absensi extends Model
 {
@@ -78,7 +79,11 @@ class Absensi extends Model
      */
     public function hitungKeterlambatan(): int
     {
-        $pengaturan = PengaturanAbsensi::firstOrFail();
+        $pengaturan = PengaturanAbsensi::getAktif();
+
+        if (! $pengaturan) {
+            return 0;
+        }
         
         // Ekstrak hanya bagian waktu (H:i:s) dari jam_masuk
         $jamMasukValue = $this->extractTimeOnly($this->jam_masuk);
@@ -92,9 +97,14 @@ class Absensi extends Model
         $jamMasukStandar = Carbon::parse($tanggalValue . ' ' . $jamMasukStandarValue);
         $jamMasukAktual = Carbon::parse($tanggalValue . ' ' . $jamMasukValue);
         
-        $selisih = $jamMasukAktual->diffInMinutes($jamMasukStandar, false);
-        
-        return $selisih > 0 ? $selisih : 0;
+        $selisih = $jamMasukStandar->diffInMinutes($jamMasukAktual, false);
+        $keterlambatan = $selisih > 0 ? $selisih : 0;
+
+        if ($keterlambatan <= (int) $pengaturan->toleransi_keterlambatan) {
+            return 0;
+        }
+
+        return $keterlambatan;
     }
     
     /**
@@ -157,7 +167,11 @@ class Absensi extends Model
      */
     public function validasiJarakDariKantor(float $lat, float $lon): array
     {
-        $pengaturan = PengaturanAbsensi::firstOrFail();
+        $pengaturan = PengaturanAbsensi::getAktif();
+
+        if (! $pengaturan) {
+            return ['valid' => true, 'jarak' => 0, 'message' => 'Pengaturan absensi belum aktif'];
+        }
         
         if (!$pengaturan->latitude_kantor || !$pengaturan->longitude_kantor) {
             return ['valid' => true, 'jarak' => 0, 'message' => 'Lokasi kantor belum diatur'];
@@ -211,9 +225,80 @@ class Absensi extends Model
      */
     public static function sudahAbsenHariIni(int $userId): bool
     {
-        return self::where('user_id', $userId)
-            ->whereDate('tanggal', today())
-            ->exists();
+        return self::query()->hariIni($userId)->exists();
+    }
+
+    public function evaluasiRisikoGps(
+        ?float $akurasi,
+        bool $mockLocationDetected,
+        ?float $latitude = null,
+        ?float $longitude = null
+    ): array {
+        $score = 0;
+        $alasan = [];
+
+        if ($mockLocationDetected) {
+            $score += 50;
+            $alasan[] = 'Mock location terdeteksi dari perangkat';
+        }
+
+        if ($akurasi === null) {
+            $score += 20;
+            $alasan[] = 'Akurasi GPS tidak tersedia';
+        } elseif ($akurasi < 5) {
+            $score += 35;
+            $alasan[] = 'Akurasi terlalu sempurna (indikasi spoofing)';
+        } elseif ($akurasi > 250) {
+            $score += 25;
+            $alasan[] = 'Akurasi GPS sangat rendah';
+        } elseif ($akurasi > 100) {
+            $score += 10;
+            $alasan[] = 'Akurasi GPS rendah';
+        }
+
+        if ($latitude === null || $longitude === null) {
+            $score += 30;
+            $alasan[] = 'Koordinat tidak lengkap';
+        }
+
+        $level = match (true) {
+            $score >= 70 => 'tinggi',
+            $score >= 40 => 'sedang',
+            default => 'rendah',
+        };
+
+        return [
+            'score' => $score,
+            'level' => $level,
+            'blocked' => $score >= 70,
+            'alasan' => $alasan,
+        ];
+    }
+
+    public static function absensiHariIni(int $userId): ?self
+    {
+        return self::query()
+            ->hariIni($userId)
+            ->first();
+    }
+
+    public function sudahAbsenKeluar(): bool
+    {
+        return filled($this->jam_keluar);
+    }
+
+    public function canCheckoutBy(User $user): bool
+    {
+        return (int) $this->user_id === (int) $user->id
+            && $this->tanggal?->isToday()
+            && ! $this->sudahAbsenKeluar();
+    }
+
+    public function scopeHariIni(Builder $query, ?int $userId = null): Builder
+    {
+        return $query
+            ->when($userId, fn (Builder $q) => $q->where('user_id', $userId))
+            ->whereDate('tanggal', today());
     }
 
     /**

@@ -59,6 +59,11 @@ class Proyek extends Model
         return $this->hasMany(LaporanMingguan::class);
     }
 
+    public function transaksiKeuangan()
+    {
+        return $this->hasMany(TransaksiKeuangan::class);
+    }
+
     /**
      * Get status label dengan badge color
      */

@@ -84,4 +84,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasAvatar
     {
         return $this->hasMany(LaporanAktivitas::class);
     }
+
+    public function transaksiKeuangan()
+    {
+        return $this->hasMany(TransaksiKeuangan::class);
+    }
 }

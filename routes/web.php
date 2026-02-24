@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\LaporanAktivitasExportController;
 use App\Http\Controllers\LaporanMingguanExportController;
+use App\Http\Controllers\TransaksiKeuanganExportController;
 
 Route::get('/', function () {
     return redirect('/admin/login');
@@ -19,6 +20,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::get('/laporan-aktivitas/{laporanAktivitas}/export/pdf', [LaporanAktivitasExportController::class, 'exportSinglePdf'])
         ->name('laporan-aktivitas.export.single.pdf');
+
+    Route::get('/transaksi-keuangan/export/pdf', [TransaksiKeuanganExportController::class, 'exportPdf'])
+        ->name('transaksi-keuangan.export.pdf');
+
+    Route::get('/transaksi-keuangan/export/excel', [TransaksiKeuanganExportController::class, 'exportExcel'])
+        ->name('transaksi-keuangan.export.excel');
 });
 
 // Laporan Mingguan PDF Export (outside admin prefix to match route name)

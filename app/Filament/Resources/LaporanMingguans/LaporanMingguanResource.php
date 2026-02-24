@@ -23,15 +23,15 @@ class LaporanMingguanResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationLabel = 'Weekly Reports';
+    protected static ?string $navigationLabel = 'Laporan Mingguan';
 
-    protected static ?string $modelLabel = 'Weekly Report';
+    protected static ?string $modelLabel = 'Laporan Mingguan';
 
-    protected static ?string $pluralModelLabel = 'Weekly Reports';
+    protected static ?string $pluralModelLabel = 'Laporan Mingguan';
 
     protected static ?int $navigationSort = 2;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Reports & Projects';
+    protected static string|UnitEnum|null $navigationGroup = 'Laporan & Proyek';
 
     public static function form(Schema $schema): Schema
     {

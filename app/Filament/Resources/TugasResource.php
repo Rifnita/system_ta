@@ -20,13 +20,13 @@ class TugasResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationLabel = 'Task Management';
+    protected static ?string $navigationLabel = 'Manajemen Tugas';
 
-    protected static ?string $modelLabel = 'Task';
+    protected static ?string $modelLabel = 'Tugas';
 
-    protected static ?string $pluralModelLabel = 'Tasks';
+    protected static ?string $pluralModelLabel = 'Tugas';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Task Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
 
     protected static ?int $navigationSort = 1;
 

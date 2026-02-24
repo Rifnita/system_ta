@@ -15,13 +15,13 @@ class RekapMingguan extends Page implements HasForms
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?string $navigationLabel = 'Weekly Summary';
+    protected static ?string $navigationLabel = 'Rekap Mingguan';
 
-    protected static ?string $title = 'Weekly Reports Summary';
+    protected static ?string $title = 'Ringkasan Laporan Mingguan';
 
     protected static ?int $navigationSort = 3;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Reports & Projects';
+    protected static string | \UnitEnum | null $navigationGroup = 'Laporan & Proyek';
 
     public $proyekId = null;
     public $tahun = null;
@@ -45,15 +45,15 @@ class RekapMingguan extends Page implements HasForms
         return $form
             ->schema([
                 Select::make('proyekId')
-                    ->label('Filter Project')
+                    ->label('Filter Proyek')
                     ->options(Proyek::pluck('nama_proyek', 'id'))
                     ->searchable()
                     ->preload()
                     ->native(false)
-                    ->placeholder('All Projects'),
+                    ->placeholder('Semua Proyek'),
                 
                 Select::make('tahun')
-                    ->label('Year')
+                    ->label('Tahun')
                     ->options(function () {
                         $years = [];
                         for ($i = date('Y'); $i >= 2020; $i--) {
@@ -65,14 +65,14 @@ class RekapMingguan extends Page implements HasForms
                     ->native(false),
                 
                 DatePicker::make('tanggalMulai')
-                    ->label('From Date')
+                    ->label('Dari Tanggal')
                     ->native(false)
                     ->displayFormat('d/m/Y')
                     ->prefixIcon('heroicon-o-calendar')
                     ->maxDate(fn ($get) => $get('tanggalAkhir')),
                 
                 DatePicker::make('tanggalAkhir')
-                    ->label('To Date')
+                    ->label('Sampai Tanggal')
                     ->native(false)
                     ->displayFormat('d/m/Y')
                     ->prefixIcon('heroicon-o-calendar')

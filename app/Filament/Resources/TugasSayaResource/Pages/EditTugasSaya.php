@@ -29,7 +29,7 @@ class EditTugasSaya extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('Task Harian Berhasil Diupdate')
-            ->body('Perubahan task harian Anda telah berhasil disimpan.');
+            ->title('Tugas Harian Berhasil Diperbarui')
+            ->body('Perubahan tugas harian Anda telah berhasil disimpan.');
     }
 }

@@ -19,7 +19,7 @@ class CreateTugasSaya extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Task Harian Berhasil Dibuat')
-            ->body('Task harian Anda telah berhasil disimpan.');
+            ->title('Tugas Harian Berhasil Dibuat')
+            ->body('Tugas harian Anda telah berhasil disimpan.');
     }
 }

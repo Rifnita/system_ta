@@ -18,7 +18,7 @@ class EditProfile extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user-circle';
 
-    protected static ?string $title = 'Edit Profile';
+    protected static ?string $title = 'Ubah Profil';
 
     protected string $view = 'filament.pages.edit-profile';
 
@@ -53,8 +53,8 @@ class EditProfile extends Page implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            Section::make('Profile Photo')
-                ->description('Upload your profile photo')
+            Section::make('Foto Profil')
+                ->description('Unggah foto profil Anda')
                 ->icon('heroicon-o-camera')
                 ->schema([
                     FileUpload::make('profile_photo_path')
@@ -68,34 +68,34 @@ class EditProfile extends Page implements HasForms
                         ->imageEditor()
                         ->circleCropper()
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                        ->helperText('Max 2MB (JPG, PNG, WEBP)')
+                        ->helperText('Maks 2MB (JPG, PNG, WEBP)')
                         ->alignCenter(),
                 ])
                 ->columnSpan(1)
                 ->collapsible()
                 ->collapsed(false),
 
-            Section::make('User Details')
-                ->description('Full user details')
+            Section::make('Detail Pengguna')
+                ->description('Detail lengkap pengguna')
                 ->icon('heroicon-o-identification')
                 ->columns(2)
                 ->schema([
                     // Personal Information
-                    Section::make('Personal Information')
+                    Section::make('Informasi Pribadi')
                         ->icon('heroicon-o-user')
                         ->columns(2)
                         ->schema([
                             TextInput::make('name')
-                                ->label('Full Name')
+                                ->label('Nama Lengkap')
                                 ->required()
                                 ->maxLength(255)
-                                ->placeholder('Enter full name')
+                                ->placeholder('Masukkan nama lengkap')
                                 ->autocomplete('name')
                                 ->prefixIcon('heroicon-o-user')
                                 ->columnSpan(2),
 
                             TextInput::make('email')
-                                ->label('Email Address')
+                                ->label('Alamat Email')
                                 ->email()
                                 ->required()
                                 ->unique(ignoreRecord: true, modifyRuleUsing: function ($rule) {
@@ -105,13 +105,13 @@ class EditProfile extends Page implements HasForms
                                 ->placeholder('name@example.com')
                                 ->autocomplete('email')
                                 ->prefixIcon('heroicon-o-envelope')
-                                ->helperText('Email for verification and password reset')
+                                ->helperText('Email untuk verifikasi dan reset kata sandi')
                                 ->columnSpan(2),
                         ])
                         ->columnSpanFull(),
 
                     // Work Information
-                    Section::make('Work Information')
+                    Section::make('Informasi Kerja')
                         ->icon('heroicon-o-briefcase')
                         ->columns(2)
                         ->schema([
@@ -122,16 +122,16 @@ class EditProfile extends Page implements HasForms
                                     return $rule->ignore(Auth::id());
                                 })
                                 ->maxLength(255)
-                                ->placeholder('Enter username')
+                                ->placeholder('Masukkan username')
                                 ->prefixIcon('heroicon-o-at-symbol')
-                                ->helperText('Letters, numbers, dashes, and underscores only')
+                                ->helperText('Hanya huruf, angka, tanda hubung, dan garis bawah')
                                 ->alphaDash()
                                 ->columnSpan(1),
 
                             TextInput::make('alamat')
-                                ->label('Address')
+                                ->label('Alamat')
                                 ->maxLength(65535)
-                                ->placeholder('Enter address')
+                                ->placeholder('Masukkan alamat')
                                 ->prefixIcon('heroicon-o-map-pin')
                                 ->columnSpan(1),
                         ])
@@ -161,7 +161,7 @@ class EditProfile extends Page implements HasForms
         $user->save();
 
         Notification::make()
-            ->title('Profile updated successfully')
+            ->title('Profil berhasil diperbarui')
             ->success()
             ->send();
     }

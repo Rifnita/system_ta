@@ -24,7 +24,7 @@ class TugasTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal_aktivitas')
-                    ->label('Date')
+                    ->label('Tanggal')
                     ->date('d M Y')
                     ->sortable()
                     ->searchable()
@@ -32,14 +32,14 @@ class TugasTable
                     ->weight('medium'),
 
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('Employee')
+                    ->label('Pegawai')
                     ->searchable()
                     ->sortable()
                     ->icon('heroicon-o-user')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('judul')
-                    ->label('Task Title')
+                    ->label('Judul Tugas')
                     ->searchable()
                     ->limit(40)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
@@ -56,7 +56,7 @@ class TugasTable
                     ->iconPosition('before'),
 
                 Tables\Columns\BadgeColumn::make('kategori')
-                    ->label('Category')
+                    ->label('Kategori')
                     ->color(fn (string $state): string => KategoriLaporanAktivitas::colorFor($state))
                     ->searchable()
                     ->icon('heroicon-o-tag'),
@@ -64,11 +64,11 @@ class TugasTable
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->formatStateUsing(fn ($state) => match ($state) {
-                        'pending' => 'Not Started',
-                        'in_progress' => 'In Progress',
-                        'completed' => 'Completed',
-                        'failed' => 'Failed',
-                        'cancelled' => 'Cancelled',
+                        'pending' => 'Belum Dimulai',
+                        'in_progress' => 'Sedang Dikerjakan',
+                        'completed' => 'Selesai',
+                        'failed' => 'Gagal',
+                        'cancelled' => 'Dibatalkan',
                         default => $state,
                     })
                     ->color(fn ($record) => $record->status_color)
@@ -83,7 +83,7 @@ class TugasTable
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('alamat_lengkap')
-                    ->label('Location')
+                    ->label('Lokasi')
                     ->limit(30)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
@@ -96,13 +96,13 @@ class TugasTable
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('target_start_time')
-                    ->label('Target Start')
+                    ->label('Target Mulai')
                     ->dateTime('d M Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('actual_durasi')
-                    ->label('Actual Duration')
+                    ->label('Durasi Aktual')
                     ->getStateUsing(function (LaporanAktivitas $record) {
                         return $record->actual_durasi;
                     })
@@ -119,39 +119,39 @@ class TugasTable
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Status')
                     ->options([
-                        'pending' => 'Not Started',
-                        'in_progress' => 'In Progress',
-                        'completed' => 'Completed',
-                        'failed' => 'Failed',
-                        'cancelled' => 'Cancelled',
+                        'pending' => 'Belum Dimulai',
+                        'in_progress' => 'Sedang Dikerjakan',
+                        'completed' => 'Selesai',
+                        'failed' => 'Gagal',
+                        'cancelled' => 'Dibatalkan',
                     ])
                     ->multiple(),
 
                 Tables\Filters\TernaryFilter::make('is_priority')
-                    ->label('Priority Task')
-                    ->placeholder('All Tasks')
-                    ->trueLabel('Priority Only')
-                    ->falseLabel('Non-Priority'),
+                    ->label('Tugas Prioritas')
+                    ->placeholder('Semua Tugas')
+                    ->trueLabel('Hanya Prioritas')
+                    ->falseLabel('Non-Prioritas'),
 
                 Tables\Filters\SelectFilter::make('user_id')
-                    ->label('Employee')
+                    ->label('Pegawai')
                     ->relationship('user', 'name')
                     ->searchable()
                     ->preload()
                     ->visible(fn () => Auth::user()->hasAnyRole(['super_admin', 'admin'])),
 
                 Tables\Filters\SelectFilter::make('kategori')
-                    ->label('Category')
+                    ->label('Kategori')
                     ->options(fn (): array => KategoriLaporanAktivitas::options())
                     ->multiple(),
 
                 Tables\Filters\Filter::make('tanggal_aktivitas')
                     ->form([
                         Forms\Components\DatePicker::make('dari')
-                            ->label('From Date')
+                            ->label('Dari Tanggal')
                             ->native(false),
                         Forms\Components\DatePicker::make('sampai')
-                            ->label('To Date')
+                            ->label('Sampai Tanggal')
                             ->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -168,10 +168,10 @@ class TugasTable
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
                         if ($data['dari'] ?? null) {
-                            $indicators['dari'] = 'From: ' . \Carbon\Carbon::parse($data['dari'])->format('d M Y');
+                            $indicators['dari'] = 'Dari: ' . \Carbon\Carbon::parse($data['dari'])->format('d M Y');
                         }
                         if ($data['sampai'] ?? null) {
-                            $indicators['sampai'] = 'To: ' . \Carbon\Carbon::parse($data['sampai'])->format('d M Y');
+                            $indicators['sampai'] = 'Sampai: ' . \Carbon\Carbon::parse($data['sampai'])->format('d M Y');
                         }
                         return $indicators;
                     }),
@@ -179,18 +179,18 @@ class TugasTable
             ->actions([
                 ActionGroup::make([
                     Action::make('update_status')
-                        ->label('Update Status')
+                        ->label('Ubah Status')
                         ->icon('heroicon-o-arrow-path')
                         ->color('info')
                         ->form([
                             Forms\Components\Select::make('status')
-                                ->label('Task Status')
+                                ->label('Status Tugas')
                                 ->options([
-                                    'pending' => 'Not Started',
-                                    'in_progress' => 'In Progress',
-                                    'completed' => 'Completed',
-                                    'failed' => 'Failed',
-                                    'cancelled' => 'Cancelled',
+                                    'pending' => 'Belum Dimulai',
+                                    'in_progress' => 'Sedang Dikerjakan',
+                                    'completed' => 'Selesai',
+                                    'failed' => 'Gagal',
+                                    'cancelled' => 'Dibatalkan',
                                 ])
                                 ->required()
                                 ->native(false)
@@ -205,22 +205,22 @@ class TugasTable
                                 }),
 
                             Forms\Components\Textarea::make('catatan_status')
-                                ->label('Notes')
+                                ->label('Catatan')
                                 ->rows(3)
-                                ->placeholder('Add notes about the status change...')
+                                ->placeholder('Tambahkan catatan perubahan status...')
                                 ->requiredIf('status', 'failed')
-                                ->helperText('Required for Failed status')
+                                ->helperText('Wajib untuk status Gagal')
                                 ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed', 'cancelled']))
                                 ->columnSpanFull(),
 
                             Forms\Components\FileUpload::make('dokumen_bukti')
-                                ->label('Proof Document')
+                                ->label('Dokumen Bukti')
                                 ->multiple()
                                 ->maxFiles(5)
                                 ->directory('laporan-aktivitas/dokumen')
                                 ->acceptedFileTypes(['application/pdf', 'image/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
                                 ->downloadable()
-                                ->helperText('Required for Completed or Failed tasks')
+                                ->helperText('Wajib untuk tugas Selesai atau Gagal')
                                 ->requiredIf('status', fn ($get) => in_array($get('status'), ['completed', 'failed']))
                                 ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed']))
                                 ->maxSize(5120)
@@ -242,12 +242,12 @@ class TugasTable
 
                             $record->update($data);
                         })
-                        ->successNotificationTitle('Status updated successfully')
-                        ->modalHeading('Update Task Status')
+                        ->successNotificationTitle('Status berhasil diperbarui')
+                        ->modalHeading('Ubah Status Tugas')
                         ->modalWidth('lg'),
 
                     Action::make('export_pdf')
-                        ->label('Export PDF')
+                        ->label('Ekspor PDF')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->action(function (LaporanAktivitas $record) {
                             return redirect()->route('admin.laporan-aktivitas.export.single.pdf', $record);
@@ -257,7 +257,7 @@ class TugasTable
                     DeleteAction::make()
                         ->color('danger'),
                 ])
-                ->label('Actions')
+                ->label('Aksi')
                 ->icon('heroicon-m-ellipsis-vertical')
                 ->size('sm')
                 ->color('primary')
@@ -268,8 +268,8 @@ class TugasTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('No Tasks Yet')
-            ->emptyStateDescription('No tasks have been created yet. Start creating daily tasks for employees!')
+            ->emptyStateHeading('Belum Ada Tugas')
+            ->emptyStateDescription('Belum ada tugas yang dibuat. Mulai buat tugas harian untuk pegawai.')
             ->emptyStateIcon('heroicon-o-clipboard-document-list')
             ->poll('30s');
     }

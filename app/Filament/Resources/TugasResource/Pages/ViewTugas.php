@@ -15,7 +15,7 @@ class ViewTugas extends ViewRecord
     {
         return [
             Actions\Action::make('export_pdf')
-                ->label('Export PDF')
+                ->label('Ekspor PDF')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
                 ->action(function (LaporanAktivitas $record) {

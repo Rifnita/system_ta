@@ -20,13 +20,13 @@ class KategoriTaskResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationLabel = 'Task Categories';
+    protected static ?string $navigationLabel = 'Kategori Tugas';
 
-    protected static ?string $modelLabel = 'Category';
+    protected static ?string $modelLabel = 'Kategori';
 
-    protected static ?string $pluralModelLabel = 'Task Categories';
+    protected static ?string $pluralModelLabel = 'Kategori Tugas';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Task Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
 
     protected static ?int $navigationSort = 3;
 

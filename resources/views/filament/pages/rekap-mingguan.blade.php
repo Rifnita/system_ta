@@ -1,7 +1,7 @@
 <x-filament-panels::page>
     <x-filament::section>
         <x-slot name="heading">
-            Filter Data
+            Filter Data Laporan
         </x-slot>
         
         <x-slot name="description">

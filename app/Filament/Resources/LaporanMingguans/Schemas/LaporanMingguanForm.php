@@ -20,11 +20,11 @@ class LaporanMingguanForm
     {
         return $schema
             ->components([
-                Section::make('Period & Project Information')
-                    ->description('Select project and reporting period')
+                Section::make('Periode & Informasi Proyek')
+                    ->description('Pilih proyek dan periode pelaporan')
                     ->schema([
                         Select::make('proyek_id')
-                            ->label('Project')
+                            ->label('Proyek')
                             ->options(Proyek::aktif()->pluck('nama_proyek', 'id'))
                             ->searchable()
                             ->required()
@@ -43,16 +43,16 @@ class LaporanMingguanForm
                             ->columnSpan(2),
                         
                         TextInput::make('minggu_ke')
-                            ->label('Week Number')
+                            ->label('Minggu Ke-')
                             ->required()
                             ->numeric()
                             ->minValue(1)
                             ->maxValue(52)
                             ->default(1)
-                            ->helperText('Week number in this year'),
+                            ->helperText('Nomor minggu pada tahun ini'),
                         
                         TextInput::make('tahun')
-                            ->label('Year')
+                            ->label('Tahun')
                             ->required()
                             ->numeric()
                             ->default(date('Y'))
@@ -60,7 +60,7 @@ class LaporanMingguanForm
                             ->maxValue(2100),
                         
                         DatePicker::make('tanggal_mulai')
-                            ->label('Period Start Date')
+                            ->label('Tanggal Mulai Periode')
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y')
@@ -68,7 +68,7 @@ class LaporanMingguanForm
                             ->maxDate(fn ($get) => $get('tanggal_akhir')),
                         
                         DatePicker::make('tanggal_akhir')
-                            ->label('Period End Date')
+                            ->label('Tanggal Akhir Periode')
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y')
@@ -77,128 +77,128 @@ class LaporanMingguanForm
                     ])
                     ->columns(3),
 
-                Section::make('Progress & Achievement')
-                    ->description('Record this week\'s work progress')
+                Section::make('Progres & Pencapaian')
+                    ->description('Catat progres pekerjaan minggu ini')
                     ->schema([
                         TextInput::make('persentase_penyelesaian')
-                            ->label('Total Completion Percentage')
+                            ->label('Persentase Penyelesaian Total')
                             ->required()
                             ->numeric()
                             ->suffix('%')
                             ->minValue(0)
                             ->maxValue(100)
                             ->default(0)
-                            ->helperText('Overall project progress at this time'),
+                            ->helperText('Progres keseluruhan proyek saat ini'),
                         
                         TextInput::make('target_mingguan')
-                            ->label('This Week Target')
+                            ->label('Target Minggu Ini')
                             ->numeric()
                             ->suffix('%')
                             ->minValue(0)
                             ->maxValue(100)
-                            ->helperText('Target progress to be achieved this week'),
+                            ->helperText('Target progres yang ingin dicapai minggu ini'),
                         
                         TextInput::make('realisasi_mingguan')
-                            ->label('This Week Realization')
+                            ->label('Realisasi Minggu Ini')
                             ->numeric()
                             ->suffix('%')
                             ->minValue(0)
                             ->maxValue(100)
-                            ->helperText('Progress achieved this week'),
+                            ->helperText('Progres yang tercapai minggu ini'),
                         
                         Textarea::make('area_dikerjakan')
-                            ->label('Area/Zone Worked On')
-                            ->placeholder('Example: 1st Floor Foundation, Column Structure, 2nd Floor Roof, etc')
+                            ->label('Area/Zona yang Dikerjakan')
+                            ->placeholder('Contoh: Pondasi Lantai 1, Struktur Kolom, Atap Lantai 2, dll')
                             ->rows(3)
                             ->columnSpanFull(),
                         
                         Textarea::make('pekerjaan_dilaksanakan')
-                            ->label('Description of Work Performed')
-                            ->placeholder('Explain in detail the work done this week...')
+                            ->label('Deskripsi Pekerjaan yang Dilaksanakan')
+                            ->placeholder('Jelaskan secara detail pekerjaan yang dilakukan minggu ini...')
                             ->rows(4)
                             ->columnSpanFull(),
                     ])
                     ->columns(3),
 
-                Section::make('Resource Management')
-                    ->description('Resources used this week')
+                Section::make('Manajemen Sumber Daya')
+                    ->description('Sumber daya yang digunakan minggu ini')
                     ->schema([
                         Textarea::make('material_digunakan')
-                            ->label('Materials Used')
-                            ->placeholder('Example: Cement 50 sacks, Steel 2 tons, Paint 20 cans, etc')
+                            ->label('Material yang Digunakan')
+                            ->placeholder('Contoh: Semen 50 sak, Besi 2 ton, Cat 20 kaleng, dll')
                             ->rows(4)
                             ->columnSpanFull(),
                         
                         TextInput::make('jumlah_pekerja')
-                            ->label('Number of Workers (Average/Day)')
+                            ->label('Jumlah Pekerja (Rata-rata/Hari)')
                             ->numeric()
                             ->suffix('orang')
                             ->minValue(0)
-                            ->helperText('Average number of workers per day'),
+                            ->helperText('Rata-rata jumlah pekerja per hari'),
                         
                         Select::make('kondisi_cuaca')
-                            ->label('Dominant Weather Condition')
+                            ->label('Kondisi Cuaca Dominan')
                             ->options([
-                                'cerah' => 'Sunny',
-                                'berawan' => 'Cloudy',
-                                'hujan_ringan' => 'Light Rain',
-                                'hujan_lebat' => 'Heavy Rain',
+                                'cerah' => 'Cerah',
+                                'berawan' => 'Berawan',
+                                'hujan_ringan' => 'Hujan Ringan',
+                                'hujan_lebat' => 'Hujan Lebat',
                             ])
                             ->native(false)
-                            ->helperText('Weather condition dominating this week'),
+                            ->helperText('Kondisi cuaca yang dominan minggu ini'),
                     ])
                     ->columns(2),
 
-                Section::make('Quality Control & Findings')
-                    ->description('Quality evaluation and field findings')
+                Section::make('Kontrol Kualitas & Temuan')
+                    ->description('Evaluasi kualitas dan temuan lapangan')
                     ->schema([
                         Select::make('status_kualitas')
-                            ->label('Work Quality Status')
+                            ->label('Status Kualitas Pekerjaan')
                             ->options([
-                                'excellent' => 'Excellent',
-                                'good' => 'Good',
-                                'fair' => 'Fair',
-                                'poor' => 'Poor',
+                                'excellent' => 'Sangat Baik',
+                                'good' => 'Baik',
+                                'fair' => 'Cukup',
+                                'poor' => 'Kurang',
                             ])
                             ->native(false)
                             ->default('good'),
                         
                         Textarea::make('temuan')
-                            ->label('Findings (Good/Bad)')
-                            ->placeholder('Record important findings, both positive and negative...')
+                            ->label('Temuan (Positif/Negatif)')
+                            ->placeholder('Catat temuan penting, baik positif maupun negatif...')
                             ->rows(4)
                             ->columnSpanFull(),
                     ])
                     ->columns(1),
 
-                Section::make('Issues & Solutions')
-                    ->description('Problems faced and how to handle them')
+                Section::make('Kendala & Solusi')
+                    ->description('Masalah yang dihadapi dan cara penanganannya')
                     ->schema([
                         Textarea::make('kendala')
-                            ->label('Issues/Problems Faced')
-                            ->placeholder('Explain the issues or problems that occurred...')
+                            ->label('Kendala/Masalah yang Dihadapi')
+                            ->placeholder('Jelaskan kendala atau masalah yang terjadi...')
                             ->rows(4)
                             ->columnSpanFull(),
                         
                         Textarea::make('solusi')
-                            ->label('Solutions/Actions Taken')
-                            ->placeholder('Explain the solutions or actions that have been/will be taken...')
+                            ->label('Solusi/Tindakan yang Diambil')
+                            ->placeholder('Jelaskan solusi atau tindakan yang sudah/akan diambil...')
                             ->rows(4)
                             ->columnSpanFull(),
                         
                         Textarea::make('dampak_timeline')
-                            ->label('Impact on Timeline')
-                            ->placeholder('Is there any impact on the schedule? Estimated delay?')
+                            ->label('Dampak pada Timeline')
+                            ->placeholder('Apakah ada dampak pada jadwal? Estimasi keterlambatan?')
                             ->rows(3)
                             ->columnSpanFull(),
                     ])
                     ->columns(1),
 
-                Section::make('Photo Documentation')
-                    ->description('Upload progress photos (maximum 5 photos)')
+                Section::make('Dokumentasi Foto')
+                    ->description('Unggah foto progres (maksimal 5 foto)')
                     ->schema([
                         FileUpload::make('foto_progress')
-                            ->label('Progress Photos')
+                            ->label('Foto Progres')
                             ->image()
                             ->multiple()
                             ->maxFiles(5)
@@ -210,22 +210,22 @@ class LaporanMingguanForm
                                 '4:3',
                                 '1:1',
                             ])
-                            ->helperText('Upload before/after photos, work progress, or issues (max 5 photos @ 5MB)')
+                            ->helperText('Unggah foto sebelum/sesudah, progres kerja, atau kendala (maksimal 5 foto @ 5MB)')
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Planning & Notes')
-                    ->description('Next week\'s plan and additional notes')
+                Section::make('Rencana & Catatan')
+                    ->description('Rencana minggu depan dan catatan tambahan')
                     ->schema([
                         Textarea::make('rencana_minggu_depan')
-                            ->label('Next Week\'s Plan')
-                            ->placeholder('Explain the work plan for next week...')
+                            ->label('Rencana Minggu Depan')
+                            ->placeholder('Jelaskan rencana kerja untuk minggu depan...')
                             ->rows(4)
                             ->columnSpanFull(),
                         
                         Textarea::make('catatan')
-                            ->label('Additional Notes')
-                            ->placeholder('Additional information that needs to be recorded...')
+                            ->label('Catatan Tambahan')
+                            ->placeholder('Informasi tambahan yang perlu dicatat...')
                             ->rows(3)
                             ->columnSpanFull(),
                     ])

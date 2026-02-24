@@ -18,7 +18,7 @@ class ListTugasSaya extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Task')
+                ->label('Tambah Tugas')
                 ->icon('heroicon-o-plus'),
         ];
     }
@@ -28,22 +28,22 @@ class ListTugasSaya extends ListRecords
         $userId = Auth::id();
 
         return [
-            'semua' => Tab::make('Semua Task')
+            'semua' => Tab::make('Semua Tugas')
                 ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->count()),
 
-            'pending' => Tab::make('Pending')
+            'pending' => Tab::make('Belum Dimulai')
                 ->icon('heroicon-o-clock')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))
                 ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->where('status', 'pending')->count())
                 ->badgeColor('warning'),
 
-            'in_progress' => Tab::make('On Progress')
+            'in_progress' => Tab::make('Sedang Dikerjakan')
                 ->icon('heroicon-o-arrow-path')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'in_progress'))
                 ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->where('status', 'in_progress')->count())
                 ->badgeColor('info'),
 
-            'completed' => Tab::make('Completed')
+            'completed' => Tab::make('Selesai')
                 ->icon('heroicon-o-check-circle')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed'))
                 ->badge(fn () => LaporanAktivitas::where('user_id', $userId)->where('status', 'completed')->count())

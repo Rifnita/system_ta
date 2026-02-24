@@ -16,12 +16,12 @@ class KategoriTaskTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
-                    ->label('Category')
+                    ->label('Kategori')
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('Dibuat')
                     ->dateTime('d M Y H:i')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

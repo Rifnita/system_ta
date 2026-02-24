@@ -25,13 +25,13 @@ class UsersTable
         return $table
             ->columns([
                 ImageColumn::make('profile_photo_path')
-                    ->label('Photo')
+                    ->label('Foto')
                     ->circular()
                     ->defaultImageUrl(url('/images/default-avatar.svg'))
                     ->size(40),
                 
                 TextColumn::make('name')
-                    ->label('Name')
+                    ->label('Nama')
                     ->searchable()
                     ->sortable()
                     ->weight('medium')
@@ -47,7 +47,7 @@ class UsersTable
                     ->searchable()
                     ->sortable()
                     ->copyable()
-                    ->copyMessage('Username copied!')
+                    ->copyMessage('Username berhasil disalin!')
                     ->icon('heroicon-o-at-symbol'),
 
                 TextColumn::make('roles.name')
@@ -62,7 +62,7 @@ class UsersTable
                     ->searchable(),
                 
                 TextColumn::make('alamat')
-                    ->label('Address')
+                    ->label('Alamat')
                     ->limit(30)
                     ->searchable()
                     ->toggleable()
@@ -71,36 +71,36 @@ class UsersTable
                 TextColumn::make('is_active')
                     ->label('Status')
                     ->badge()
-                    ->formatStateUsing(fn (bool $state): string => $state ? 'Active' : 'Inactive')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Aktif' : 'Nonaktif')
                     ->color(fn (bool $state): string => $state ? 'info' : 'danger')
                     ->sortable(),
                 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('Dibuat')
                     ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('Diperbarui')
                     ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TernaryFilter::make('email_verified_at')
-                    ->label('Email Verified')
-                    ->placeholder('All')
-                    ->trueLabel('Verified')
-                    ->falseLabel('Unverified')
+                    ->label('Email Terverifikasi')
+                    ->placeholder('Semua')
+                    ->trueLabel('Terverifikasi')
+                    ->falseLabel('Belum Terverifikasi')
                     ->nullable()
                     ->native(false),
                 
                 SelectFilter::make('is_active')
                     ->label('Status')
                     ->options([
-                        1 => 'Active',
-                        0 => 'Inactive',
+                        1 => 'Aktif',
+                        0 => 'Nonaktif',
                     ]),
                 
                 SelectFilter::make('roles')
@@ -112,19 +112,19 @@ class UsersTable
             ->actions([
                 ActionGroup::make([
                     EditAction::make()
-                        ->label('Edit')
+                        ->label('Ubah')
                         ->icon('heroicon-o-pencil-square'),
                     
                     Action::make('resendVerification')
-                        ->label('Send Verification Email')
+                        ->label('Kirim Email Verifikasi')
                         ->icon('heroicon-o-envelope')
                         ->color('warning')
                         ->visible(fn ($record): bool => is_null($record->email_verified_at))
                         ->requiresConfirmation()
-                        ->modalHeading('Resend Verification Email')
-                        ->modalDescription('Verification email will be sent to the user email address.')
-                        ->modalSubmitActionLabel('Send Email')
-                        ->modalCancelActionLabel('Cancel')
+                        ->modalHeading('Kirim Ulang Email Verifikasi')
+                        ->modalDescription('Email verifikasi akan dikirim ke alamat email pengguna.')
+                        ->modalSubmitActionLabel('Kirim Email')
+                        ->modalCancelActionLabel('Batal')
                         ->action(function ($record) {
                             $record->sendEmailVerificationNotification();
                             return true;
@@ -132,19 +132,19 @@ class UsersTable
                         ->successNotification(
                             fn () => \Filament\Notifications\Notification::make()
                                 ->success()
-                                ->title('Verification Email Sent')
-                                ->body('Verification email has been sent to the user.')
+                                ->title('Email Verifikasi Terkirim')
+                                ->body('Email verifikasi telah dikirim ke pengguna.')
                         ),
                     
                     Action::make('sendResetPassword')
-                        ->label('Send Password Reset')
+                        ->label('Kirim Reset Kata Sandi')
                         ->icon('heroicon-o-key')
                         ->color('warning')
                         ->requiresConfirmation()
-                        ->modalHeading('Send Password Reset Link')
-                        ->modalDescription('Password reset link will be sent to the user email address.')
-                        ->modalSubmitActionLabel('Send Email')
-                        ->modalCancelActionLabel('Cancel')
+                        ->modalHeading('Kirim Tautan Reset Kata Sandi')
+                        ->modalDescription('Tautan reset kata sandi akan dikirim ke alamat email pengguna.')
+                        ->modalSubmitActionLabel('Kirim Email')
+                        ->modalCancelActionLabel('Batal')
                         ->action(function ($record) {
                             Password::sendResetLink(['email' => $record->email]);
                             return true;
@@ -152,20 +152,20 @@ class UsersTable
                         ->successNotification(
                             fn () => \Filament\Notifications\Notification::make()
                                 ->success()
-                                ->title('Password Reset Email Sent')
-                                ->body('Password reset link has been sent to the user.')
+                                ->title('Email Reset Kata Sandi Terkirim')
+                                ->body('Tautan reset kata sandi telah dikirim ke pengguna.')
                         ),
                     
                     DeleteAction::make()
-                        ->label('Delete')
+                        ->label('Hapus')
                         ->icon('heroicon-o-trash')
                         ->requiresConfirmation()
-                        ->modalHeading('Delete User')
-                        ->modalDescription('Are you sure you want to delete this user? Deleted data cannot be restored.')
-                        ->modalSubmitActionLabel('Yes, Delete')
-                        ->modalCancelActionLabel('Cancel'),
+                        ->modalHeading('Hapus Pengguna')
+                        ->modalDescription('Yakin ingin menghapus pengguna ini? Data yang dihapus tidak dapat dipulihkan.')
+                        ->modalSubmitActionLabel('Ya, Hapus')
+                        ->modalCancelActionLabel('Batal'),
                 ])
-                    ->label('Actions')
+                    ->label('Aksi')
                     ->icon('heroicon-m-ellipsis-vertical')
                     ->size('sm')
                     ->color('primary')
@@ -174,13 +174,13 @@ class UsersTable
             ->bulkActions([
                 BulkActionGroup::make([
                     BulkAction::make('sendVerificationEmails')
-                        ->label('Send Verification Emails')
+                        ->label('Kirim Email Verifikasi')
                         ->icon('heroicon-o-envelope')
                         ->color('warning')
                         ->requiresConfirmation()
-                        ->modalHeading('Send Verification Emails')
-                        ->modalDescription('Verification emails will be sent to all selected unverified users.')
-                        ->modalSubmitActionLabel('Send Email')
+                        ->modalHeading('Kirim Email Verifikasi')
+                        ->modalDescription('Email verifikasi akan dikirim ke semua pengguna terpilih yang belum terverifikasi.')
+                        ->modalSubmitActionLabel('Kirim Email')
                         ->action(function ($records) {
                             $count = 0;
                             foreach ($records as $record) {
@@ -194,19 +194,19 @@ class UsersTable
                         ->successNotification(
                             fn ($result) => \Filament\Notifications\Notification::make()
                                 ->success()
-                                ->title('Verification Emails Sent')
-                                ->body("Verification emails have been sent to {$result} users.")
+                                ->title('Email Verifikasi Terkirim')
+                                ->body("Email verifikasi telah dikirim ke {$result} pengguna.")
                         )
                         ->deselectRecordsAfterCompletion(),
                     
                     BulkAction::make('sendResetPasswordEmails')
-                        ->label('Send Password Reset')
+                        ->label('Kirim Reset Kata Sandi')
                         ->icon('heroicon-o-key')
                         ->color('warning')
                         ->requiresConfirmation()
-                        ->modalHeading('Send Password Reset Links')
-                        ->modalDescription('Password reset links will be sent to all selected users.')
-                        ->modalSubmitActionLabel('Send Email')
+                        ->modalHeading('Kirim Tautan Reset Kata Sandi')
+                        ->modalDescription('Tautan reset kata sandi akan dikirim ke semua pengguna terpilih.')
+                        ->modalSubmitActionLabel('Kirim Email')
                         ->action(function ($records) {
                             $count = 0;
                             foreach ($records as $record) {
@@ -218,8 +218,8 @@ class UsersTable
                         ->successNotification(
                             fn ($result) => \Filament\Notifications\Notification::make()
                                 ->success()
-                                ->title('Password Reset Emails Sent')
-                                ->body("Password reset links have been sent to {$result} users.")
+                                ->title('Email Reset Kata Sandi Terkirim')
+                                ->body("Tautan reset kata sandi telah dikirim ke {$result} pengguna.")
                         )
                         ->deselectRecordsAfterCompletion(),
                     

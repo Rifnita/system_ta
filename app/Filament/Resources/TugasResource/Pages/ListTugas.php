@@ -20,9 +20,9 @@ class ListTugas extends ListRecords
     {
         return [
             Actions\Action::make('export_pdf')
-                ->label('Export PDF')
+                ->label('Ekspor PDF')
                 ->icon('heroicon-o-arrow-down-tray')
-                ->modalHeading('Export Laporan Aktivitas (PDF)')
+                ->modalHeading('Ekspor Laporan Aktivitas (PDF)')
                 ->form([
                     DatePicker::make('start_date')
                         ->label('Tanggal Mulai')
@@ -65,22 +65,22 @@ class ListTugas extends ListRecords
     public function getTabs(): array
     {
         return [
-            'semua' => Tab::make('Semua Task')
+            'semua' => Tab::make('Semua Tugas')
                 ->badge(fn () => \App\Models\LaporanAktivitas::count()),
             
-            'pending' => Tab::make('Pending')
+            'pending' => Tab::make('Belum Dimulai')
                 ->icon('heroicon-o-clock')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))
                 ->badge(fn () => \App\Models\LaporanAktivitas::where('status', 'pending')->count())
                 ->badgeColor('warning'),
             
-            'in_progress' => Tab::make('On Progress')
+            'in_progress' => Tab::make('Sedang Dikerjakan')
                 ->icon('heroicon-o-arrow-path')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'in_progress'))
                 ->badge(fn () => \App\Models\LaporanAktivitas::where('status', 'in_progress')->count())
                 ->badgeColor('info'),
             
-            'completed' => Tab::make('Completed')
+            'completed' => Tab::make('Selesai')
                 ->icon('heroicon-o-check-circle')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed'))
                 ->badge(fn () => \App\Models\LaporanAktivitas::where('status', 'completed')->count())

@@ -5,6 +5,8 @@ namespace App\Filament\Resources\AbsensiResource\Schemas;
 use Filament\Forms;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -16,10 +18,26 @@ class AbsensiForm
     {
         return $schema
             ->components([
-                self::dataAbsensiSection(),
-                self::absenMasukSection(),
-                self::absenKeluarSection(),
-                self::informasiAbsensiSection(),
+                Tabs::make('Form Absensi')
+                    ->tabs([
+                        Tab::make('Data Absensi')
+                            ->schema([
+                                self::dataAbsensiSection(),
+                            ]),
+                        Tab::make('Absen Masuk')
+                            ->schema([
+                                self::absenMasukSection(),
+                            ]),
+                        Tab::make('Absen Keluar')
+                            ->schema([
+                                self::absenKeluarSection(),
+                            ]),
+                        Tab::make('Informasi')
+                            ->schema([
+                                self::informasiAbsensiSection(),
+                            ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

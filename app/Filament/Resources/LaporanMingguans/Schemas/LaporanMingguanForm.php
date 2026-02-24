@@ -11,6 +11,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +22,13 @@ class LaporanMingguanForm
     {
         return $schema
             ->components([
-                Section::make('Periode & Informasi Proyek')
-                    ->description('Pilih proyek dan periode pelaporan')
-                    ->schema([
+                Tabs::make('Form Laporan Mingguan')
+                    ->tabs([
+                        Tab::make('Periode')
+                            ->schema([
+                                Section::make('Periode & Informasi Proyek')
+                                    ->description('Pilih proyek dan periode pelaporan')
+                                    ->schema([
                         Select::make('proyek_id')
                             ->label('Proyek')
                             ->options(Proyek::aktif()->pluck('nama_proyek', 'id'))
@@ -74,12 +80,15 @@ class LaporanMingguanForm
                             ->displayFormat('d/m/Y')
                             ->default(now()->endOfWeek())
                             ->minDate(fn ($get) => $get('tanggal_mulai')),
-                    ])
-                    ->columns(3),
+                                    ])
+                                    ->columns(3),
+                            ]),
 
-                Section::make('Progres & Pencapaian')
-                    ->description('Catat progres pekerjaan minggu ini')
-                    ->schema([
+                        Tab::make('Progres')
+                            ->schema([
+                                Section::make('Progres & Pencapaian')
+                                    ->description('Catat progres pekerjaan minggu ini')
+                                    ->schema([
                         TextInput::make('persentase_penyelesaian')
                             ->label('Persentase Penyelesaian Total')
                             ->required()
@@ -117,12 +126,15 @@ class LaporanMingguanForm
                             ->placeholder('Jelaskan secara detail pekerjaan yang dilakukan minggu ini...')
                             ->rows(4)
                             ->columnSpanFull(),
-                    ])
-                    ->columns(3),
+                                    ])
+                                    ->columns(3),
+                            ]),
 
-                Section::make('Manajemen Sumber Daya')
-                    ->description('Sumber daya yang digunakan minggu ini')
-                    ->schema([
+                        Tab::make('Sumber Daya')
+                            ->schema([
+                                Section::make('Manajemen Sumber Daya')
+                                    ->description('Sumber daya yang digunakan minggu ini')
+                                    ->schema([
                         Textarea::make('material_digunakan')
                             ->label('Material yang Digunakan')
                             ->placeholder('Contoh: Semen 50 sak, Besi 2 ton, Cat 20 kaleng, dll')
@@ -146,12 +158,15 @@ class LaporanMingguanForm
                             ])
                             ->native(false)
                             ->helperText('Kondisi cuaca yang dominan minggu ini'),
-                    ])
-                    ->columns(2),
+                                    ])
+                                    ->columns(2),
+                            ]),
 
-                Section::make('Kontrol Kualitas & Temuan')
-                    ->description('Evaluasi kualitas dan temuan lapangan')
-                    ->schema([
+                        Tab::make('Kualitas')
+                            ->schema([
+                                Section::make('Kontrol Kualitas & Temuan')
+                                    ->description('Evaluasi kualitas dan temuan lapangan')
+                                    ->schema([
                         Select::make('status_kualitas')
                             ->label('Status Kualitas Pekerjaan')
                             ->options([
@@ -168,12 +183,15 @@ class LaporanMingguanForm
                             ->placeholder('Catat temuan penting, baik positif maupun negatif...')
                             ->rows(4)
                             ->columnSpanFull(),
-                    ])
-                    ->columns(1),
+                                    ])
+                                    ->columns(1),
+                            ]),
 
-                Section::make('Kendala & Solusi')
-                    ->description('Masalah yang dihadapi dan cara penanganannya')
-                    ->schema([
+                        Tab::make('Kendala')
+                            ->schema([
+                                Section::make('Kendala & Solusi')
+                                    ->description('Masalah yang dihadapi dan cara penanganannya')
+                                    ->schema([
                         Textarea::make('kendala')
                             ->label('Kendala/Masalah yang Dihadapi')
                             ->placeholder('Jelaskan kendala atau masalah yang terjadi...')
@@ -191,12 +209,15 @@ class LaporanMingguanForm
                             ->placeholder('Apakah ada dampak pada jadwal? Estimasi keterlambatan?')
                             ->rows(3)
                             ->columnSpanFull(),
-                    ])
-                    ->columns(1),
+                                    ])
+                                    ->columns(1),
+                            ]),
 
-                Section::make('Dokumentasi Foto')
-                    ->description('Unggah foto progres (maksimal 5 foto)')
-                    ->schema([
+                        Tab::make('Dokumentasi')
+                            ->schema([
+                                Section::make('Dokumentasi Foto')
+                                    ->description('Unggah foto progres (maksimal 5 foto)')
+                                    ->schema([
                         FileUpload::make('foto_progress')
                             ->label('Foto Progres')
                             ->image()
@@ -212,11 +233,14 @@ class LaporanMingguanForm
                             ])
                             ->helperText('Unggah foto sebelum/sesudah, progres kerja, atau kendala (maksimal 5 foto @ 5MB)')
                             ->columnSpanFull(),
-                    ]),
+                                    ]),
+                            ]),
 
-                Section::make('Rencana & Catatan')
-                    ->description('Rencana minggu depan dan catatan tambahan')
-                    ->schema([
+                        Tab::make('Rencana')
+                            ->schema([
+                                Section::make('Rencana & Catatan')
+                                    ->description('Rencana minggu depan dan catatan tambahan')
+                                    ->schema([
                         Textarea::make('rencana_minggu_depan')
                             ->label('Rencana Minggu Depan')
                             ->placeholder('Jelaskan rencana kerja untuk minggu depan...')
@@ -228,8 +252,11 @@ class LaporanMingguanForm
                             ->placeholder('Informasi tambahan yang perlu dicatat...')
                             ->rows(3)
                             ->columnSpanFull(),
+                                    ])
+                                    ->columns(1),
+                            ]),
                     ])
-                    ->columns(1),
+                    ->columnSpanFull(),
 
                 Hidden::make('user_id')
                     ->default(Auth::id()),

@@ -5,6 +5,8 @@ namespace App\Filament\Resources\PengaturanAbsensiResource\Schemas;
 use Filament\Forms;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\HtmlString;
@@ -15,10 +17,26 @@ class PengaturanAbsensiForm
     {
         return $schema
             ->components([
-                self::jamKerjaSection(),
-                self::pengaturanValidasiSection(),
-                self::lokasiKantorSection(),
-                self::statusSection(),
+                Tabs::make('Form Pengaturan Absensi')
+                    ->tabs([
+                        Tab::make('Jam Kerja')
+                            ->schema([
+                                self::jamKerjaSection(),
+                            ]),
+                        Tab::make('Validasi')
+                            ->schema([
+                                self::pengaturanValidasiSection(),
+                            ]),
+                        Tab::make('Lokasi Kantor')
+                            ->schema([
+                                self::lokasiKantorSection(),
+                            ]),
+                        Tab::make('Status')
+                            ->schema([
+                                self::statusSection(),
+                            ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

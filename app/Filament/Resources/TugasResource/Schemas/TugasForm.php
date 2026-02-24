@@ -7,6 +7,8 @@ use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +21,14 @@ class TugasForm
     {
         return $schema
             ->components([
-                // Main Information Section
-                Section::make('Informasi Tugas')
-                    ->description('Informasi dasar tugas yang akan dikerjakan')
-                    ->icon('heroicon-o-clipboard-document-list')
-                    ->schema([
+                Tabs::make('Form Tugas')
+                    ->tabs([
+                        Tab::make('Informasi Tugas')
+                            ->icon('heroicon-o-clipboard-document-list')
+                            ->schema([
+                                Section::make('Informasi Tugas')
+                                    ->description('Informasi dasar tugas yang akan dikerjakan')
+                                    ->schema([
                         Forms\Components\DatePicker::make('tanggal_aktivitas')
                             ->label('Tanggal Tugas')
                             ->required()
@@ -102,16 +107,16 @@ class TugasForm
                             ->requiredIf('status', 'failed')
                             ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed', 'cancelled']))
                             ->columnSpanFull(),
-                    ])
-                    ->columns(2)
-                    ->collapsible()
-                    ->persistCollapsed(),
+                                    ])
+                                    ->columns(2),
+                            ]),
 
-                // Time Planning Section
-                Section::make('Perencanaan Waktu')
-                    ->description('Target dan waktu aktual penyelesaian tugas (wajib)')
-                    ->icon('heroicon-o-clock')
-                    ->schema([
+                        Tab::make('Perencanaan Waktu')
+                            ->icon('heroicon-o-clock')
+                            ->schema([
+                                Section::make('Perencanaan Waktu')
+                                    ->description('Target dan waktu aktual penyelesaian tugas (wajib)')
+                                    ->schema([
                         Forms\Components\DateTimePicker::make('target_start_time')
                             ->label('Target Mulai')
                             ->required()
@@ -146,16 +151,16 @@ class TugasForm
                             ->after('actual_start_time')
                             ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed']))
                             ->columnSpan(1),
-                    ])
-                    ->columns(2)
-                    ->collapsible()
-                    ->persistCollapsed(),
+                                    ])
+                                    ->columns(2),
+                            ]),
 
-                // Location Section
-                Section::make('Lokasi Tugas')
-                    ->description('Masukkan alamat, sistem akan membuat tautan Google Maps otomatis')
-                    ->icon('heroicon-o-map-pin')
-                    ->schema([
+                        Tab::make('Lokasi Tugas')
+                            ->icon('heroicon-o-map-pin')
+                            ->schema([
+                                Section::make('Lokasi Tugas')
+                                    ->description('Masukkan alamat, sistem akan membuat tautan Google Maps otomatis')
+                                    ->schema([
                         Forms\Components\Textarea::make('alamat_lengkap')
                             ->label('Alamat Lengkap')
                             ->placeholder('Contoh: Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta')
@@ -231,16 +236,15 @@ class TugasForm
 
                         Forms\Components\Hidden::make('latitude'),
                         Forms\Components\Hidden::make('longitude'),
-                    ])
-                    ->collapsible()
-                    ->persistCollapsed()
-                    ->collapsed(),
+                                    ]),
+                            ]),
 
-                // Documentation Section
-                Section::make('Dokumentasi')
-                    ->description('Unggah foto dan dokumen bukti (opsional, wajib untuk tugas selesai/gagal)')
-                    ->icon('heroicon-o-camera')
-                    ->schema([
+                        Tab::make('Dokumentasi')
+                            ->icon('heroicon-o-camera')
+                            ->schema([
+                                Section::make('Dokumentasi')
+                                    ->description('Unggah foto dan dokumen bukti (opsional, wajib untuk tugas selesai/gagal)')
+                                    ->schema([
                         Forms\Components\FileUpload::make('foto_bukti')
                             ->label('Foto Bukti Aktivitas')
                             ->image()
@@ -273,10 +277,10 @@ class TugasForm
                             ->visible(fn ($get) => in_array($get('status'), ['completed', 'failed']))
                             ->maxSize(5120)
                             ->columnSpanFull(),
+                                    ]),
+                            ]),
                     ])
-                    ->collapsible()
-                    ->persistCollapsed()
-                    ->collapsed(),
+                    ->columnSpanFull(),
 
                 Forms\Components\Hidden::make('user_id')
                     ->default(Auth::id())

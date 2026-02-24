@@ -8,6 +8,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ProyekForm
 {
@@ -15,9 +17,13 @@ class ProyekForm
     {
         return $schema
             ->components([
-                Section::make('Informasi Dasar Proyek')
-                    ->description('Identitas proyek dan informasi umum')
-                    ->schema([
+                Tabs::make('Form Proyek')
+                    ->tabs([
+                        Tab::make('Informasi Dasar')
+                            ->schema([
+                                Section::make('Informasi Dasar Proyek')
+                                    ->description('Identitas proyek dan informasi umum')
+                                    ->schema([
                         TextInput::make('kode_proyek')
                             ->label('Kode Proyek')
                             ->placeholder('Contoh: PRJ-2026-001')
@@ -53,11 +59,14 @@ class ProyekForm
                             ->default('perencanaan')
                             ->required()
                             ->native(false),
-                    ])
-                    ->columns(2),
+                                    ])
+                                    ->columns(2),
+                            ]),
                 
-                Section::make('Lokasi dan Pihak Terkait')
-                    ->schema([
+                        Tab::make('Lokasi & Pihak')
+                            ->schema([
+                                Section::make('Lokasi dan Pihak Terkait')
+                                    ->schema([
                         TextInput::make('lokasi')
                             ->label('Lokasi/Kota')
                             ->placeholder('Contoh: Surabaya')
@@ -76,11 +85,14 @@ class ProyekForm
                             ->label('Kontraktor/Mandor')
                             ->placeholder('Nama kontraktor atau mandor')
                             ->maxLength(255),
-                    ])
-                    ->columns(2),
+                                    ])
+                                    ->columns(2),
+                            ]),
                 
-                Section::make('Timeline dan Anggaran')
-                    ->schema([
+                        Tab::make('Timeline & Anggaran')
+                            ->schema([
+                                Section::make('Timeline dan Anggaran')
+                                    ->schema([
                         DatePicker::make('tanggal_mulai')
                             ->label('Tanggal Mulai')
                             ->native(false)
@@ -96,11 +108,14 @@ class ProyekForm
                             ->prefix('Rp')
                             ->placeholder('0')
                             ->helperText('Nilai kontrak dalam Rupiah'),
-                    ])
-                    ->columns(3),
+                                    ])
+                                    ->columns(3),
+                            ]),
                 
-                Section::make('Spesifikasi Bangunan')
-                    ->schema([
+                        Tab::make('Spesifikasi')
+                            ->schema([
+                                Section::make('Spesifikasi Bangunan')
+                                    ->schema([
                         TextInput::make('luas_tanah')
                             ->label('Luas Tanah')
                             ->numeric()
@@ -116,8 +131,11 @@ class ProyekForm
                             ->placeholder('Informasi tambahan tentang proyek...')
                             ->rows(3)
                             ->columnSpanFull(),
+                                    ])
+                                    ->columns(2),
+                            ]),
                     ])
-                    ->columns(2),
+                    ->columnSpanFull(),
             ]);
     }
 }

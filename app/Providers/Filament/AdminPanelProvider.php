@@ -122,19 +122,20 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         .fi-sidebar {
-                            background: linear-gradient(180deg, #243a66 0%, #10214b 100%) !important;
+                            background: linear-gradient(180deg, #fffaf2 0%, #f8f2e6 100%) !important;
+                            border-inline-end: 1px solid #e5d2a6 !important;
                         }
 
                         .fi-sidebar .fi-sidebar-item-label,
                         .fi-sidebar .fi-sidebar-group-label {
-                            color: #f1e5cc !important;
+                            color: #243a66 !important;
                         }
 
                         .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
                         .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn,
                         .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current="page"] {
-                            background: linear-gradient(90deg, #d9bf7f 0%, #d0ad63 100%) !important;
-                            box-shadow: 0 6px 16px rgba(16, 33, 75, 0.18) !important;
+                            background: linear-gradient(90deg, #d9deea 0%, #b3bdd6 100%) !important;
+                            box-shadow: 0 4px 10px rgba(16, 33, 75, 0.1) !important;
                         }
 
                         .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
@@ -143,7 +144,7 @@ class AdminPanelProvider extends PanelProvider
                         .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn > .fi-icon,
                         .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current="page"] > .fi-sidebar-item-label,
                         .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current="page"] > .fi-icon {
-                            color: #10214b !important;
+                            color: #192a4d !important;
                         }
 
                         .fi-sidebar .fi-sidebar-item-btn,
@@ -153,24 +154,24 @@ class AdminPanelProvider extends PanelProvider
 
                         .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
                         .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible {
-                            background-color: rgba(217, 191, 127, 0.22) !important;
+                            background-color: rgba(217, 189, 136, 0.3) !important;
                         }
 
                         .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-sidebar-item-label,
                         .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-icon {
-                            color: #f8f2e6 !important;
+                            color: #243a66 !important;
                         }
 
                         .fi-topbar {
-                            background: linear-gradient(90deg, #2f497f 0%, #243a66 100%) !important;
-                            border-bottom: 1px solid #192a4d !important;
+                            background: linear-gradient(90deg, #fffaf2 0%, #f8f2e6 100%) !important;
+                            border-bottom: 1px solid #e5d2a6 !important;
                         }
 
                         .fi-topbar .fi-topbar-item-btn > .fi-topbar-item-label,
                         .fi-topbar .fi-topbar-item-btn > .fi-icon,
                         .fi-topbar .fi-topbar-open-sidebar-btn > .fi-icon,
                         .fi-topbar .fi-topbar-close-sidebar-btn > .fi-icon {
-                            color: #f8f2e6 !important;
+                            color: #243a66 !important;
                         }
 
                         .fi-topbar .fi-input-wrp {
@@ -216,30 +217,100 @@ class AdminPanelProvider extends PanelProvider
                             border-radius: var(--ui-radius) !important;
                         }
 
+                        .fi-btn.fi-color-primary {
+                            background: linear-gradient(90deg, #405b97 0%, #2f497f 100%) !important;
+                            color: #f8f2e6 !important;
+                            border: 1px solid #243a66 !important;
+                            box-shadow: 0 6px 14px rgba(64, 91, 151, 0.2) !important;
+                        }
+
+                        .fi-btn.fi-color-primary:hover {
+                            background: linear-gradient(90deg, #2f497f 0%, #243a66 100%) !important;
+                        }
+
                         .fi-wi {
                             gap: 1rem !important;
                         }
 
-                        .fi-dashboard .fi-wi-widget {
+                        .fi-dashboard .fi-wi-widget,
+                        .fi-dashboard .fi-wi-stats-overview {
                             background: transparent !important;
                             border: 0 !important;
                             box-shadow: none !important;
                             padding: 0 !important;
                         }
 
-                        .fi-section,
-                        .fi-wi-stats-overview-stat {
+                        .fi-wi-stats-overview .fi-section {
+                            background: transparent !important;
+                            border: 0 !important;
+                            box-shadow: none !important;
+                            outline: 0 !important;
+                            padding: 0 !important;
+                        }
+
+                        .fi-wi-stats-overview .fi-section-content-ctn,
+                        .fi-wi-stats-overview .fi-section-content {
+                            background: transparent !important;
+                            border: 0 !important;
+                            box-shadow: none !important;
+                            outline: 0 !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+
+                        .fi-wi-stats-overview.fi-section,
+                        .fi-wi-stats-overview {
+                            background: transparent !important;
+                            border: 0 !important;
+                            box-shadow: none !important;
+                            outline: 0 !important;
+                            padding: 0 !important;
+                        }
+
+                        .fi-section:not(.fi-wi-stats-overview) {
                             background: #fffaf2 !important;
                             border: 1px solid #e5d2a6 !important;
                             border-radius: var(--ui-radius) !important;
                             transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease !important;
                         }
 
-                        .fi-section:hover,
+                        .fi-wi-stats-overview-stat {
+                            background: #fffaf2 !important;
+                            border: 1px solid #e5d2a6 !important;
+                            border-radius: var(--ui-radius) !important;
+                            box-shadow: 0 2px 6px rgba(16, 33, 75, 0.06) !important;
+                            padding: 1rem !important;
+                            transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease !important;
+                        }
+
+                        .fi-section:not(.fi-wi-stats-overview):hover,
                         .fi-wi-stats-overview-stat:hover {
                             transform: translateY(-1px) !important;
                             border-color: #d0ad63 !important;
                             box-shadow: 0 8px 16px rgba(16, 33, 75, 0.1) !important;
+                        }
+
+                        .fi-wi-stats-overview-stat .fi-wi-stats-overview-stat-label {
+                            color: #405b97 !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .fi-wi-stats-overview-stat .fi-wi-stats-overview-stat-value {
+                            color: #10214b !important;
+                        }
+
+                        .fi-wi-stats-overview-stat .fi-wi-stats-overview-stat-description {
+                            color: #243a66 !important;
+                        }
+
+                        .fi-sidebar-nav {
+                            scrollbar-width: none !important;
+                            -ms-overflow-style: none !important;
+                        }
+
+                        .fi-sidebar-nav::-webkit-scrollbar {
+                            width: 0 !important;
+                            height: 0 !important;
                         }
 
                         .fi-wi-chart canvas {
@@ -255,6 +326,19 @@ class AdminPanelProvider extends PanelProvider
                             background: #fffaf2 !important;
                             border: 1px solid #e5d2a6 !important;
                             border-radius: var(--ui-radius) !important;
+                        }
+
+                        .fi-ta-table thead tr {
+                            background: #d9deea !important;
+                        }
+
+                        .fi-ta-table thead th {
+                            color: #192a4d !important;
+                            border-bottom: 1px solid #b3bdd6 !important;
+                        }
+
+                        .fi-ta-table tbody td {
+                            color: #243a66 !important;
                         }
 
                         .fi-ta-table tbody tr,

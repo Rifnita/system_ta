@@ -9,12 +9,18 @@ use UnitEnum;
 class RoleResource extends ShieldRoleResource
 {
     protected static string|UnitEnum|null $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationLabel = 'Role';
     
     protected static ?int $navigationSort = 10;
     
     public static function getNavigationGroup(): ?string
     {
         return 'Manajemen Pengguna';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Role';
     }
     
     public static function getPages(): array

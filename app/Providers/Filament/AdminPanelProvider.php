@@ -12,6 +12,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Enums\ThemeMode;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
@@ -32,6 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->darkMode(false)
+            ->defaultThemeMode(ThemeMode::Light)
             ->passwordReset()
             ->emailVerification()
             ->brandName('System TA')
@@ -48,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                     700 => '#243a66',
                     800 => '#192a4d',
                     900 => '#10214b',
+                    950 => '#10214b',
                 ],
                 'danger' => Color::Rose,
                 'gray' => Color::Slate,
@@ -62,6 +66,7 @@ class AdminPanelProvider extends PanelProvider
                     700 => '#243a66',
                     800 => '#192a4d',
                     900 => '#10214b',
+                    950 => '#10214b',
                 ],
                 'success' => Color::Emerald,
                 'warning' => [
@@ -75,6 +80,7 @@ class AdminPanelProvider extends PanelProvider
                     700 => '#9f875a',
                     800 => '#7b6a47',
                     900 => '#5a4d35',
+                    950 => '#5a4d35',
                 ],
             ])
             ->renderHook(
@@ -102,29 +108,159 @@ class AdminPanelProvider extends PanelProvider
                             --color-secondary-700: #9f875a;
                             --color-secondary-800: #7b6a47;
                             --color-secondary-900: #5a4d35;
+                            --ui-radius: 10px;
                         }
 
-                        .fi-dashboard .fi-wi-widget,
-                        .fi-dashboard .fi-section,
-                        .fi-dashboard .fi-wi-stats-overview-stat {
-                            transition: transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
+                        .fi-body {
+                            background: linear-gradient(180deg, #f8f2e6 0%, #eff1f7 100%) !important;
                         }
 
-                        .fi-dashboard .fi-wi-widget:hover,
-                        .fi-dashboard .fi-section:hover,
-                        .fi-dashboard .fi-wi-stats-overview-stat:hover {
-                            transform: translateY(-3px);
-                            border-color: var(--color-secondary-400);
-                            box-shadow: 0 14px 30px rgba(16, 33, 75, 0.12);
-                            background: linear-gradient(180deg, #ffffff 0%, var(--color-primary-50) 100%);
+                        .fi-page,
+                        .fi-page-content,
+                        .fi-main {
+                            background-color: transparent !important;
                         }
 
-                        .fi-dashboard .fi-ta-table tbody tr {
-                            transition: background-color 160ms ease;
+                        .fi-sidebar {
+                            background: linear-gradient(180deg, #243a66 0%, #10214b 100%) !important;
                         }
 
-                        .fi-dashboard .fi-ta-table tbody tr:hover {
-                            background-color: #eef2fb;
+                        .fi-sidebar .fi-sidebar-item-label,
+                        .fi-sidebar .fi-sidebar-group-label {
+                            color: #f1e5cc !important;
+                        }
+
+                        .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn,
+                        .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current="page"] {
+                            background: linear-gradient(90deg, #d9bf7f 0%, #d0ad63 100%) !important;
+                            box-shadow: 0 6px 16px rgba(16, 33, 75, 0.18) !important;
+                        }
+
+                        .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+                        .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn > .fi-icon,
+                        .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current="page"] > .fi-sidebar-item-label,
+                        .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current="page"] > .fi-icon {
+                            color: #10214b !important;
+                        }
+
+                        .fi-sidebar .fi-sidebar-item-btn,
+                        .fi-sidebar .fi-sidebar-group-dropdown-trigger-btn {
+                            border-radius: var(--ui-radius) !important;
+                        }
+
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible {
+                            background-color: rgba(217, 191, 127, 0.22) !important;
+                        }
+
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-sidebar-item-label,
+                        .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-icon {
+                            color: #f8f2e6 !important;
+                        }
+
+                        .fi-topbar {
+                            background: linear-gradient(90deg, #2f497f 0%, #243a66 100%) !important;
+                            border-bottom: 1px solid #192a4d !important;
+                        }
+
+                        .fi-topbar .fi-topbar-item-btn > .fi-topbar-item-label,
+                        .fi-topbar .fi-topbar-item-btn > .fi-icon,
+                        .fi-topbar .fi-topbar-open-sidebar-btn > .fi-icon,
+                        .fi-topbar .fi-topbar-close-sidebar-btn > .fi-icon {
+                            color: #f8f2e6 !important;
+                        }
+
+                        .fi-topbar .fi-input-wrp {
+                            background-color: #f8f2e6 !important;
+                            border-color: #d9bf7f !important;
+                            border-radius: var(--ui-radius) !important;
+                        }
+
+                        .fi-topbar .fi-input-wrp input {
+                            color: #243a66 !important;
+                        }
+
+                        .fi-topbar .fi-input-wrp input::placeholder {
+                            color: #667cac !important;
+                        }
+
+                        .fi-topbar .fi-dropdown-panel,
+                        .fi-topbar .fi-dropdown-list,
+                        .fi-topbar .fi-dropdown-list-item,
+                        .fi-topbar .fi-dropdown-list-item-label,
+                        .fi-topbar .fi-dropdown-header,
+                        .fi-topbar .fi-dropdown-panel .fi-icon {
+                            background-color: #fffaf2 !important;
+                            color: #243a66 !important;
+                        }
+
+                        .fi-topbar .fi-dropdown-panel,
+                        .fi-topbar .fi-user-menu-trigger,
+                        .fi-topbar .fi-topbar-item-btn {
+                            border-radius: var(--ui-radius) !important;
+                        }
+
+                        .fi-topbar .fi-user-menu-trigger .fi-avatar,
+                        .fi-topbar .fi-user-menu-trigger img {
+                            border: 2px solid #d9bf7f !important;
+                            border-radius: 9999px !important;
+                            box-shadow: 0 0 0 2px rgba(16, 33, 75, 0.45) !important;
+                            background-color: #fffaf2 !important;
+                        }
+
+                        .fi-btn,
+                        .fi-badge {
+                            border-radius: var(--ui-radius) !important;
+                        }
+
+                        .fi-wi {
+                            gap: 1rem !important;
+                        }
+
+                        .fi-dashboard .fi-wi-widget {
+                            background: transparent !important;
+                            border: 0 !important;
+                            box-shadow: none !important;
+                            padding: 0 !important;
+                        }
+
+                        .fi-section,
+                        .fi-wi-stats-overview-stat {
+                            background: #fffaf2 !important;
+                            border: 1px solid #e5d2a6 !important;
+                            border-radius: var(--ui-radius) !important;
+                            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease !important;
+                        }
+
+                        .fi-section:hover,
+                        .fi-wi-stats-overview-stat:hover {
+                            transform: translateY(-1px) !important;
+                            border-color: #d0ad63 !important;
+                            box-shadow: 0 8px 16px rgba(16, 33, 75, 0.1) !important;
+                        }
+
+                        .fi-wi-chart canvas {
+                            transition: transform 180ms ease !important;
+                        }
+
+                        .fi-wi-widget:hover .fi-wi-chart canvas {
+                            transform: scale(1.005) !important;
+                        }
+
+                        .fi-ta,
+                        .fi-ta-ctn {
+                            background: #fffaf2 !important;
+                            border: 1px solid #e5d2a6 !important;
+                            border-radius: var(--ui-radius) !important;
+                        }
+
+                        .fi-ta-table tbody tr,
+                        .fi-ta-table tbody tr:hover {
+                            background-color: transparent !important;
+                            transform: none !important;
                         }
                     </style>
                 HTML),

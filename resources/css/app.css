@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import './gold-luxury.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -43,26 +42,163 @@
 }
 
 @layer components {
-    .fi-dashboard .fi-wi-widget,
-    .fi-dashboard .fi-section,
-    .fi-dashboard .fi-wi-stats-overview-stat {
-        transition: transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
+    :root {
+        --ui-radius: 10px;
     }
 
-    .fi-dashboard .fi-wi-widget:hover,
-    .fi-dashboard .fi-section:hover,
-    .fi-dashboard .fi-wi-stats-overview-stat:hover {
-        transform: translateY(-3px);
-        border-color: var(--color-secondary-400);
-        box-shadow: 0 14px 30px rgba(16, 33, 75, 0.12);
-        background: linear-gradient(180deg, #ffffff 0%, var(--color-primary-50) 100%);
+    .fi-body {
+        background: linear-gradient(180deg, #f8f2e6 0%, #eff1f7 100%);
     }
 
-    .fi-dashboard .fi-ta-table tbody tr {
-        transition: background-color 160ms ease;
+    .fi-page,
+    .fi-page-content,
+    .fi-main {
+        background-color: transparent;
     }
 
-    .fi-dashboard .fi-ta-table tbody tr:hover {
-        background-color: #eef2fb;
+    .fi-sidebar {
+        background: linear-gradient(180deg, #243a66 0%, #10214b 100%);
+    }
+
+    .fi-sidebar .fi-sidebar-item-label,
+    .fi-sidebar .fi-sidebar-group-label {
+        color: #f1e5cc;
+    }
+
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn,
+    .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current='page'] {
+        background: linear-gradient(90deg, #d9bf7f 0%, #d0ad63 100%);
+        box-shadow: 0 6px 16px rgba(16, 33, 75, 0.18);
+    }
+
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-active-child-items > .fi-sidebar-item-btn > .fi-icon,
+    .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current='page'] > .fi-sidebar-item-label,
+    .fi-sidebar .fi-sidebar-item > .fi-sidebar-item-btn[aria-current='page'] > .fi-icon {
+        color: #10214b;
+    }
+
+    .fi-sidebar .fi-sidebar-item-btn,
+    .fi-sidebar .fi-sidebar-group-dropdown-trigger-btn {
+        border-radius: var(--ui-radius);
+    }
+
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible {
+        background-color: rgba(217, 191, 127, 0.22);
+    }
+
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-sidebar-item-label,
+    .fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-icon {
+        color: #f8f2e6;
+    }
+
+    .fi-topbar {
+        background: linear-gradient(90deg, #2f497f 0%, #243a66 100%);
+        border-bottom: 1px solid #192a4d;
+    }
+
+    .fi-topbar .fi-topbar-item-btn > .fi-topbar-item-label,
+    .fi-topbar .fi-topbar-item-btn > .fi-icon,
+    .fi-topbar .fi-topbar-open-sidebar-btn > .fi-icon,
+    .fi-topbar .fi-topbar-close-sidebar-btn > .fi-icon {
+        color: #f8f2e6;
+    }
+
+    .fi-topbar .fi-input-wrp {
+        background-color: #f8f2e6;
+        border-color: #d9bf7f;
+        border-radius: var(--ui-radius);
+    }
+
+    .fi-topbar .fi-input-wrp input {
+        color: #243a66;
+    }
+
+    .fi-topbar .fi-input-wrp input::placeholder {
+        color: #667cac;
+    }
+
+    .fi-topbar .fi-dropdown-panel,
+    .fi-topbar .fi-dropdown-list,
+    .fi-topbar .fi-dropdown-list-item,
+    .fi-topbar .fi-dropdown-list-item-label,
+    .fi-topbar .fi-dropdown-header,
+    .fi-topbar .fi-dropdown-panel .fi-icon {
+        background-color: #fffaf2;
+        color: #243a66;
+    }
+
+    .fi-topbar .fi-dropdown-panel,
+    .fi-topbar .fi-user-menu-trigger,
+    .fi-topbar .fi-topbar-item-btn {
+        border-radius: var(--ui-radius);
+    }
+
+    .fi-topbar .fi-user-menu-trigger .fi-avatar,
+    .fi-topbar .fi-user-menu-trigger img {
+        border: 2px solid #d9bf7f;
+        border-radius: 9999px;
+        box-shadow: 0 0 0 2px rgba(16, 33, 75, 0.45);
+        background-color: #fffaf2;
+    }
+
+    .fi-btn.fi-color-primary {
+        box-shadow: 0 10px 24px rgba(64, 91, 151, 0.22);
+    }
+
+    .fi-btn,
+    .fi-badge {
+        border-radius: var(--ui-radius);
+    }
+
+    .fi-wi {
+        gap: 1rem;
+    }
+
+    .fi-dashboard .fi-wi-widget {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .fi-section,
+    .fi-wi-stats-overview-stat {
+        background: #fffaf2;
+        border: 1px solid #e5d2a6;
+        border-radius: var(--ui-radius);
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .fi-section:hover,
+    .fi-wi-stats-overview-stat:hover {
+        transform: translateY(-1px);
+        border-color: #d0ad63;
+        box-shadow: 0 8px 16px rgba(16, 33, 75, 0.1);
+    }
+
+    .fi-wi-chart canvas {
+        transition: transform 180ms ease;
+    }
+
+    .fi-wi-widget:hover .fi-wi-chart canvas {
+        transform: scale(1.005);
+    }
+
+    .fi-ta,
+    .fi-ta-ctn {
+        background: #fffaf2;
+        border: 1px solid #e5d2a6;
+        border-radius: var(--ui-radius);
+    }
+
+    .fi-ta-table tbody tr,
+    .fi-ta-table tbody tr:hover {
+        background-color: transparent;
+        transform: none;
     }
 }

@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use App\Models\LaporanAktivitas;
 use App\Policies\LaporanAktivitasPolicy;
-use Filament\Support\Colors\Color;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,31 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configure Filament with Gold luxury color palette
-        $this->configureFilamentTheme();
-        
+        App::setLocale('id');
+        Carbon::setLocale('id');
+
         // Register policies
         Gate::policy(LaporanAktivitas::class, LaporanAktivitasPolicy::class);
-    }
-
-    /**
-     * Configure Filament theme with gold luxury palette
-     */
-    private function configureFilamentTheme(): void
-    {
-        // Gold palette colors
-        $goldPalette = [
-            50 => '#FFFBF0',
-            100 => '#FEF3E2',
-            200 => '#FDE8C9',
-            300 => '#FCDCA8',
-            400 => '#F9C66D',
-            500 => '#D4AF37',
-            600 => '#C9A227',
-            700 => '#B8941F',
-            800 => '#8B6914',
-            900 => '#5A450C',
-            950 => '#3D2E08',
-        ];
     }
 }

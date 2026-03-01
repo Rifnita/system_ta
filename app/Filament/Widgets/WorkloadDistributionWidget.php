@@ -7,7 +7,6 @@ use App\Models\User;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class WorkloadDistributionWidget extends ChartWidget
 {
@@ -17,27 +16,26 @@ class WorkloadDistributionWidget extends ChartWidget
 
     public static function canView(): bool
     {
-        // Only for managers and admins
         $user = Auth::user();
+
         return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
     }
 
     public function getHeading(): ?string
     {
-        return 'Team Workload Distribution (Active Tasks)';
+        return 'Distribusi Beban Kerja Tim (Tugas Aktif)';
     }
 
     public function getDescription(): ?string
     {
         $totalActiveTasks = LaporanAktivitas::whereIn('status', ['pending', 'in_progress'])->count();
         $activeUsers = User::where('is_active', true)->count();
-        
-        return "Total active tasks: $totalActiveTasks across $activeUsers team members";
+
+        return "Total tugas aktif: $totalActiveTasks pada $activeUsers anggota tim";
     }
 
     protected function getData(): array
     {
-        // Get workload per user (tasks in pending or in_progress)
         $workloadData = LaporanAktivitas::query()
             ->whereIn('status', ['pending', 'in_progress'])
             ->select('user_id', DB::raw('count(*) as task_count'))
@@ -52,30 +50,29 @@ class WorkloadDistributionWidget extends ChartWidget
         $backgroundColors = [];
 
         foreach ($workloadData as $data) {
-            $userName = $data->user->name ?? 'Unknown User';
+            $userName = $data->user->name ?? 'Pengguna tidak diketahui';
             $userNames[] = strlen($userName) > 20 ? substr($userName, 0, 17) . '...' : $userName;
             $taskCounts[] = $data->task_count;
-            
-            // Color coding based on workload
+
             if ($data->task_count > 20) {
-                $backgroundColors[] = 'rgba(239, 68, 68, 0.6)'; // red - overloaded
+                $backgroundColors[] = 'rgba(225, 29, 72, 0.65)';
             } elseif ($data->task_count > 10) {
-                $backgroundColors[] = 'rgba(251, 191, 36, 0.6)'; // yellow - high load
+                $backgroundColors[] = 'rgba(208, 173, 99, 0.75)';
             } elseif ($data->task_count > 5) {
-                $backgroundColors[] = 'rgba(59, 130, 246, 0.6)'; // blue - moderate
+                $backgroundColors[] = 'rgba(64, 91, 151, 0.72)';
             } else {
-                $backgroundColors[] = 'rgba(34, 197, 94, 0.6)'; // green - light load
+                $backgroundColors[] = 'rgba(22, 163, 74, 0.65)';
             }
         }
 
         return [
             'datasets' => [
                 [
-                    'label' => 'Active Tasks',
+                    'label' => 'Tugas Aktif',
                     'data' => $taskCounts,
                     'backgroundColor' => $backgroundColors,
-                    'borderColor' => array_map(function($color) {
-                        return str_replace('0.6', '1', $color);
+                    'borderColor' => array_map(function ($color) {
+                        return str_replace(['0.65', '0.72', '0.75'], '1', $color);
                     }, $backgroundColors),
                     'borderWidth' => 2,
                 ],
@@ -92,7 +89,7 @@ class WorkloadDistributionWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
-            'indexAxis' => 'y', // Horizontal bar chart
+            'indexAxis' => 'y',
             'plugins' => [
                 'legend' => [
                     'display' => false,
@@ -106,7 +103,7 @@ class WorkloadDistributionWidget extends ChartWidget
                     'beginAtZero' => true,
                     'title' => [
                         'display' => true,
-                        'text' => 'Number of Active Tasks',
+                        'text' => 'Jumlah Tugas Aktif',
                     ],
                     'ticks' => [
                         'stepSize' => 5,
@@ -115,7 +112,7 @@ class WorkloadDistributionWidget extends ChartWidget
                 'y' => [
                     'title' => [
                         'display' => true,
-                        'text' => 'Team Member',
+                        'text' => 'Anggota Tim',
                     ],
                 ],
             ],

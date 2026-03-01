@@ -18,14 +18,14 @@ class TaskStatusChartWidget extends ChartWidget
 
     public static function canView(): bool
     {
-        // Personal widget - only for staff/users
         $user = Auth::user();
-        return $user && !$user->hasAnyRole(['super_admin', 'panel_user']);
+
+        return $user && ! $user->hasAnyRole(['super_admin', 'panel_user']);
     }
 
     public function getHeading(): ?string
     {
-        return 'My Tasks By Status';
+        return 'Distribusi Tugas Saya';
     }
 
     protected function getData(): array
@@ -45,24 +45,24 @@ class TaskStatusChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Tasks',
+                    'label' => 'Jumlah Tugas',
                     'data' => [$pending, $inProgress, $completed, $cancelled],
                     'backgroundColor' => [
-                        'rgba(156, 163, 175, 0.5)',  // gray - pending
-                        'rgba(59, 130, 246, 0.5)',   // blue - in progress
-                        'rgba(34, 197, 94, 0.5)',    // green - completed
-                        'rgba(239, 68, 68, 0.5)',    // red - cancelled
+                        'rgba(217, 222, 234, 0.85)',
+                        'rgba(64, 91, 151, 0.72)',
+                        'rgba(208, 173, 99, 0.72)',
+                        'rgba(225, 29, 72, 0.62)',
                     ],
                     'borderColor' => [
-                        'rgb(156, 163, 175)',
-                        'rgb(59, 130, 246)',
-                        'rgb(34, 197, 94)',
-                        'rgb(239, 68, 68)',
+                        'rgb(179, 189, 214)',
+                        'rgb(47, 73, 127)',
+                        'rgb(191, 165, 111)',
+                        'rgb(190, 24, 93)',
                     ],
                     'borderWidth' => 2,
                 ],
             ],
-            'labels' => ['Pending', 'In Progress', 'Completed', 'Cancelled'],
+            'labels' => ['Menunggu', 'Sedang Dikerjakan', 'Selesai', 'Dibatalkan'],
         ];
     }
 

@@ -1,59 +1,201 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# System TA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi manajemen tugas, laporan aktivitas, absensi, dan transaksi keuangan berbasis Laravel 12 + Filament 4.
 
-## About Laravel
+## 1. Prasyarat
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pastikan tools berikut sudah terpasang:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP `>= 8.2`
+- Composer `>= 2.x`
+- Node.js `>= 20` dan npm
+- MySQL/MariaDB (disarankan MySQL 8+)
+- Git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Ekstensi PHP yang umumnya wajib untuk proyek ini:
 
-## Learning Laravel
+- `bcmath`
+- `ctype`
+- `fileinfo`
+- `json`
+- `mbstring`
+- `openssl`
+- `pdo`
+- `pdo_mysql`
+- `tokenizer`
+- `xml`
+- `zip`
+- `gd`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Jika pakai Laragon, aktifkan versi PHP 8.2+ dan MySQL dari menu Laragon.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 2. Clone Project
 
-## Laravel Sponsors
+```bash
+git clone <url-repository> system_ta
+cd system_ta
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 3. Install Dependency Backend (PHP)
 
-### Premium Partners
+```bash
+composer install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 4. Install Dependency Frontend (Node)
 
-## Contributing
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 5. Buat dan Atur File Environment
 
-## Code of Conduct
+Copy file contoh environment:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+Jika di Windows PowerShell dan `cp` tidak tersedia, pakai:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```powershell
+Copy-Item .env.example .env
+```
 
-## License
+Lalu sesuaikan `.env` minimal bagian database:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+APP_NAME="System TA"
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=system_ta
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+## 6. Buat Database
+
+Buat database kosong bernama `system_ta` di MySQL.
+
+Contoh via MySQL CLI:
+
+```sql
+CREATE DATABASE system_ta CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+## 7. Generate App Key
+
+```bash
+php artisan key:generate
+```
+
+## 8. Migrasi dan Seeder
+
+Jalankan migrasi:
+
+```bash
+php artisan migrate
+```
+
+Lalu isi data awal:
+
+```bash
+php artisan db:seed
+```
+
+Seeder akan membuat akun admin default:
+
+- Email: `admin@test.com`
+- Password: `password`
+
+## 9. Link Storage (Jika Butuh File Upload)
+
+```bash
+php artisan storage:link
+```
+
+## 10. Build Asset Frontend
+
+Untuk development (watch mode):
+
+```bash
+npm run dev
+```
+
+Untuk build production:
+
+```bash
+npm run build
+```
+
+## 11. Jalankan Aplikasi
+
+Buka terminal baru lalu jalankan:
+
+```bash
+php artisan serve
+```
+
+Akses aplikasi di:
+
+- Home: `http://127.0.0.1:8000`
+- Admin panel: `http://127.0.0.1:8000/admin/login`
+
+## 12. (Opsional) Jalankan Queue Worker
+
+Karena default `QUEUE_CONNECTION=database`, jalankan worker jika fitur tertentu butuh queue:
+
+```bash
+php artisan queue:work
+```
+
+## 13. Opsi Setup Cepat
+
+Proyek ini punya script Composer `setup`:
+
+```bash
+composer run setup
+```
+
+Script ini menjalankan:
+
+- `composer install`
+- copy `.env` jika belum ada
+- `php artisan key:generate`
+- `php artisan migrate --force`
+- `npm install`
+- `npm run build`
+
+Catatan: script `setup` tidak menjalankan `db:seed`, jadi tetap jalankan:
+
+```bash
+php artisan db:seed
+```
+
+## 14. Troubleshooting Singkat
+
+- Error koneksi database
+  - Pastikan service MySQL aktif.
+  - Cek `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` di `.env`.
+
+- Asset/CSS tidak muncul
+  - Jalankan `npm run dev` (local) atau `npm run build` (production).
+
+- Login gagal dengan akun default
+  - Jalankan ulang `php artisan db:seed`.
+  - Pastikan tabel `users`, `roles`, `permissions` sudah terisi.
+
+- Perubahan `.env` tidak terbaca
+  - Jalankan `php artisan optimize:clear`.
+
+## 15. Perintah Harian yang Sering Dipakai
+
+```bash
+php artisan serve
+npm run dev
+php artisan queue:work
+php artisan optimize:clear
+```

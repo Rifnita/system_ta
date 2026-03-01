@@ -4,9 +4,9 @@ namespace App\Filament\Widgets;
 
 use App\Models\LaporanAktivitas;
 use App\Models\LaporanMingguan;
+use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class WeeklyComparisonWidget extends ChartWidget
 {
@@ -19,19 +19,19 @@ class WeeklyComparisonWidget extends ChartWidget
 
     public static function canView(): bool
     {
-        // Only for managers and admins
         $user = Auth::user();
+
         return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
     }
 
     public function getHeading(): ?string
     {
-        return 'Weekly Performance Trend';
+        return 'Tren Kinerja Mingguan';
     }
 
     public function getDescription(): ?string
     {
-        return 'Last 8 weeks comparison';
+        return 'Perbandingan 8 minggu terakhir';
     }
 
     protected function getData(): array
@@ -43,16 +43,13 @@ class WeeklyComparisonWidget extends ChartWidget
         for ($i = 7; $i >= 0; $i--) {
             $weekStart = Carbon::now()->subWeeks($i)->startOfWeek();
             $weekEnd = Carbon::now()->subWeeks($i)->endOfWeek();
-            
-            // Week label
-            $weeks[] = $weekStart->format('M d');
-            
-            // Tasks completed this week
+
+            $weeks[] = $weekStart->translatedFormat('d M');
+
             $tasksCompleted[] = LaporanAktivitas::where('status', 'completed')
                 ->whereBetween('updated_at', [$weekStart, $weekEnd])
                 ->count();
-            
-            // Weekly reports submitted
+
             $reportsSubmitted[] = LaporanMingguan::whereBetween('created_at', [$weekStart, $weekEnd])
                 ->count();
         }
@@ -60,18 +57,18 @@ class WeeklyComparisonWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Tasks Completed',
+                    'label' => 'Tugas Selesai',
                     'data' => $tasksCompleted,
-                    'borderColor' => 'rgb(59, 130, 246)',
-                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
+                    'borderColor' => 'rgb(64, 91, 151)',
+                    'backgroundColor' => 'rgba(64, 91, 151, 0.12)',
                     'tension' => 0.4,
                     'fill' => true,
                 ],
                 [
-                    'label' => 'Reports Submitted',
+                    'label' => 'Laporan Terkirim',
                     'data' => $reportsSubmitted,
-                    'borderColor' => 'rgb(34, 197, 94)',
-                    'backgroundColor' => 'rgba(34, 197, 94, 0.1)',
+                    'borderColor' => 'rgb(191, 165, 111)',
+                    'backgroundColor' => 'rgba(191, 165, 111, 0.16)',
                     'tension' => 0.4,
                     'fill' => true,
                 ],

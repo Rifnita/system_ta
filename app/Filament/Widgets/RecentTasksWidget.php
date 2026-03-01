@@ -3,11 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Models\LaporanAktivitas;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class RecentTasksWidget extends BaseWidget
@@ -17,14 +15,14 @@ class RecentTasksWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        // Personal tasks history - only for staff/users
         $user = Auth::user();
-        return $user && !$user->hasAnyRole(['super_admin', 'panel_user']);
+
+        return $user && ! $user->hasAnyRole(['super_admin', 'panel_user']);
     }
 
     public function getHeading(): ?string
     {
-        return 'Recent Tasks Activity';
+        return 'Aktivitas Tugas Terbaru';
     }
 
     public function table(Table $table): Table
@@ -39,19 +37,19 @@ class RecentTasksWidget extends BaseWidget
             )
             ->columns([
                 TextColumn::make('judul')
-                    ->label('Task Title')
+                    ->label('Judul Tugas')
                     ->searchable()
                     ->weight('bold')
                     ->wrap()
                     ->limit(40),
-                
+
                 TextColumn::make('tanggal_aktivitas')
-                    ->label('Date')
+                    ->label('Tanggal')
                     ->date('d M Y')
                     ->sortable(),
-                
+
                 TextColumn::make('kategori')
-                    ->label('Category')
+                    ->label('Kategori')
                     ->badge()
                     ->color(fn ($state) => match ($state) {
                         'meeting' => 'info',
@@ -60,8 +58,14 @@ class RecentTasksWidget extends BaseWidget
                         'documentation' => 'success',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn ($state) => ucfirst(str_replace('_', ' ', $state ?? 'Other'))),
-                
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'meeting' => 'Rapat',
+                        'development' => 'Pengembangan',
+                        'review' => 'Peninjauan',
+                        'documentation' => 'Dokumentasi',
+                        default => 'Lainnya',
+                    }),
+
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
@@ -72,20 +76,26 @@ class RecentTasksWidget extends BaseWidget
                         'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn ($state) => ucfirst(str_replace('_', ' ', $state ?? 'Pending'))),
-                
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'completed' => 'Selesai',
+                        'in_progress' => 'Sedang Dikerjakan',
+                        'pending' => 'Menunggu',
+                        'cancelled' => 'Dibatalkan',
+                        default => 'Menunggu',
+                    }),
+
                 TextColumn::make('is_priority')
-                    ->label('Priority')
+                    ->label('Prioritas')
                     ->badge()
                     ->color(fn ($state) => $state ? 'danger' : 'gray')
-                    ->formatStateUsing(fn ($state) => $state ? 'High' : 'Normal'),
-                
+                    ->formatStateUsing(fn ($state) => $state ? 'Tinggi' : 'Normal'),
+
                 TextColumn::make('durasi')
-                    ->label('Duration')
+                    ->label('Durasi')
                     ->toggleable(),
-                
+
                 TextColumn::make('lokasi')
-                    ->label('Location')
+                    ->label('Lokasi')
                     ->limit(30)
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

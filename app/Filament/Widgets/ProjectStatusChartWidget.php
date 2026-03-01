@@ -18,14 +18,14 @@ class ProjectStatusChartWidget extends ChartWidget
 
     public static function canView(): bool
     {
-        // Analytics widget - visible for managers
         $user = Auth::user();
+
         return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
     }
 
     public function getHeading(): ?string
     {
-        return 'Projects Distribution By Status';
+        return 'Distribusi Proyek Berdasarkan Status';
     }
 
     protected function getData(): array
@@ -44,19 +44,19 @@ class ProjectStatusChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Projects',
+                    'label' => 'Jumlah Proyek',
                     'data' => [$perencanaan, $dalamPengerjaan, $tertunda, $selesai],
                     'backgroundColor' => [
-                        'rgba(147, 197, 253, 0.5)',  // light blue - perencanaan
-                        'rgba(59, 130, 246, 0.5)',   // blue - dalam pengerjaan
-                        'rgba(251, 191, 36, 0.5)',   // yellow - tertunda
-                        'rgba(34, 197, 94, 0.5)',    // green - selesai
+                        'rgba(179, 189, 214, 0.65)',
+                        'rgba(64, 91, 151, 0.72)',
+                        'rgba(208, 173, 99, 0.72)',
+                        'rgba(34, 197, 94, 0.55)',
                     ],
                     'borderColor' => [
-                        'rgb(147, 197, 253)',
-                        'rgb(59, 130, 246)',
-                        'rgb(251, 191, 36)',
-                        'rgb(34, 197, 94)',
+                        'rgb(140, 157, 193)',
+                        'rgb(47, 73, 127)',
+                        'rgb(191, 165, 111)',
+                        'rgb(22, 163, 74)',
                     ],
                     'borderWidth' => 2,
                 ],

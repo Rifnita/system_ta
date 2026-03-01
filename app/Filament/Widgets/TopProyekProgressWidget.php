@@ -3,7 +3,6 @@
 namespace App\Filament\Widgets;
 
 use App\Models\LaporanMingguan;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -18,14 +17,14 @@ class TopProyekProgressWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        // Analytics widget - visible for managers
         $user = Auth::user();
+
         return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
     }
 
     public function getHeading(): ?string
     {
-        return 'Top Proyek Progress';
+        return 'Progres Proyek Teratas';
     }
 
     public ?int $proyekId = null;
@@ -35,7 +34,6 @@ class TopProyekProgressWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
-        // Get top 5 projects with highest progress using subquery to avoid GROUP BY issues
         $subquery = LaporanMingguan::query()
             ->select('proyek_id', DB::raw('MAX(persentase_penyelesaian) as max_progress'))
             ->when($this->proyekId, fn (Builder $q) => $q->where('proyek_id', $this->proyekId))
@@ -47,9 +45,8 @@ class TopProyekProgressWidget extends BaseWidget
             ->limit(5)
             ->get();
 
-        // Get the full laporan records based on the subquery results
         $proyekIds = $subquery->pluck('proyek_id')->toArray();
-        
+
         $query = LaporanMingguan::query()
             ->whereIn('proyek_id', $proyekIds)
             ->with('proyek')
@@ -63,18 +60,18 @@ class TopProyekProgressWidget extends BaseWidget
                     ->label('Kode')
                     ->badge()
                     ->color('primary'),
-                
+
                 TextColumn::make('proyek.nama_proyek')
                     ->label('Nama Proyek')
                     ->weight('bold')
                     ->wrap(),
-                
+
                 TextColumn::make('proyek.pemilik_proyek')
                     ->label('Pemilik')
                     ->toggleable(),
-                
+
                 TextColumn::make('persentase_penyelesaian')
-                    ->label('Progress')
+                    ->label('Progres')
                     ->suffix('%')
                     ->badge()
                     ->color(fn ($state) => match (true) {
@@ -82,7 +79,7 @@ class TopProyekProgressWidget extends BaseWidget
                         $state >= 50 => 'warning',
                         default => 'danger',
                     }),
-                
+
                 TextColumn::make('proyek.status')
                     ->label('Status Proyek')
                     ->badge()

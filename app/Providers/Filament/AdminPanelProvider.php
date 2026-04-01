@@ -394,6 +394,7 @@ class AdminPanelProvider extends PanelProvider
                 'profile' => MenuItem::make()
                     ->label('Ubah Profil')
                     ->url(fn (): string => EditProfile::getUrl())
+                    ->visible(fn (): bool => EditProfile::canAccess())
                     ->icon('heroicon-o-user-circle'),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')

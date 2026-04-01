@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use App\Models\Proyek;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -12,6 +13,7 @@ use Filament\Pages\Page;
 class RekapMingguan extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
 

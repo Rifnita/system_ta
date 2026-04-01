@@ -22,31 +22,18 @@ class TugasSayaResource extends Resource
 
     protected static ?string $navigationLabel = 'Tugas Saya';
 
-    protected static ?string $modelLabel = 'Tugas';
+    protected static ?string $modelLabel = 'Tugas Saya';
 
-    protected static ?string $pluralModelLabel = 'Tugas';
+    protected static ?string $pluralModelLabel = 'Tugas Saya';
 
     protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
 
     protected static ?int $navigationSort = 2;
 
-    public static function shouldRegisterNavigation(): bool
+    public static function canViewAny(): bool
     {
         $user = Auth::user();
-
-        if (! $user) {
-            return false;
-        }
-
-        // Show menu if user has related permissions (let Shield manage it).
-        return $user->can('view_laporan::aktivitas')
-            || $user->can('create_laporan::aktivitas')
-            || $user->can('update_laporan::aktivitas')
-            || $user->can('view_any_laporan::aktivitas')
-            || $user->can('View:LaporanAktivitas')
-            || $user->can('Create:LaporanAktivitas')
-            || $user->can('Update:LaporanAktivitas')
-            || $user->can('ViewAny:LaporanAktivitas');
+        return $user && $user->can('ViewAny:TugasSayaResource');
     }
 
     public static function form(Schema $schema): Schema

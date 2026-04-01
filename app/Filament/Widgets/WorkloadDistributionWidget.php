@@ -2,24 +2,19 @@
 
 namespace App\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use App\Models\LaporanAktivitas;
 use App\Models\User;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WorkloadDistributionWidget extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 8;
     protected int | string | array $columnSpan = 'full';
     protected ?string $maxHeight = '350px';
-
-    public static function canView(): bool
-    {
-        $user = Auth::user();
-
-        return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
-    }
 
     public function getHeading(): ?string
     {

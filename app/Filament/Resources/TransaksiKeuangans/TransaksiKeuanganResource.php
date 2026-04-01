@@ -20,7 +20,7 @@ use UnitEnum;
 class TransaksiKeuanganResource extends Resource
 {
     private const PERMISSION_MAP = [
-        'view_any' => ['view_any_transaksi_keuangan', 'ViewAny:TransaksiKeuangan'],
+        'view_any' => ['ViewAny:TransaksiKeuangan'],
     ];
 
     protected static ?string $model = TransaksiKeuangan::class;

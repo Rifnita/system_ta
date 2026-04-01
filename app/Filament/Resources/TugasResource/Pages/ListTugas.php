@@ -9,12 +9,23 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class ListTugas extends ListRecords
 {
     protected static string $resource = TugasResource::class;
+
+    public function getTitle(): string | Htmlable
+    {
+        return 'Daftar Tugas';
+    }
+
+    public function getHeading(): string | Htmlable
+    {
+        return 'Daftar Tugas';
+    }
 
     protected function getHeaderActions(): array
     {
@@ -44,10 +55,10 @@ class ListTugas extends ListRecords
                         ->searchable()
                         ->preload()
                         ->nullable()
-                        ->visible(fn () => Auth::user()?->can('view_any_laporan::aktivitas') === true),
+                        ->visible(fn () => TugasResource::canViewAny()),
                 ])
                 ->action(function (array $data) {
-                    if (Auth::user()?->can('view_any_laporan::aktivitas') !== true) {
+                    if (! TugasResource::canViewAny()) {
                         unset($data['user_id']);
                     }
 

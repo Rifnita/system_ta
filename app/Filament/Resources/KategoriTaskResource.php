@@ -11,7 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class KategoriTaskResource extends Resource
@@ -29,40 +28,6 @@ class KategoriTaskResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
 
     protected static ?int $navigationSort = 3;
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        $user = Auth::user();
-
-        if (! $user) {
-            return false;
-        }
-
-        // Admin/supervisor who can monitor activity reports can also manage categories.
-        return $user->can('view_any_laporan::aktivitas') || $user->can('ViewAny:LaporanAktivitas');
-    }
-
-    public static function canViewAny(): bool
-    {
-        $user = Auth::user();
-
-        return (bool) ($user?->can('view_any_laporan::aktivitas') || $user?->can('ViewAny:LaporanAktivitas'));
-    }
-
-    public static function canCreate(): bool
-    {
-        return static::canViewAny();
-    }
-
-    public static function canEdit($record): bool
-    {
-        return static::canViewAny();
-    }
-
-    public static function canDelete($record): bool
-    {
-        return static::canViewAny();
-    }
 
     public static function form(Schema $schema): Schema
     {

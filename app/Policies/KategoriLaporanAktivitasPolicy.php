@@ -14,57 +14,57 @@ class KategoriLaporanAktivitasPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:KategoriLaporanAktivitas');
+        return $authUser->can('ViewAny:KategoriTaskResource');
     }
 
     public function view(AuthUser $authUser, KategoriLaporanAktivitas $kategoriLaporanAktivitas): bool
     {
-        return $authUser->can('View:KategoriLaporanAktivitas');
+        return $authUser->can('View:KategoriTaskResource');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:KategoriLaporanAktivitas');
+        return $authUser->can('Create:KategoriTaskResource');
     }
 
     public function update(AuthUser $authUser, KategoriLaporanAktivitas $kategoriLaporanAktivitas): bool
     {
-        return $authUser->can('Update:KategoriLaporanAktivitas');
+        return $authUser->can('Update:KategoriTaskResource');
     }
 
     public function delete(AuthUser $authUser, KategoriLaporanAktivitas $kategoriLaporanAktivitas): bool
     {
-        return $authUser->can('Delete:KategoriLaporanAktivitas');
+        return $authUser->can('Delete:KategoriTaskResource');
     }
 
     public function restore(AuthUser $authUser, KategoriLaporanAktivitas $kategoriLaporanAktivitas): bool
     {
-        return $authUser->can('Restore:KategoriLaporanAktivitas');
+        return $authUser->can('Restore:KategoriTaskResource');
     }
 
     public function forceDelete(AuthUser $authUser, KategoriLaporanAktivitas $kategoriLaporanAktivitas): bool
     {
-        return $authUser->can('ForceDelete:KategoriLaporanAktivitas');
+        return $authUser->can('ForceDelete:KategoriTaskResource');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:KategoriLaporanAktivitas');
+        return $authUser->can('ForceDeleteAny:KategoriTaskResource');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:KategoriLaporanAktivitas');
+        return $authUser->can('RestoreAny:KategoriTaskResource');
     }
 
     public function replicate(AuthUser $authUser, KategoriLaporanAktivitas $kategoriLaporanAktivitas): bool
     {
-        return $authUser->can('Replicate:KategoriLaporanAktivitas');
+        return $authUser->can('Replicate:KategoriTaskResource');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:KategoriLaporanAktivitas');
+        return $authUser->can('Reorder:KategoriTaskResource');
     }
 
 }

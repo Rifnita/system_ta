@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use App\Models\LaporanAktivitas;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
@@ -9,19 +10,14 @@ use Illuminate\Support\Facades\DB;
 
 class TaskStatusChartWidget extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 3;
     protected int | string | array $columnSpan = [
         'md' => 2,
         'xl' => 1,
     ];
     protected ?string $maxHeight = '300px';
-
-    public static function canView(): bool
-    {
-        $user = Auth::user();
-
-        return $user && ! $user->hasAnyRole(['super_admin', 'panel_user']);
-    }
 
     public function getHeading(): ?string
     {

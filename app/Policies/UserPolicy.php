@@ -11,57 +11,57 @@ class UserPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:User');
+        return $authUser->can('ViewAny:UserResource');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('View:User');
+        return $authUser->can('View:UserResource');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:User');
+        return $authUser->can('Create:UserResource');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('Update:User');
+        return $authUser->can('Update:UserResource');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('Delete:User');
+        return $authUser->can('Delete:UserResource');
     }
 
     public function restore(AuthUser $authUser): bool
     {
-        return $authUser->can('Restore:User');
+        return $authUser->can('Restore:UserResource');
     }
 
     public function forceDelete(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDelete:User');
+        return $authUser->can('ForceDelete:UserResource');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:User');
+        return $authUser->can('ForceDeleteAny:UserResource');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:User');
+        return $authUser->can('RestoreAny:UserResource');
     }
 
     public function replicate(AuthUser $authUser): bool
     {
-        return $authUser->can('Replicate:User');
+        return $authUser->can('Replicate:UserResource');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:User');
+        return $authUser->can('Reorder:UserResource');
     }
 
 }

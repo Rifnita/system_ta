@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filament\Resources\TugasResource;
 use App\Models\LaporanAktivitas;
 use App\Models\User;
 use App\Services\LaporanAktivitasPdfExporter;
@@ -32,7 +33,7 @@ class LaporanAktivitasExportController extends Controller
             ->orderBy('tanggal_aktivitas')
             ->orderBy('waktu_mulai');
 
-        if (Auth::user()?->can('view_any_laporan::aktivitas') !== true) {
+        if (! TugasResource::canViewAny()) {
             $query->where('user_id', Auth::id());
         } elseif (! empty($data['user_id'])) {
             $query->where('user_id', (int) $data['user_id']);
@@ -41,7 +42,7 @@ class LaporanAktivitasExportController extends Controller
         $records = $query->get();
 
         $pegawai = 'Semua Pegawai';
-        if (Auth::user()?->can('view_any_laporan::aktivitas') !== true) {
+        if (! TugasResource::canViewAny()) {
             $pegawai = Auth::user()?->name ?? '-';
         } elseif (! empty($data['user_id'])) {
             $pegawai = User::find((int) $data['user_id'])?->name ?? '-';
@@ -68,7 +69,7 @@ class LaporanAktivitasExportController extends Controller
     {
         $laporanAktivitas->loadMissing('user');
 
-        if (Auth::user()?->can('view_any_laporan::aktivitas') !== true && $laporanAktivitas->user_id !== Auth::id()) {
+        if (! TugasResource::canViewAny() && $laporanAktivitas->user_id !== Auth::id()) {
             abort(403);
         }
 

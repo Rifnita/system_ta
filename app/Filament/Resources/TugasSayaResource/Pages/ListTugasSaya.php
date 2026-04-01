@@ -7,12 +7,23 @@ use App\Models\LaporanAktivitas;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class ListTugasSaya extends ListRecords
 {
     protected static string $resource = TugasSayaResource::class;
+
+    public function getTitle(): string | Htmlable
+    {
+        return 'Tugas Saya';
+    }
+
+    public function getHeading(): string | Htmlable
+    {
+        return 'Tugas Saya';
+    }
 
     protected function getHeaderActions(): array
     {

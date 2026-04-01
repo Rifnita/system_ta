@@ -14,57 +14,57 @@ class LaporanAktivitasPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:LaporanAktivitas');
+        return $authUser->can('ViewAny:TugasSayaResource');
     }
 
     public function view(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        return $authUser->can('View:LaporanAktivitas');
+        return $authUser->can('View:TugasSayaResource');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:LaporanAktivitas');
+        return $authUser->can('Create:TugasSayaResource');
     }
 
     public function update(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        return $authUser->can('Update:LaporanAktivitas');
+        return $authUser->can('Update:TugasSayaResource');
     }
 
     public function delete(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        return $authUser->can('Delete:LaporanAktivitas');
+        return $authUser->can('Delete:TugasSayaResource');
     }
 
     public function restore(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        return $authUser->can('Restore:LaporanAktivitas');
+        return $authUser->can('Restore:TugasSayaResource');
     }
 
     public function forceDelete(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        return $authUser->can('ForceDelete:LaporanAktivitas');
+        return $authUser->can('ForceDelete:TugasSayaResource');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:LaporanAktivitas');
+        return $authUser->can('ForceDeleteAny:TugasSayaResource');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:LaporanAktivitas');
+        return $authUser->can('RestoreAny:TugasSayaResource');
     }
 
     public function replicate(AuthUser $authUser, LaporanAktivitas $laporanAktivitas): bool
     {
-        return $authUser->can('Replicate:LaporanAktivitas');
+        return $authUser->can('Replicate:TugasSayaResource');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:LaporanAktivitas');
+        return $authUser->can('Reorder:TugasSayaResource');
     }
 
 }

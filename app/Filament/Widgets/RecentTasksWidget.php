@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use App\Models\LaporanAktivitas;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -10,15 +11,10 @@ use Illuminate\Support\Facades\Auth;
 
 class RecentTasksWidget extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 21;
     protected int | string | array $columnSpan = 'full';
-
-    public static function canView(): bool
-    {
-        $user = Auth::user();
-
-        return $user && ! $user->hasAnyRole(['super_admin', 'panel_user']);
-    }
 
     public function getHeading(): ?string
     {

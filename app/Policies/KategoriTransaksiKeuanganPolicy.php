@@ -14,57 +14,57 @@ class KategoriTransaksiKeuanganPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:KategoriTransaksiKeuangan');
+        return $authUser->can('ViewAny:KategoriTransaksiKeuanganResource');
     }
 
     public function view(AuthUser $authUser, KategoriTransaksiKeuangan $kategoriTransaksiKeuangan): bool
     {
-        return $authUser->can('View:KategoriTransaksiKeuangan');
+        return $authUser->can('View:KategoriTransaksiKeuanganResource');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:KategoriTransaksiKeuangan');
+        return $authUser->can('Create:KategoriTransaksiKeuanganResource');
     }
 
     public function update(AuthUser $authUser, KategoriTransaksiKeuangan $kategoriTransaksiKeuangan): bool
     {
-        return $authUser->can('Update:KategoriTransaksiKeuangan');
+        return $authUser->can('Update:KategoriTransaksiKeuanganResource');
     }
 
     public function delete(AuthUser $authUser, KategoriTransaksiKeuangan $kategoriTransaksiKeuangan): bool
     {
-        return $authUser->can('Delete:KategoriTransaksiKeuangan');
+        return $authUser->can('Delete:KategoriTransaksiKeuanganResource');
     }
 
     public function restore(AuthUser $authUser, KategoriTransaksiKeuangan $kategoriTransaksiKeuangan): bool
     {
-        return $authUser->can('Restore:KategoriTransaksiKeuangan');
+        return $authUser->can('Restore:KategoriTransaksiKeuanganResource');
     }
 
     public function forceDelete(AuthUser $authUser, KategoriTransaksiKeuangan $kategoriTransaksiKeuangan): bool
     {
-        return $authUser->can('ForceDelete:KategoriTransaksiKeuangan');
+        return $authUser->can('ForceDelete:KategoriTransaksiKeuanganResource');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:KategoriTransaksiKeuangan');
+        return $authUser->can('ForceDeleteAny:KategoriTransaksiKeuanganResource');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:KategoriTransaksiKeuangan');
+        return $authUser->can('RestoreAny:KategoriTransaksiKeuanganResource');
     }
 
     public function replicate(AuthUser $authUser, KategoriTransaksiKeuangan $kategoriTransaksiKeuangan): bool
     {
-        return $authUser->can('Replicate:KategoriTransaksiKeuangan');
+        return $authUser->can('Replicate:KategoriTransaksiKeuanganResource');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:KategoriTransaksiKeuangan');
+        return $authUser->can('Reorder:KategoriTransaksiKeuanganResource');
     }
 
 }

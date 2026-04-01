@@ -36,7 +36,8 @@ class TugasTable
                     ->searchable()
                     ->sortable()
                     ->icon('heroicon-o-user')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->weight('medium')
+                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('judul')
                     ->label('Judul Tugas')
@@ -138,7 +139,7 @@ class TugasTable
                     ->relationship('user', 'name')
                     ->searchable()
                     ->preload()
-                    ->visible(fn () => Auth::user()->hasAnyRole(['super_admin', 'admin'])),
+                    ->visible(fn () => TugasResource::canViewAny()),
 
                 Tables\Filters\SelectFilter::make('kategori')
                     ->label('Kategori')

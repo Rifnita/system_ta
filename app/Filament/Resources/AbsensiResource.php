@@ -17,11 +17,11 @@ use UnitEnum;
 class AbsensiResource extends Resource
 {
     private const PERMISSION_MAP = [
-        'view_any' => ['view_any_absensi', 'ViewAny:Absensi'],
-        'view' => ['view_absensi', 'View:Absensi'],
-        'create' => ['create_absensi', 'Create:Absensi'],
-        'update' => ['update_absensi', 'Update:Absensi'],
-        'delete' => ['delete_absensi', 'Delete:Absensi'],
+        'view_any' => ['ViewAny:Absensi'],
+        'view' => ['View:Absensi'],
+        'create' => ['Create:Absensi'],
+        'update' => ['Update:Absensi'],
+        'delete' => ['Delete:Absensi'],
     ];
 
     protected static ?string $model = Absensi::class;

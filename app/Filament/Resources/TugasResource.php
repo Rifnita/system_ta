@@ -10,7 +10,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
@@ -20,37 +20,25 @@ class TugasResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationLabel = 'Manajemen Tugas';
+    protected static ?string $navigationLabel = 'Daftar Tugas';
 
-    protected static ?string $modelLabel = 'Tugas';
+    protected static ?string $modelLabel = 'Daftar Tugas';
 
-    protected static ?string $pluralModelLabel = 'Tugas';
+    protected static ?string $pluralModelLabel = 'Daftar Tugas';
 
     protected static string|UnitEnum|null $navigationGroup = 'Manajemen Tugas';
 
     protected static ?int $navigationSort = 1;
 
-    public static function shouldRegisterNavigation(): bool
+    public static function canViewAny(): bool
     {
         $user = Auth::user();
-
-        if (! $user) {
-            return false;
-        }
-
-        // All users can access the menu to manage their own tasks
-        return true;
+        return $user && $user->can('ViewAny:TugasResource');
     }
 
     public static function form(Schema $schema): Schema
     {
         return TugasForm::configure($schema);
-    }
-
-    public static function canCreate(): bool
-    {
-        // All users can create daily tasks for themselves
-        return true;
     }
 
     public static function table(Table $table): Table
@@ -73,18 +61,5 @@ class TugasResource extends Resource
             'view' => Pages\ViewTugas::route('/{record}'),
             'edit' => Pages\EditTugas::route('/{record}/edit'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-        $user = Auth::user();
-
-        // Admin/Supervisor can view all tasks, regular users can only view their own tasks
-        if ($user && !$user->hasAnyRole(['super_admin', 'admin'])) {
-            $query->where('user_id', $user->id);
-        }
-
-        return $query;
     }
 }

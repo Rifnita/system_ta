@@ -2,27 +2,22 @@
 
 namespace App\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use App\Models\LaporanAktivitas;
 use App\Models\LaporanMingguan;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Facades\Auth;
 
 class WeeklyComparisonWidget extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 5;
     protected int | string | array $columnSpan = [
         'md' => 2,
         'xl' => 1,
     ];
     protected ?string $maxHeight = '300px';
-
-    public static function canView(): bool
-    {
-        $user = Auth::user();
-
-        return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
-    }
 
     public function getHeading(): ?string
     {

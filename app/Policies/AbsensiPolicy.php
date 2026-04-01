@@ -14,57 +14,57 @@ class AbsensiPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:Absensi');
+        return $authUser->can('ViewAny:AbsensiResource');
     }
 
     public function view(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $authUser->can('View:Absensi');
+        return $authUser->can('View:AbsensiResource');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Absensi');
+        return $authUser->can('Create:AbsensiResource');
     }
 
     public function update(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $authUser->can('Update:Absensi');
+        return $authUser->can('Update:AbsensiResource');
     }
 
     public function delete(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $authUser->can('Delete:Absensi');
+        return $authUser->can('Delete:AbsensiResource');
     }
 
     public function restore(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $authUser->can('Restore:Absensi');
+        return $authUser->can('Restore:AbsensiResource');
     }
 
     public function forceDelete(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $authUser->can('ForceDelete:Absensi');
+        return $authUser->can('ForceDelete:AbsensiResource');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:Absensi');
+        return $authUser->can('ForceDeleteAny:AbsensiResource');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:Absensi');
+        return $authUser->can('RestoreAny:AbsensiResource');
     }
 
     public function replicate(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $authUser->can('Replicate:Absensi');
+        return $authUser->can('Replicate:AbsensiResource');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:Absensi');
+        return $authUser->can('Reorder:AbsensiResource');
     }
 
 }

@@ -2,25 +2,20 @@
 
 namespace App\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use App\Models\LaporanMingguan;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TopProyekProgressWidget extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 10;
     protected int | string | array $columnSpan = 'full';
-
-    public static function canView(): bool
-    {
-        $user = Auth::user();
-
-        return $user && $user->hasAnyRole(['super_admin', 'panel_user']);
-    }
 
     public function getHeading(): ?string
     {

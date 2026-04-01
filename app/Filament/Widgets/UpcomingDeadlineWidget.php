@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use App\Models\LaporanAktivitas;
 use Carbon\Carbon;
 use Filament\Tables\Columns\TextColumn;
@@ -11,15 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class UpcomingDeadlineWidget extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 20;
     protected int | string | array $columnSpan = 'full';
-
-    public static function canView(): bool
-    {
-        $user = Auth::user();
-
-        return $user && ! $user->hasAnyRole(['super_admin', 'panel_user']);
-    }
 
     public function getHeading(): ?string
     {

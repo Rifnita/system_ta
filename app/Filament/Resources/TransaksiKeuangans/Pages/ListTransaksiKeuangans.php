@@ -137,13 +137,7 @@ class ListTransaksiKeuangans extends ListRecords
 
     private function canViewAny(): bool
     {
-        $user = Auth::user();
-
-        if (! $user) {
-            return false;
-        }
-
-        return $user->can('view_any_transaksi_keuangan') || $user->can('ViewAny:TransaksiKeuangan');
+        return TransaksiKeuanganResource::canViewAny();
     }
 
     private function canExport(): bool
@@ -154,11 +148,7 @@ class ListTransaksiKeuangans extends ListRecords
             return false;
         }
 
-        return $user->can('export_transaksi_keuangan')
-            || $user->can('Export:TransaksiKeuangan')
-            || $user->can('view_any_transaksi_keuangan')
-            || $user->can('ViewAny:TransaksiKeuangan')
-            || $user->can('create_transaksi_keuangan')
-            || $user->can('Create:TransaksiKeuangan');
+        return TransaksiKeuanganResource::canViewAny()
+            || TransaksiKeuanganResource::canCreate();
     }
 }

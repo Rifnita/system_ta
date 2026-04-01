@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use BackedEnum;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class EditProfile extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user-circle';
 

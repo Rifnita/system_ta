@@ -14,57 +14,57 @@ class PengaturanAbsensiPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:PengaturanAbsensi');
+        return $authUser->can('ViewAny:PengaturanAbsensiResource');
     }
 
     public function view(AuthUser $authUser, PengaturanAbsensi $pengaturanAbsensi): bool
     {
-        return $authUser->can('View:PengaturanAbsensi');
+        return $authUser->can('View:PengaturanAbsensiResource');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:PengaturanAbsensi');
+        return $authUser->can('Create:PengaturanAbsensiResource');
     }
 
     public function update(AuthUser $authUser, PengaturanAbsensi $pengaturanAbsensi): bool
     {
-        return $authUser->can('Update:PengaturanAbsensi');
+        return $authUser->can('Update:PengaturanAbsensiResource');
     }
 
     public function delete(AuthUser $authUser, PengaturanAbsensi $pengaturanAbsensi): bool
     {
-        return $authUser->can('Delete:PengaturanAbsensi');
+        return $authUser->can('Delete:PengaturanAbsensiResource');
     }
 
     public function restore(AuthUser $authUser, PengaturanAbsensi $pengaturanAbsensi): bool
     {
-        return $authUser->can('Restore:PengaturanAbsensi');
+        return $authUser->can('Restore:PengaturanAbsensiResource');
     }
 
     public function forceDelete(AuthUser $authUser, PengaturanAbsensi $pengaturanAbsensi): bool
     {
-        return $authUser->can('ForceDelete:PengaturanAbsensi');
+        return $authUser->can('ForceDelete:PengaturanAbsensiResource');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:PengaturanAbsensi');
+        return $authUser->can('ForceDeleteAny:PengaturanAbsensiResource');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:PengaturanAbsensi');
+        return $authUser->can('RestoreAny:PengaturanAbsensiResource');
     }
 
     public function replicate(AuthUser $authUser, PengaturanAbsensi $pengaturanAbsensi): bool
     {
-        return $authUser->can('Replicate:PengaturanAbsensi');
+        return $authUser->can('Replicate:PengaturanAbsensiResource');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:PengaturanAbsensi');
+        return $authUser->can('Reorder:PengaturanAbsensiResource');
     }
 
 }

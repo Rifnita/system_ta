@@ -11,47 +11,30 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class AbsensiPolicy
 {
     use HandlesAuthorization;
-
-    private function canWithFallback(AuthUser $authUser, string ...$permissions): bool
-    {
-        foreach ($permissions as $permission) {
-            if ($authUser->can($permission)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $this->canWithFallback($authUser, 'ViewAny:Absensi', 'view_any_absensi');
+        return $authUser->can('ViewAny:Absensi');
     }
 
     public function view(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $this->canWithFallback($authUser, 'View:Absensi', 'view_absensi');
+        return $authUser->can('View:Absensi');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $this->canWithFallback($authUser, 'Create:Absensi', 'create_absensi');
+        return $authUser->can('Create:Absensi');
     }
 
     public function update(AuthUser $authUser, Absensi $absensi): bool
     {
-        if ($this->canWithFallback($authUser, 'Update:Absensi', 'update_absensi')) {
-            return true;
-        }
-
-        // Izinkan user melakukan checkout absensi miliknya sendiri pada hari yang sama.
-        return $this->canWithFallback($authUser, 'Create:Absensi', 'create_absensi')
-            && $absensi->canCheckoutBy($authUser);
+        return $authUser->can('Update:Absensi');
     }
 
     public function delete(AuthUser $authUser, Absensi $absensi): bool
     {
-        return $this->canWithFallback($authUser, 'Delete:Absensi', 'delete_absensi');
+        return $authUser->can('Delete:Absensi');
     }
 
     public function restore(AuthUser $authUser, Absensi $absensi): bool

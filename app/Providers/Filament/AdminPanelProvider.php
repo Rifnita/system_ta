@@ -37,7 +37,28 @@ class AdminPanelProvider extends PanelProvider
             ->defaultThemeMode(ThemeMode::Light)
             ->passwordReset()
             ->emailVerification()
-            ->brandName('System TA')
+            ->brandName(config('app.name', 'System TA'))
+            ->brandLogo(function (): HtmlString {
+                $brandName = e((string) config('app.name', 'System TA'));
+
+                if (file_exists(public_path('images/company-logo.svg'))) {
+                    $logoUrl = asset('images/company-logo.svg');
+                } elseif (file_exists(public_path('images/company-logo.png'))) {
+                    $logoUrl = asset('images/company-logo.png');
+                } else {
+                    return new HtmlString(
+                        '<span style="font-weight:700; font-size:1rem; color:#243a66; line-height:1.1;">' . $brandName . '</span>'
+                    );
+                }
+
+                return new HtmlString(
+                    '<span style="display:inline-flex; align-items:center; gap:.55rem;">'
+                    . '<img src="' . $logoUrl . '" alt="' . $brandName . '" style="height:2rem; width:auto; object-fit:contain;" />'
+                    . '<span style="font-weight:700; font-size:1rem; color:#243a66; line-height:1.1; white-space:nowrap;">' . $brandName . '</span>'
+                    . '</span>'
+                );
+            })
+            ->brandLogoHeight('2rem')
             ->favicon(asset('favicon.ico'))
             ->colors([
                 'primary' => [
@@ -109,6 +130,19 @@ class AdminPanelProvider extends PanelProvider
                             --color-secondary-800: #7b6a47;
                             --color-secondary-900: #5a4d35;
                             --ui-radius: 10px;
+                        }
+
+                        .fi-simple-main .fi-simple-header-heading {
+                            font-size: 1.05rem !important;
+                            font-weight: 600 !important;
+                            letter-spacing: 0 !important;
+                            color: #111111 !important;
+                        }
+
+                        .fi-simple-main .fi-simple-header-subheading {
+                            font-size: 0.875rem !important;
+                            font-weight: 400 !important;
+                            color: #222222 !important;
                         }
 
                         .fi-body {

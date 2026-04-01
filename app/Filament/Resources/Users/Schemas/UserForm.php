@@ -26,6 +26,7 @@ class UserForm
                             ->label('')
                             ->image()
                             ->avatar()
+                            ->disk('public')
                             ->directory('profile-photos')
                             ->visibility('public')
                             ->maxSize(2048)

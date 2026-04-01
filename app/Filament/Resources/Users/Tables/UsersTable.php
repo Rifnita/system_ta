@@ -26,6 +26,7 @@ class UsersTable
             ->columns([
                 ImageColumn::make('profile_photo_path')
                     ->label('Foto')
+                    ->disk('public')
                     ->circular()
                     ->defaultImageUrl(url('/images/default-avatar.svg'))
                     ->size(40),

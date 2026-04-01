@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\LaporanAktivitasExportController;
 use App\Http\Controllers\LaporanMingguanExportController;
@@ -13,6 +14,11 @@ Route::get('/', function () {
 // Password Reset Routes
 Route::get('/password/reset', [PasswordResetController::class, 'show'])->name('password.reset');
 Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+
+// Email Verification Route
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/laporan-aktivitas/export/pdf', [LaporanAktivitasExportController::class, 'exportPdf'])

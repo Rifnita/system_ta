@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, HasAvatar
@@ -72,9 +73,15 @@ class User extends Authenticatable implements MustVerifyEmail, HasAvatar
      */
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->profile_photo_path 
-            ? \Illuminate\Support\Facades\Storage::url('public/' . $this->profile_photo_path)
-            : null;
+        if (! filled($this->profile_photo_path)) {
+            return null;
+        }
+
+        if (Str::startsWith($this->profile_photo_path, ['http://', 'https://'])) {
+            return $this->profile_photo_path;
+        }
+
+        return asset('storage/' . ltrim($this->profile_photo_path, '/'));
     }
 
     /**

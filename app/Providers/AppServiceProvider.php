@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\LaporanAktivitas;
+use App\Notifications\VerifyEmailNotification;
 use App\Policies\LaporanAktivitasPolicy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        App::bind(\Filament\Auth\Notifications\VerifyEmail::class, VerifyEmailNotification::class);
     }
 
     /**

@@ -9,6 +9,8 @@ use Illuminate\Support\Carbon;
 
 class VerifyEmailNotification extends VerifyEmailBase
 {
+    public string $url = '';
+
     /**
      * Get the mail representation of the notification.
      */

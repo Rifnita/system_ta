@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Filament\Auth\Responses\LoginResponse as FilamentLoginResponse;
 use App\Models\LaporanAktivitas;
 use App\Notifications\VerifyEmailNotification;
 use App\Policies\LaporanAktivitasPolicy;
 use Carbon\Carbon;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse as FilamentLoginResponseContract;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         App::bind(\Filament\Auth\Notifications\VerifyEmail::class, VerifyEmailNotification::class);
+        $this->app->bind(FilamentLoginResponseContract::class, FilamentLoginResponse::class);
     }
 
     /**

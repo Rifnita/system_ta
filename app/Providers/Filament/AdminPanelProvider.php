@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
 use App\Filament\Pages\EditProfile;
+use App\Filament\Resources\AbsensiResource;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -33,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->homeUrl(fn (): string => AbsensiResource::getUrl('index'))
             ->darkMode(false)
             ->defaultThemeMode(ThemeMode::Light)
             ->passwordReset()

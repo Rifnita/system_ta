@@ -16,14 +16,6 @@ use UnitEnum;
 
 class AbsensiResource extends Resource
 {
-    private const PERMISSION_MAP = [
-        'view_any' => ['ViewAny:Absensi'],
-        'view' => ['View:Absensi'],
-        'create' => ['Create:Absensi'],
-        'update' => ['Update:Absensi'],
-        'delete' => ['Delete:Absensi'],
-    ];
-
     protected static ?string $model = Absensi::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clock';
@@ -69,9 +61,10 @@ class AbsensiResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
+        $user = Auth::user();
         
-        // Non-admin hanya bisa lihat absensi sendiri
-        if (!static::canDo('view_any')) {
+        // User non-admin hanya bisa melihat absensi miliknya sendiri.
+        if (! $user || !($user->hasRole('super_admin') || $user->hasRole('admin'))) {
             $query->where('user_id', Auth::id());
         }
         
@@ -86,12 +79,10 @@ class AbsensiResource extends Resource
             return false;
         }
 
-        foreach (static::PERMISSION_MAP[$ability] ?? [] as $permission) {
-            if ($user->can($permission)) {
-                return true;
-            }
+        if (in_array($ability, ['view_any', 'view', 'create', 'update'], true)) {
+            return true;
         }
 
-        return false;
+        return $user->hasRole('super_admin') || $user->hasRole('admin');
     }
 }

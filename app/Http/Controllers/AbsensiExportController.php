@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AbsensiExportController extends Controller
 {
@@ -36,6 +37,15 @@ class AbsensiExportController extends Controller
 
         $startDate = Carbon::parse($data['start_date'])->startOfDay();
         $endDate = Carbon::parse($data['end_date'])->startOfDay();
+
+        $maxRangeDays = 62;
+        $selectedRangeDays = (int) ($startDate->diffInDays($endDate) + 1);
+        if ($selectedRangeDays > $maxRangeDays) {
+            throw ValidationException::withMessages([
+                'end_date' => "Rentang tanggal maksimal {$maxRangeDays} hari per export.",
+            ]);
+        }
+
         $dateRange = [];
         $currentDate = $startDate->copy();
         while ($currentDate->lte($endDate)) {
@@ -87,10 +97,6 @@ class AbsensiExportController extends Controller
                 $cuti = $this->findApprovedLeaveForDate($cutiRecords->get($user->id, collect()), $dateString);
                 $tanggalMerah = $tanggalMerahService->getDateInfo($date);
 
-                if ($tanggalMerah['is_red']) {
-                    $totalTanggalMerah++;
-                }
-
                 $statusKehadiran = 'Tidak Absen';
                 $kategoriHari = $tanggalMerah['is_red'] ? 'Tanggal Merah' : 'Hari Kerja';
                 $catatanSistem = $tanggalMerah['label'];
@@ -99,7 +105,6 @@ class AbsensiExportController extends Controller
                     $statusKehadiran = 'Cuti';
                     $kategoriHari = 'Cuti';
                     $catatanSistem = 'Cuti disetujui: ' . $this->labelJenisCuti((string) $cuti->jenis_cuti);
-                    $totalCuti++;
                 }
 
                 if ($absensi) {
@@ -113,6 +118,14 @@ class AbsensiExportController extends Controller
                     if ($absensi->mock_location_detected_keluar) {
                         $totalFakeGpsKeluar++;
                     }
+                }
+
+                if (! $absensi && $cuti) {
+                    $totalCuti++;
+                }
+
+                if (! $absensi && ! $cuti && $tanggalMerah['is_red']) {
+                    $totalTanggalMerah++;
                 }
 
                 if (! $absensi && ! $cuti && ! $tanggalMerah['is_red']) {

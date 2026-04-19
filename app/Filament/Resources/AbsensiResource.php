@@ -54,7 +54,16 @@ class AbsensiResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $today = Absensi::whereDate('tanggal', today())->count();
+        $user = Auth::user();
+
+        $today = Absensi::query()
+            ->whereDate('tanggal', today())
+            ->when(
+                ! $user || ! ($user->hasRole('super_admin') || $user->hasRole('admin')),
+                fn (Builder $query): Builder => $query->where('user_id', Auth::id()),
+            )
+            ->count();
+
         return $today > 0 ? (string) $today : null;
     }
 

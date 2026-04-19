@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Notifications\VerifyEmailNotification;
+use App\Http\Controllers\AbsensiExportController;
 use App\Http\Controllers\LaporanAktivitasExportController;
 use App\Http\Controllers\LaporanMingguanExportController;
 use App\Http\Controllers\TransaksiKeuanganExportController;
@@ -37,6 +38,9 @@ Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 've
     ->name('verification.verify');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/absensi/export/excel', [AbsensiExportController::class, 'exportExcel'])
+        ->name('absensi.export.excel');
+
     Route::get('/laporan-aktivitas/export/pdf', [LaporanAktivitasExportController::class, 'exportPdf'])
         ->name('laporan-aktivitas.export.pdf');
 

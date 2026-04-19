@@ -4,9 +4,13 @@ namespace App\Filament\Resources\AbsensiResource\Pages;
 
 use App\Filament\Resources\AbsensiResource;
 use App\Models\Absensi;
+use App\Models\User;
 use Filament\Actions;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class ListAbsensis extends ListRecords
 {
@@ -19,6 +23,57 @@ class ListAbsensis extends ListRecords
         $bisaAbsenKeluar = $absensiHariIni?->canCheckoutBy(Auth::user()) ?? false;
         
         return [
+            Actions\Action::make('export_rekap_excel')
+                ->label('Rekap & Export Excel')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('primary')
+                ->form([
+                    DatePicker::make('start_date')
+                        ->label('Tanggal Mulai')
+                        ->default(now()->startOfMonth())
+                        ->required(),
+                    DatePicker::make('end_date')
+                        ->label('Tanggal Selesai')
+                        ->default(now()->endOfMonth())
+                        ->required(),
+                    Select::make('status')
+                        ->label('Status Absensi')
+                        ->options([
+                            'hadir' => 'Hadir',
+                            'izin' => 'Izin',
+                            'sakit' => 'Sakit',
+                            'cuti' => 'Cuti',
+                            'alpha' => 'Alpha',
+                            'dinas_luar' => 'Dinas Luar',
+                            'lembur' => 'Lembur',
+                        ])
+                        ->placeholder('Semua status'),
+                    Select::make('status_persetujuan')
+                        ->label('Status Persetujuan')
+                        ->options([
+                            'menunggu' => 'Menunggu',
+                            'disetujui' => 'Disetujui',
+                            'ditolak' => 'Ditolak',
+                        ])
+                        ->placeholder('Semua status persetujuan'),
+                    Select::make('user_id')
+                        ->label('Pegawai')
+                        ->searchable()
+                        ->options(fn (): array => User::query()->orderBy('name')->pluck('name', 'id')->toArray())
+                        ->placeholder('Semua pegawai')
+                        ->visible(fn (): bool => (bool) (Auth::user()?->hasRole('super_admin') || Auth::user()?->hasRole('admin'))),
+                ])
+                ->action(function (array $data): void {
+                    $url = URL::route('admin.absensi.export.excel', array_filter([
+                        'start_date' => $data['start_date'] ?? null,
+                        'end_date' => $data['end_date'] ?? null,
+                        'status' => $data['status'] ?? null,
+                        'status_persetujuan' => $data['status_persetujuan'] ?? null,
+                        'user_id' => $data['user_id'] ?? null,
+                    ], fn ($value) => filled($value)));
+
+                    $this->redirect($url, navigate: false);
+                }),
             Actions\Action::make('absen_masuk')
                 ->label($sudahAbsen ? 'Sudah Absen Hari Ini' : 'Absen Masuk')
                 ->icon('heroicon-o-arrow-left-on-rectangle')

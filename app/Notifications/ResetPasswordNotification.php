@@ -20,6 +20,13 @@ class ResetPasswordNotification extends Notification
     public $token;
 
     /**
+     * Optional reset URL from Filament auth flow.
+     *
+     * @var string|null
+     */
+    public ?string $url = null;
+
+    /**
      * Create a new notification instance.
      */
     public function __construct($token)
@@ -42,7 +49,7 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $resetUrl = url(route('password.reset', [
+        $resetUrl = $this->url ?? url(route('password.reset', [
             'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));

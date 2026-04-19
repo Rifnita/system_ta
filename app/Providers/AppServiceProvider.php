@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Filament\Auth\Responses\LoginResponse as FilamentLoginResponse;
 use App\Models\LaporanAktivitas;
+use App\Notifications\ResetPasswordNotification;
 use App\Notifications\VerifyEmailNotification;
 use App\Policies\LaporanAktivitasPolicy;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         App::bind(\Filament\Auth\Notifications\VerifyEmail::class, VerifyEmailNotification::class);
+        App::bind(\Filament\Auth\Notifications\ResetPassword::class, ResetPasswordNotification::class);
         $this->app->bind(FilamentLoginResponseContract::class, FilamentLoginResponse::class);
     }
 

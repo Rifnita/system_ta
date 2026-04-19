@@ -60,17 +60,6 @@ class AbsensiTable
                 ->suffix(' jam')
                 ->placeholder('-'),
             
-            Tables\Columns\BadgeColumn::make('status')
-                ->label('Status')
-                ->colors([
-                    'success' => 'hadir',
-                    'warning' => ['izin', 'lembur'],
-                    'info' => 'sakit',
-                    'primary' => 'cuti',
-                    'secondary' => 'dinas_luar',
-                    'danger' => 'alpha',
-                ]),
-            
             Tables\Columns\IconColumn::make('mock_location_detected_masuk')
                 ->label('Fake GPS')
                 ->boolean()
@@ -89,17 +78,6 @@ class AbsensiTable
     protected static function getFilters(): array
     {
         return [
-            Tables\Filters\SelectFilter::make('status')
-                ->options([
-                    'hadir' => 'Hadir',
-                    'izin' => 'Izin',
-                    'sakit' => 'Sakit',
-                    'cuti' => 'Cuti',
-                    'alpha' => 'Alpha',
-                    'dinas_luar' => 'Dinas Luar',
-                    'lembur' => 'Lembur',
-                ]),
-            
             Tables\Filters\Filter::make('tanggal')
                 ->form([
                     Forms\Components\DatePicker::make('dari'),

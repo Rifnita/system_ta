@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AbsensiResource\Pages;
 
 use App\Filament\Resources\AbsensiResource;
 use App\Models\Absensi;
+use App\Models\PengajuanCuti;
 use App\Models\PengaturanAbsensi;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
@@ -28,6 +29,23 @@ class CreateAbsensi extends CreateRecord
                 ->danger()
                 ->send();
             
+            $this->halt();
+        }
+
+        $hasApprovedLeaveToday = PengajuanCuti::query()
+            ->where('user_id', Auth::id())
+            ->where('status_pengajuan', 'disetujui')
+            ->whereDate('tanggal_mulai', '<=', today())
+            ->whereDate('tanggal_selesai', '>=', today())
+            ->exists();
+
+        if ($hasApprovedLeaveToday) {
+            Notification::make()
+                ->title('Cuti Disetujui')
+                ->body('Anda sedang dalam periode cuti yang telah disetujui, sehingga tidak perlu absen masuk.')
+                ->warning()
+                ->send();
+
             $this->halt();
         }
 

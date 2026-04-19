@@ -2079,6 +2079,53 @@
             "install-path": "../graham-campbell/result-type"
         },
         {
+            "name": "grei/tanggalmerah",
+            "version": "v2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guangrei/phptanggalmerah.git",
+                "reference": "2570fe5fb9dae075d08200a691dded08c4b66bb1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guangrei/phptanggalmerah/zipball/2570fe5fb9dae075d08200a691dded08c4b66bb1",
+                "reference": "2570fe5fb9dae075d08200a691dded08c4b66bb1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.1.3|~6.0"
+            },
+            "time": "2023-07-27T20:14:03+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Grei\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "guangrei",
+                    "email": "myawn@pm.me"
+                }
+            ],
+            "description": "indonesia holiday checker (include sunday)",
+            "homepage": "https://guangrei.github.io",
+            "support": {
+                "issues": "https://github.com/guangrei/phptanggalmerah/issues",
+                "source": "https://github.com/guangrei/phptanggalmerah/tree/v2.1.0"
+            },
+            "install-path": "../grei/tanggalmerah"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "7.10.0",
             "version_normalized": "7.10.0.0",

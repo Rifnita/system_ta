@@ -103,7 +103,6 @@ class EditAbsensi extends EditRecord
 
         // Mode administrasi: batasi update ke field non-kritikal.
         return [
-            'status' => $data['status'] ?? $record->status,
             'keterangan' => $data['keterangan'] ?? $record->keterangan,
         ];
     }

@@ -27,6 +27,7 @@ class ListAbsensis extends ListRecords
                 ->label('Rekap & Export Excel')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('primary')
+                ->visible(fn (): bool => (bool) (Auth::user()?->hasRole('super_admin')))
                 ->form([
                     DatePicker::make('start_date')
                         ->label('Tanggal Mulai')
@@ -36,39 +37,17 @@ class ListAbsensis extends ListRecords
                         ->label('Tanggal Selesai')
                         ->default(now()->endOfMonth())
                         ->required(),
-                    Select::make('status')
-                        ->label('Status Absensi')
-                        ->options([
-                            'hadir' => 'Hadir',
-                            'izin' => 'Izin',
-                            'sakit' => 'Sakit',
-                            'cuti' => 'Cuti',
-                            'alpha' => 'Alpha',
-                            'dinas_luar' => 'Dinas Luar',
-                            'lembur' => 'Lembur',
-                        ])
-                        ->placeholder('Semua status'),
-                    Select::make('status_persetujuan')
-                        ->label('Status Persetujuan')
-                        ->options([
-                            'menunggu' => 'Menunggu',
-                            'disetujui' => 'Disetujui',
-                            'ditolak' => 'Ditolak',
-                        ])
-                        ->placeholder('Semua status persetujuan'),
                     Select::make('user_id')
                         ->label('Pegawai')
                         ->searchable()
                         ->options(fn (): array => User::query()->orderBy('name')->pluck('name', 'id')->toArray())
                         ->placeholder('Semua pegawai')
-                        ->visible(fn (): bool => (bool) (Auth::user()?->hasRole('super_admin') || Auth::user()?->hasRole('admin'))),
+                        ->visible(fn (): bool => (bool) (Auth::user()?->hasRole('super_admin'))),
                 ])
                 ->action(function (array $data): void {
                     $url = URL::route('admin.absensi.export.excel', array_filter([
                         'start_date' => $data['start_date'] ?? null,
                         'end_date' => $data['end_date'] ?? null,
-                        'status' => $data['status'] ?? null,
-                        'status_persetujuan' => $data['status_persetujuan'] ?? null,
                         'user_id' => $data['user_id'] ?? null,
                     ], fn ($value) => filled($value)));
 

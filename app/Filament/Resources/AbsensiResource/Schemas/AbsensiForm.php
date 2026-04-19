@@ -57,20 +57,6 @@ class AbsensiForm
                     ->dehydrated(true)
                     ->visible(fn (string $operation) => $operation === 'create'),
 
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'hadir' => 'Hadir',
-                        'izin' => 'Izin',
-                        'sakit' => 'Sakit',
-                        'cuti' => 'Cuti',
-                        'alpha' => 'Alpha',
-                        'dinas_luar' => 'Dinas Luar',
-                        'lembur' => 'Lembur',
-                    ])
-                    ->default('hadir')
-                    ->required()
-                    ->disabled(fn (string $operation) => $operation === 'create'),
-
                 Forms\Components\Textarea::make('keterangan')
                     ->rows(3)
                     ->columnSpanFull(),

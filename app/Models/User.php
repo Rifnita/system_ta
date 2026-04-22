@@ -9,13 +9,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -82,15 +83,66 @@ class User extends Authenticatable implements MustVerifyEmail, HasAvatar
      */
     public function getFilamentAvatarUrl(): ?string
     {
-        if (! filled($this->profile_photo_path)) {
+        return $this->profile_photo_url;
+    }
+
+    public function getProfilePhotoUrlAttribute(): ?string
+    {
+        $path = $this->extractProfilePhotoPath($this->profile_photo_path);
+
+        if (! filled($path)) {
+            return asset('images/default-avatar.svg');
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        $normalizedPath = ltrim($path, '/');
+
+        if (Str::startsWith($normalizedPath, 'storage/')) {
+            return asset($normalizedPath);
+        }
+
+        if (Str::startsWith($normalizedPath, 'public/')) {
+            $normalizedPath = Str::after($normalizedPath, 'public/');
+        }
+
+        return asset('storage/' . ltrim($normalizedPath, '/'));
+    }
+
+    public function setProfilePhotoPathAttribute(string | array | null $value): void
+    {
+        $normalizedPath = $this->extractProfilePhotoPath($value);
+
+        if (blank($normalizedPath)) {
+            $this->attributes['profile_photo_path'] = null;
+
+            return;
+        }
+
+        if (Str::startsWith($normalizedPath, 'storage/')) {
+            $normalizedPath = Str::after($normalizedPath, 'storage/');
+        }
+
+        if (Str::startsWith($normalizedPath, 'public/')) {
+            $normalizedPath = Str::after($normalizedPath, 'public/');
+        }
+
+        $this->attributes['profile_photo_path'] = $normalizedPath;
+    }
+
+    protected function extractProfilePhotoPath(string | array | null $value): ?string
+    {
+        if (is_array($value)) {
+            $value = collect($value)->flatten()->filter(fn ($item) => filled($item))->first();
+        }
+
+        if (blank($value)) {
             return null;
         }
 
-        if (Str::startsWith($this->profile_photo_path, ['http://', 'https://'])) {
-            return $this->profile_photo_path;
-        }
-
-        return asset('storage/' . ltrim($this->profile_photo_path, '/'));
+        return ltrim(trim((string) $value), '/');
     }
 
     /**

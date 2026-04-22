@@ -24,9 +24,8 @@ class UsersTable
     {
         return $table
             ->columns([
-                ImageColumn::make('profile_photo_path')
+                ImageColumn::make('profile_photo_url')
                     ->label('Foto')
-                    ->disk('public')
                     ->circular()
                     ->defaultImageUrl(url('/images/default-avatar.svg'))
                     ->size(40),

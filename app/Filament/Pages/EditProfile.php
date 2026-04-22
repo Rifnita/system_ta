@@ -37,7 +37,7 @@ class EditProfile extends Page implements HasForms
             'username' => $user->username,
             'email' => $user->email,
             'alamat' => $user->alamat,
-            'profile_photo_path' => $user->profile_photo_path,
+            'profile_photo_path' => $this->normalizeProfilePhotoPath($user->profile_photo_path),
         ];
         $this->form->fill($this->data);
     }
@@ -156,8 +156,8 @@ class EditProfile extends Page implements HasForms
         $user->email = $data['email'];
         $user->alamat = $data['alamat'];
         
-        if (isset($data['profile_photo_path'])) {
-            $user->profile_photo_path = $data['profile_photo_path'];
+        if (array_key_exists('profile_photo_path', $data)) {
+            $user->profile_photo_path = $this->normalizeProfilePhotoPath($data['profile_photo_path']);
         }
 
         $user->save();
@@ -166,5 +166,28 @@ class EditProfile extends Page implements HasForms
             ->title('Profil berhasil diperbarui')
             ->success()
             ->send();
+    }
+
+    protected function normalizeProfilePhotoPath(string | array | null $path): ?string
+    {
+        if (is_array($path)) {
+            $path = collect($path)->flatten()->filter(fn ($item) => filled($item))->first();
+        }
+
+        if (blank($path)) {
+            return null;
+        }
+
+        $path = ltrim(trim($path), '/');
+
+        if (str_starts_with($path, 'storage/')) {
+            return substr($path, strlen('storage/'));
+        }
+
+        if (str_starts_with($path, 'public/')) {
+            return substr($path, strlen('public/'));
+        }
+
+        return $path;
     }
 }

@@ -13,11 +13,23 @@ use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
 class TransaksiKeuanganForm
 {
+    private static function formatRupiahInput($state): ?string
+    {
+        $digitsOnly = preg_replace('/\D/', '', (string) $state);
+
+        if (blank($digitsOnly)) {
+            return null;
+        }
+
+        return strrev(implode('.', str_split(strrev($digitsOnly), 3)));
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -65,10 +77,29 @@ class TransaksiKeuanganForm
                                             ->required(),
                                         TextInput::make('nominal')
                                             ->label('Nominal')
-                                            ->numeric()
                                             ->prefix('Rp')
+                                            ->inputMode('numeric')
+                                            ->placeholder('0')
+                                            ->helperText('Ketik angka saja. Format Rupiah akan otomatis, misal 100000000 menjadi 100.000.000.')
+                                            ->live(debounce: 300)
+                                            ->formatStateUsing(fn ($state): ?string => self::formatRupiahInput($state))
+                                            ->afterStateUpdated(function (Set $set, $state): void {
+                                                $formatted = self::formatRupiahInput($state);
+
+                                                if (blank($formatted)) {
+                                                    $set('nominal', null);
+
+                                                    return;
+                                                }
+
+                                                if ($formatted !== $state) {
+                                                    $set('nominal', $formatted);
+                                                }
+                                            })
+                                            ->dehydrateStateUsing(fn ($state): ?string => preg_replace('/\D/', '', (string) $state) ?: null)
+                                            ->mutateStateForValidationUsing(fn ($state): ?string => preg_replace('/\D/', '', (string) $state) ?: null)
                                             ->required()
-                                            ->minValue(0),
+                                            ->rule('digits_between:1,13'),
                                         Select::make('metode_pembayaran')
                                             ->label('Metode Pembayaran')
                                             ->options([

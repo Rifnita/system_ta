@@ -20,11 +20,18 @@
     padding: 0 !important;
     max-width: none !important;
     width: 100% !important;
+    min-height: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
 }
 
 /* Pastikan body & html tidak punya background yang mengganggu */
 body, html {
     background: #eceef4 !important;
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden !important;
 }
 </style>
 
@@ -64,12 +71,16 @@ body, html {
     --lx-radius:  1rem;
     --lx-shadow:  0 20px 60px rgba(15,32,80,.16);
 
+    position: fixed;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    box-sizing: border-box;
+    height: 100%;
     width: 100%;
-    padding: 2rem 1.25rem;
+    padding: 1.5rem;
+    overflow: hidden;
     background: transparent;
     font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
@@ -80,10 +91,11 @@ body, html {
     grid-template-columns: minmax(0,46%) minmax(0,54%);
     width: 100%;
     max-width: 960px;
+    max-height: calc(100% - 3rem);
     background: transparent;
     border-radius: 1.5rem;
     overflow: hidden;
-    box-shadow: none;
+    box-shadow: var(--lx-shadow);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -281,8 +293,7 @@ body, html {
     flex-direction: column;
     justify-content: center;
     gap: 0;
-    box-shadow: var(--lx-shadow);
-    border-radius: 1.5rem;
+    border-radius: 0;
 }
 
 .lx-right-eyebrow {
@@ -326,7 +337,7 @@ body, html {
 .lx-form-wrap input[type="text"],
 .lx-form-wrap input[type="email"],
 .lx-form-wrap input[type="password"] {
-    border-radius: .35rem !important;
+    border-radius: .45rem !important;
     border-color: var(--lx-border) !important;
     background: var(--lx-white) !important;
     box-shadow: 0 1px 3px rgba(0,0,0,.05) !important;

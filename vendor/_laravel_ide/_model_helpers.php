@@ -12,15 +12,18 @@ namespace App\Models {
      * @property string $password
      * @property \Illuminate\Support\Carbon|null $email_verified_at
      * @property string|null $alamat
-     * @property string|null $profile_photo_path
      * @property string $email
      * @property string $username
      * @property string $name
      * @property int $id
+     * @property-read mixed $profile_photo_path
+     * @property-read mixed $profile_photo_url
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LaporanAktivitas> $laporanAktivitas
      * @property-read int|null $laporan_aktivitas_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TransaksiKeuangan> $transaksiKeuangan
      * @property-read int|null $transaksi_keuangan_count
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+     * @property-read int|null $tokens_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
      * @property-read int|null $roles_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -31,7 +34,6 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereName($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereUsername($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmail($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereProfilePhotoPath($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereAlamat($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmailVerifiedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User wherePassword($value)

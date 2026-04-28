@@ -1,3 +1,33 @@
+{{-- ═══ Global overrides: strip Filament page chrome ═══ --}}
+<style>
+/* Hilangkan background & padding dari Filament page wrapper di luar blade kita */
+.fi-simple-main,
+.fi-simple-layout,
+.fi-simple-page,
+[class*="fi-simple"] {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Hilangkan card putih Filament (fi-simple-card / fi-page-content) */
+.fi-simple-main > *,
+.fi-simple-layout > *,
+.fi-simple-page > * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+}
+
+/* Pastikan body & html tidak punya background yang mengganggu */
+body, html {
+    background: #eceef4 !important;
+}
+</style>
+
 @php
     $heading = $this->getHeading();
     $subheading = $this->getSubHeading();
@@ -292,8 +322,11 @@
 }
 
 /* Input wrapper */
-.lx-form-wrap .fi-input-wrp {
-    border-radius: .45rem !important;
+.lx-form-wrap .fi-input-wrp,
+.lx-form-wrap input[type="text"],
+.lx-form-wrap input[type="email"],
+.lx-form-wrap input[type="password"] {
+    border-radius: .35rem !important;
     border-color: var(--lx-border) !important;
     background: var(--lx-white) !important;
     box-shadow: 0 1px 3px rgba(0,0,0,.05) !important;
@@ -315,18 +348,43 @@
     color: #aab3c4 !important;
 }
 
-/* "Lupa kata sandi?" — Filament renders hint in label row, right side */
-.lx-form-wrap .fi-fo-field-wrp-label {
+/* ── "Lupa kata sandi?" ──
+   Filament renders: label-row → hint → input-wrp
+   Kita mau: label-row → input-wrp → hint (di bawah, kanan)
+   Caranya: jadikan fi-fo-field-wrp flex column dan gunakan order
+── */
+.lx-form-wrap .fi-fo-field-wrp {
     display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
+    flex-direction: column !important;
 }
 
+/* Label baris = order 1 */
+.lx-form-wrap .fi-fo-field-wrp-label {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: .35rem !important;
+}
+
+/* Input wrapper = order 2 */
+.lx-form-wrap .fi-input-wrp,
+.lx-form-wrap .fi-fo-field-wrp > div:has(input),
+.lx-form-wrap .fi-fo-field-wrp > .fi-input-wrp {
+    order: 2 !important;
+}
+
+/* Hint (Lupa kata sandi?) = order 3, pojok kanan, di bawah input */
 .lx-form-wrap .fi-fo-field-wrp-hint {
-    margin-left: auto !important;
-    margin-top: 0 !important;
+    order: 3 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-top: .3rem !important;
     margin-bottom: 0 !important;
+}
+
+/* Error message = order 4 */
+.lx-form-wrap .fi-fo-field-wrp-error-message {
+    order: 4 !important;
 }
 
 .lx-form-wrap .fi-fo-field-wrp-hint a,

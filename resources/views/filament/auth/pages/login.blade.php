@@ -337,11 +337,22 @@ body, html {
 .lx-form-wrap input[type="text"],
 .lx-form-wrap input[type="email"],
 .lx-form-wrap input[type="password"] {
-    border-radius: .45rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: .15rem .3rem !important;
+    border-radius: .15rem !important;
     border-color: var(--lx-border) !important;
     background: var(--lx-white) !important;
     box-shadow: 0 1px 3px rgba(0,0,0,.05) !important;
     transition: border-color 150ms, box-shadow 150ms !important;
+}
+
+.lx-form-wrap .fi-input-wrp {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .lx-form-wrap .fi-input-wrp:focus-within {
@@ -351,8 +362,12 @@ body, html {
 
 /* Input text */
 .lx-form-wrap .fi-input {
-    font-size: .875rem !important;
+    font-size: .8rem !important;
     color: var(--lx-ink) !important;
+    height: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
 }
 
 .lx-form-wrap .fi-input::placeholder {

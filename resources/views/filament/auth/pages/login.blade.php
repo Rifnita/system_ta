@@ -27,11 +27,12 @@
 
 /* Pastikan body & html tidak punya background yang mengganggu */
 body, html {
-    background: #eceef4 !important;
+    background: #fdfbf6 !important;
     min-height: 100%;
     height: 100%;
     margin: 0;
     overflow: hidden !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
 }
 </style>
 
@@ -59,17 +60,17 @@ body, html {
 
 /* ─── Full-viewport wrapper ─────────────────────────────────────── */
 .lx-shell {
-    --lx-navy:    #1b3270;
-    --lx-navy2:   #152960;
-    --lx-navy3:   #0f2050;
-    --lx-gold:    #c9a84c;
-    --lx-ink:     #111e3c;
-    --lx-muted:   #5a6a85;
-    --lx-border:  #dde3ef;
-    --lx-bg:      #eceef4;
+    --lx-navy:    #243a66;
+    --lx-navy2:   #2f497f;
+    --lx-navy3:   #192a4d;
+    --lx-gold:    #d0ad63;
+    --lx-ink:     #10214b;
+    --lx-muted:   #5a4d35;
+    --lx-border:  #e5d2a6;
+    --lx-bg:      #fdfbf6;
     --lx-white:   #ffffff;
     --lx-radius:  1rem;
-    --lx-shadow:  0 20px 60px rgba(15,32,80,.16);
+    --lx-shadow:  0 20px 60px rgba(16,33,75,.12);
 
     position: fixed;
     inset: 0;
@@ -82,7 +83,7 @@ body, html {
     padding: 1.5rem;
     overflow: hidden;
     background: transparent;
-    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* ─── Card ──────────────────────────────────────────────────────── */
@@ -103,9 +104,9 @@ body, html {
 ══════════════════════════════════════════════════════════════════ */
 .lx-left {
     background:
-        radial-gradient(ellipse at 20% -10%, #2e4f9a 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 95%, #162c6b 0%, transparent 50%),
-        linear-gradient(160deg, #1e3a82 0%, var(--lx-navy) 45%, var(--lx-navy3) 100%);
+        radial-gradient(ellipse at 20% -10%, #405b97 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 95%, #243a66 0%, transparent 50%),
+        linear-gradient(160deg, #2f497f 0%, var(--lx-navy) 45%, var(--lx-navy3) 100%);
     color: rgba(255,255,255,.95);
     padding: 2.25rem 2.25rem 2rem;
     display: flex;
@@ -113,6 +114,7 @@ body, html {
     gap: 1.6rem;
     position: relative;
     overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* subtle dot texture */
@@ -166,6 +168,7 @@ body, html {
     text-transform: uppercase;
     line-height: 1.25;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
 
 .lx-brand-tagline {
@@ -287,13 +290,14 @@ body, html {
    RIGHT PANEL
 ══════════════════════════════════════════════════════════════════ */
 .lx-right {
-    background: #f6f8fc;
+    background: #fdfcf9;
     padding: 2.5rem 2.75rem 2.25rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 0;
     border-radius: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .lx-right-eyebrow {
@@ -312,6 +316,7 @@ body, html {
     color: var(--lx-ink);
     margin-bottom: .6rem;
     letter-spacing: -.01em;
+    font-family: 'Poppins', sans-serif;
 }
 
 .lx-right-subheading {
@@ -448,13 +453,14 @@ body, html {
     letter-spacing: .01em !important;
     background: var(--lx-navy) !important;
     border-color: transparent !important;
-    box-shadow: 0 4px 14px rgba(27,50,112,.28) !important;
+    box-shadow: 0 4px 14px rgba(36,58,102,.28) !important;
     transition: background 150ms, box-shadow 150ms !important;
+    font-family: 'Inter', sans-serif !important;
 }
 
 .lx-form-wrap .fi-btn.fi-color-primary:hover {
     background: var(--lx-navy2) !important;
-    box-shadow: 0 6px 18px rgba(27,50,112,.36) !important;
+    box-shadow: 0 6px 18px rgba(36,58,102,.36) !important;
 }
 
 /* Register / Daftar button */
@@ -473,11 +479,12 @@ body, html {
     font-weight: 600;
     transition: background 120ms, border-color 120ms;
     box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    font-family: 'Inter', sans-serif;
 }
 
 .lx-register:hover {
-    background: #f0f4fd;
-    border-color: #b8cce6;
+    background: #f8f2e6;
+    border-color: #d9bf7f;
 }
 
 /* ─── Responsive ────────────────────────────────────────────────── */

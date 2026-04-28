@@ -1,3 +1,4 @@
+<div>
 {{-- ═══ Global overrides: strip Filament page chrome ═══ --}}
 <style>
 /* Hilangkan background & padding dari Filament page wrapper di luar blade kita */
@@ -638,4 +639,5 @@ body, html {
 
     </div>
 
+</div>
 </div>
